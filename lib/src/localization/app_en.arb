@@ -1,0 +1,10 @@
+{
+  "appTitle": "waves_spy",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+    "headerTitle": "Waves Spy Explorer",
+    "@headerTitle": {
+      "description": "The title of the Scaffold"
+    }
+ }
