@@ -6,25 +6,117 @@ import 'package:http/http.dart' as http;
 import '../models/asset.dart';
 import '../providers/transaction_provider.dart';
 
+Map<String, Asset> assetsGlobal = {};
+
 DateTime timestampToDate(int timestamp) {
     final date = DateTime.fromMillisecondsSinceEpoch(timestamp);
     return date;
 }
 
+int dateToTimestamp(DateTime? date) {
+    if (date == null) {
+        print("--- helpers.dart dateToTimestamp: input date is null");
+    }
+    final ts = date == null ? 0 : date.millisecondsSinceEpoch;
+    return ts;
+}
+
 String getTypeName(int type) {
     switch(type) {
+        case 3:
+            return "Issue";
         case 4:
             return "Asset Transfer";
+        case 5:
+            return "Reissue";
         case 6:
             return "Asset Burn";
         case 7:
             return "Exchange";
+        case 8:
+            return "Lease";
+        case 9:
+            return "Lease cancel";
+        case 10:
+            return "Alias";
         case 11:
             return "Mass Payment";
         case 16:
             return "Invoke Script";
+        case 12:
+            return "Data";
+        case 13:
+            return "Set Script";
+        case 14:
+            return "Set Sponsorship";
+        case 15:
+            return "Set Asset Script";
+        case 17:
+            return "Update Asset Script";
         default:
             return "Unknown";
+    }
+}
+
+Future<Asset> fetchAssetInfo(String? id) async{
+    var data = <String, dynamic>{};
+    // print("fetching: " + id!);
+    if(id == "WAVES") {
+        data["assetId"] = "WAVES";
+        data["name"] = "WAVES";
+        data["decimals"] = 8;
+        data['description'] = "Waves blockchain core token";
+        data['reissuable'] = true;
+    } else {
+        var resp = await http.get(Uri.parse("$nodeUrl/assets/details/$id"));
+        data = jsonDecode(resp.body);
+    }
+    if (data.containsKey("error")) {
+        throw ("Can not fetch asset details data");
+    }
+    return Asset(data["assetId"], data["name"], data["decimals"], data['description'], data['reissuable']);
+}
+
+Future<List<Asset?>>? getAssetInfoLabel(String id) async{
+    Asset? asset;
+    List<String> ids = id.split(".|.");
+    if (assetsGlobal.containsKey(ids[0])) {
+        asset = assetsGlobal[ids[0]];
+    } else {
+        asset = await fetchAssetInfo(ids[0]);
+        assetsGlobal[ids[0]] = asset;
+    }
+    Asset? priceAsset;
+    if (ids[1] != " ") {
+        if (assetsGlobal.containsKey(ids[1])) {
+            priceAsset = assetsGlobal[ids[1]];
+        } else {
+            priceAsset = await fetchAssetInfo(ids[1]);
+            assetsGlobal[ids[1]] = priceAsset;
+        }
+    }
+    return [asset, priceAsset];
+}
+
+Future<void> getMassAssetsInfo(Map<String, String> ids) async{
+    final keys = ids.keys;
+    String tmpstr = "";
+    String tmpsepar = "";
+    for (var id in keys) {
+        if (id != "WAVES") {
+          tmpstr += tmpsepar + id;
+          if (tmpsepar == "") {
+              tmpsepar = "&id=";
+          }
+        }
+    }
+    var resp = await http.get(Uri.parse("$nodeUrl/assets/details?id=$tmpstr"));
+    List<dynamic> assetDetails = jsonDecode(resp.body);
+    for (var ass in assetDetails) {
+        if (!assetsGlobal.containsKey(ass['assetId'])) {
+            Asset a = Asset(ass['assetId'], ass['name'], ass['decimals'], ass['description'], ass['reissuable']);
+            assetsGlobal[a.id] = a;
+        }
     }
 }
 
@@ -47,45 +139,7 @@ getTransfers(String addr, dynamic jsonD, Map<String, double> resDict) {
         for (var inv in invokes) {
             getTransfers(addr, inv, resDict);
         }
-}
-
-var assetsGlobal = <String, Asset>{};
-
-Future<Asset> fetchAssetInfo(String? id) async{
-    var data = <String, dynamic>{};
-    if(id == null || id == "WAVES") {
-        data["assetId"] = "WAVES";
-        data["name"] = "WAVES";
-        data["decimals"] = 8;
-    } else {
-        var resp = await http.get(Uri.parse("$nodeUrl/assets/details/$id"));
-        data = jsonDecode(resp.body);
-    }
-    if (data.containsKey("error")) {
-        throw ("Can not fetch asset details data");
-    }
-    return Asset(data["assetId"], data["name"], data["decimals"]);
-}
-
-Future<List<Asset?>>? getAssetInfo(String id) async{
-    Asset? asset;
-    List<String> ids = id.split(".|.");
-    if (assetsGlobal.containsKey(ids[0])) {
-        asset = assetsGlobal[ids[0]];
-    } else {
-        asset = await fetchAssetInfo(ids[0]);
-        assetsGlobal[ids[0]] = asset;
-    }
-    Asset? priceAsset;
-    if (ids[1] != " ") {
-        if (assetsGlobal.containsKey(ids[1])) {
-            priceAsset = assetsGlobal[ids[1]];
-        } else {
-            priceAsset = await fetchAssetInfo(ids[1]);
-            assetsGlobal[ids[1]] = priceAsset;
-        }
-    }
-    return [asset, priceAsset];
+        // print(resDict);
 }
 
 parseTransactionType(Map<String, dynamic> td)  {
@@ -94,6 +148,7 @@ parseTransactionType(Map<String, dynamic> td)  {
     Map<String, double> transfers = {};
     var p = <String, dynamic>{};
     p['exchPriceAsset'] = " ";
+    p["sender"] = td["sender"];
     switch(td['type']) {
         case 16:
             p["dApp"] = td["dApp"];
@@ -104,7 +159,7 @@ parseTransactionType(Map<String, dynamic> td)  {
                 final assetId = element["assetId"] ?? "WAVES";
                 payment[assetId] = element["amount"];
             }
-            getTransfers(_transactionProvider.curAddr, td, transfers);
+            getTransfers(td["sender"], td, transfers);
             p["header"] = "invoke";
             break;
         case 4:
@@ -167,7 +222,7 @@ parseTransactionType(Map<String, dynamic> td)  {
                 payment[amountAsset] = amount;
             }
             // print(transfers)
-            p["header"] = ["exchange"];
+            p["header"] = "exchange";
             p["exchPriceAsset"] = amountAsset;
             break;
     }

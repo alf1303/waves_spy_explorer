@@ -4,10 +4,40 @@ import 'package:waves_spy/src/widgets/transactions/transaction_view.dart';
 
 import '../../providers/transaction_provider.dart';
 
-class TransactionsList extends StatelessWidget {
+class TransactionsList extends StatefulWidget {
   TransactionsList({Key? key, this.transactionsList}) : super(key: key);
+  final List<dynamic>? transactionsList;
 
-  List<dynamic>? transactionsList;
+  @override
+  State<TransactionsList> createState() => _TransactionsListState();
+}
+
+class _TransactionsListState extends State<TransactionsList> {
+  late ScrollController controller;
+  bool _loadingM = false;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = ScrollController()..addListener(_scrollListener);
+  }
+
+  @override
+  void dispose() {
+    controller.removeListener(_scrollListener);
+    super.dispose();
+  }
+
+  Future<void> _scrollListener() async {
+    final _transactionProvider = TransactionProvider();
+    // print(controller.position.extentAfter);
+    if (controller.position.extentAfter == 0 && !_loadingM) {
+      _loadingM = true;
+      await _transactionProvider.getMoreTransactions();
+      _loadingM = false;
+
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,9 +47,10 @@ class TransactionsList extends StatelessWidget {
       child: Consumer<TransactionProvider>(
         builder: (context, model, child) {
           return ListView.builder(
-            itemCount: model.allTransactions.length,
+            itemCount: model.filteredTransactions.length,
+              controller: controller,
               itemBuilder: (context, i) {
-                return TransView(td: model.allTransactions[i]);
+                return TransView(td: model.filteredTransactions[i]);
               }
           );
         },

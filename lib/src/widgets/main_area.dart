@@ -4,6 +4,8 @@ import 'package:waves_spy/src/providers/transaction_provider.dart';
 import 'package:waves_spy/src/widgets/filter_widger.dart';
 import 'package:waves_spy/src/widgets/transactions/transactions_list.dart';
 
+TabController? tabController;
+
 class MainArea extends StatefulWidget {
   const MainArea({Key? key}) : super(key: key);
 
@@ -12,12 +14,10 @@ class MainArea extends StatefulWidget {
 }
 
 class _MainAreaState extends State<MainArea>  with SingleTickerProviderStateMixin{
-  TabController? _tabController;
-
 
   @override
   void initState() {
-    _tabController = TabController(vsync: this, length: 5);
+    tabController = TabController(vsync: this, length: 5);
   }
 
   @override
@@ -26,7 +26,7 @@ class _MainAreaState extends State<MainArea>  with SingleTickerProviderStateMixi
     return Scaffold(
       appBar: AppBar(
         title: TabBar(
-          controller: _tabController,
+          controller: tabController,
             tabs: const [
           Tab(text: "Transactions",),
           Tab(text: "Assets",),
@@ -40,7 +40,7 @@ class _MainAreaState extends State<MainArea>  with SingleTickerProviderStateMixi
           FilterWidget(),
           Expanded(
             child: TabBarView(
-                controller: _tabController,
+                controller: tabController,
                 children: [
               TransactionsList(),
               Center(child: Text("Assets")),

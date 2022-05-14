@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:waves_spy/src/helpers/helpers.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter/services.dart';
 import 'package:waves_spy/src/providers/transaction_provider.dart';
 
 class InputWidget extends StatelessWidget {
@@ -12,17 +15,47 @@ class InputWidget extends StatelessWidget {
     _transactionProvider.setCurrAddr(_inputController.text);
   }
 
+  loadMore() async {
+    await _transactionProvider.getMoreTransactions();
+  }
+
+  pasteFromClipboard() async{
+    ClipboardData? cdata = await Clipboard.getData(Clipboard.kTextPlain);
+    String? copiedtext = cdata?.text;
+    if (copiedtext != null) {
+      _inputController.text = copiedtext;
+      await onSearch();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final apploc = AppLocalizations.of(context);
     return Row(children: [
       IconButton(
-          onPressed: onSearch,
-          icon: const Icon(Icons.search_rounded)),
-      Expanded(
+          onPressed: pasteFromClipboard,
+          tooltip: apploc?.paste,
+          icon: const Icon(Icons.paste)),
+      SizedBox(
+        width: 500,
         child: TextField(
+          textInputAction: TextInputAction.go,
           controller: _inputController,
+          decoration: InputDecoration(
+            isDense: true,
+            label: Text(apploc!.addrHint),
+          ),
+          onSubmitted: (val) {
+            onSearch();
+          },
         ),
       ),
+      IconButton(
+          onPressed: onSearch,
+          tooltip: apploc.search,
+          icon: const Icon(Icons.search_rounded)),
+      TextButton(onPressed: loadMore, child: Text(apploc.loadMore))
+
     ],
     );
   }

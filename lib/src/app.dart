@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:waves_spy/src/providers/filter_provider.dart';
+import 'package:waves_spy/src/providers/progress_bars_provider.dart';
+import 'package:waves_spy/src/providers/transaction_details_provider.dart';
 import 'package:waves_spy/src/providers/transaction_provider.dart';
 
 import 'main_page.dart';
@@ -15,7 +18,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(providers: [
-        ChangeNotifierProvider<TransactionProvider>(create: (_) => TransactionProvider())
+      ChangeNotifierProvider<TransactionProvider>(create: (_) => TransactionProvider()),
+      ChangeNotifierProvider<FilterProvider>(create: (_) => FilterProvider()),
+      ChangeNotifierProvider<ProgressProvider>(create: (_) => ProgressProvider()),
+      ChangeNotifierProvider<TransactionDetailsProvider>(create: (_) => TransactionDetailsProvider()),
     ],
       child: MaterialApp(
         // Providing a restorationScopeId allows the Navigator built by the

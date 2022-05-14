@@ -122,9 +122,30 @@ const dAppsDict = {
 "3PPsoLQYRjvhQTfLYnaEm6BVeJLznBFrwZK": "Neutrino - JPYN Collateral",
 "3P4PCxsJqMzQBALo8zANHtBDZRRquobHQp7": "Neutrino - Liquidation",
 
+  "3P6fAxtw12pjFhayEfpcUWxgu2BHVCeP78A": "PuzzleMarket",
+  "3P3pDosq4GCwfJkvq4yqKvvoTwmoqc9qPmo": "DuckWrapper - PuzzleMarket",
+
 "3P9LTA2dBPNZfUhgnE7na9EyDeuqYdRSqTQ": "Dima Ivanov Main",
 "3PMyGoiQZgNQ8jWn4eKR6uZzSkRoWjdBdgW": "Dima Ivanov 2",
 "3P3188GUzTypcP2hKNe7Ys5X1S9yoNYjCU3": "Dasha Rewards",
 "3PD8eT53J3LcUM5HLnHMcYNAuLEKrQgC4bR": "Buy the Dip PUZzle",
 "3P3EgRSuPaavrVx8AavNVrTMLqtyPsNwPiy": "Dima @Kript_on"
+};
+
+const typeDict = {
+  3: "Issue",
+  5: "Reissue",
+  15: "Set asset script",
+  17: "Update assetinfo",
+  6: "Burn",
+  4: "Transfer",
+  7: "Exchange",
+  10: "Alias",
+  11: "Mass transfer",
+  12: "Data",
+  13: "Set script",
+  16: "Invoke script",
+  8: "Lease",
+  9: "Lease cancel",
+  14: "Set sponsorship"
 };

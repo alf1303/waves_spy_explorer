@@ -3,8 +3,14 @@
   "@appTitle": {
     "description": "The title of the application"
   },
-    "headerTitle": "Waves Spy Explorer",
+    "headerTitle": "Waves Spy Explorer 3PAtzncjJGWRpCtkR55wAzcfZ9fubMeA4JU",
     "@headerTitle": {
       "description": "The title of the Scaffold"
-    }
+    },
+    "search" : "search data",
+    "paste" : "paste from clipboard",
+    "addrHint" : "Enter or Paste address",
+    "clearAsset" : "clear asset name",
+    "clearFunction" : "clear function name",
+    "loadMore" : "Load more"
  }

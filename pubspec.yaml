@@ -16,6 +16,9 @@ dependencies:
     sdk: flutter
   http: ^0.13.4
   provider: ^6.0.2
+  flutter_datetime_picker: ^1.5.1
+  date_time_picker: ^2.1.0
+
 
 dev_dependencies:
   flutter_test:
