@@ -125,6 +125,8 @@ class Details extends StatelessWidget {
     String inn = _transactionProvider.curAddr != dApp ? "in" : "out";
         List<Widget> payList = payment.entries.map((e) => assetBuilder(e.key, e.value, exop, p["exchPriceAsset"], out)).toList();
         List<Widget> inList = transfers.entries.map((e) => assetBuilder(e.key, e.value, exop, p["exchPriceAsset"], inn)).toList();
+        // print(td["id"] + ": ");
+        // print(inList);
     return  Column(
       children: [
         header,

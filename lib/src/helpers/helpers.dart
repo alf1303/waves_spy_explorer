@@ -158,11 +158,12 @@ Future<void> getMassAssetsInfo(Map<String, String> ids) async{
     }
 }
 
-getTransfers(String addr, dynamic jsonD, Map<String, double> resDict) {
-    var transfers = jsonD["stateChanges"]["transfers"];
+getTransfers({required bool isDapp, required String sender, required String curAddr, dynamic data, required Map<String, double> resDict}) {
+    var transfers = data["stateChanges"]["transfers"];
     for (dynamic el in transfers) {
         double amount = el["amount"] ?? 0;
-        if (el["address"] == addr) {
+        // bool condition = isDapp ?
+        if (el["address"] == sender || (!isDapp && el["address"] == curAddr)) {
             final assetId = el["asset"] ?? "WAVES";
             if (resDict.containsKey(assetId)) {
                 double prevAm = resDict[assetId] ?? 0;
@@ -173,9 +174,9 @@ getTransfers(String addr, dynamic jsonD, Map<String, double> resDict) {
             }
         }
         }
-    List<dynamic> invokes = jsonD["stateChanges"]["invokes"];
+    List<dynamic> invokes = data["stateChanges"]["invokes"];
         for (var inv in invokes) {
-            getTransfers(addr, inv, resDict);
+            getTransfers(isDapp: isDapp, sender: sender, curAddr: curAddr, data: inv, resDict: resDict);
         }
         // print(resDict);
 }
@@ -197,7 +198,7 @@ parseTransactionType(Map<String, dynamic> td)  {
                 final assetId = element["assetId"] ?? "WAVES";
                 payment[assetId] = element["amount"];
             }
-            getTransfers(td["sender"], td, transfers);
+            getTransfers(isDapp: td["dApp"] == _transactionProvider.curAddr, sender: td["sender"], curAddr: _transactionProvider.curAddr, data: td, resDict: transfers);
             p["header"] = "invoke";
             break;
         case 4:
