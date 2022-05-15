@@ -111,12 +111,17 @@ Future<void> getMassAssetsInfo(Map<String, String> ids) async{
         }
     }
     var resp = await http.get(Uri.parse("$nodeUrl/assets/details?id=$tmpstr"));
-    List<dynamic> assetDetails = jsonDecode(resp.body);
-    for (var ass in assetDetails) {
-        if (!assetsGlobal.containsKey(ass['assetId'])) {
-            Asset a = Asset(ass['assetId'], ass['name'], ass['decimals'], ass['description'], ass['reissuable']);
-            assetsGlobal[a.id] = a;
-        }
+
+    if (resp.statusCode == 200) {
+      List<dynamic> assetDetails = jsonDecode(resp.body);
+      for (var ass in assetDetails) {
+          if (!assetsGlobal.containsKey(ass['assetId'])) {
+              Asset a = Asset(ass['assetId'], ass['name'], ass['decimals'], ass['description'], ass['reissuable']);
+              assetsGlobal[a.id] = a;
+          }
+      }
+    } else {
+        throw("Failed to load assets details: " + resp.body);
     }
 }
 

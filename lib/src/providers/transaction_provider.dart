@@ -70,8 +70,8 @@ class TransactionProvider extends ChangeNotifier {
         String afterId = after == null ? "" : afterGlob;
         after = true;
         var resp = await http.get(Uri.parse("$nodeUrl/transactions/address/$address/limit/$limit?after=$afterId"));
-        print(resp.body);
-        print("");
+        // print(resp.body);
+        // print("");
         if (resp.statusCode == 200) {
           final json = jsonDecode(resp.body);
           res = json[0];
@@ -94,16 +94,14 @@ class TransactionProvider extends ChangeNotifier {
           allTransactions.addAll(res);
         }
       }
-      
-      final ids = await extractAssets(allTransactions);
+      final ids = await extractAssets(res);
       await getMassAssetsInfo(ids);
-      fillTransactionsWithAssetsNames(allTransactions);
+      fillTransactionsWithAssetsNames(res);
       
       filteredTransactions = allTransactions;
       // print("Loaded ${allTransactions.length}, last: $afterGlob");
       
       filterTransactions();
-      
       // JsonEncoder encoder = const JsonEncoder.withIndent('  ');
       // for (var value in allTransactions) {
       //   print(encoder.convert(value));
