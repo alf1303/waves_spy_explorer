@@ -4,6 +4,8 @@ import 'package:waves_spy/src/providers/transaction_provider.dart';
 import 'package:waves_spy/src/widgets/filter_widger.dart';
 import 'package:waves_spy/src/widgets/transactions/transactions_list.dart';
 
+import 'assets/assets_list.dart';
+
 TabController? tabController;
 
 class MainArea extends StatefulWidget {
@@ -37,13 +39,12 @@ class _MainAreaState extends State<MainArea>  with SingleTickerProviderStateMixi
       ),
       body: Column(
         children: [
-          FilterWidget(),
           Expanded(
             child: TabBarView(
                 controller: tabController,
                 children: [
               TransactionsList(),
-              Center(child: Text("Assets")),
+              const AssetsList(),
               Center(child: Text("NFTs")),
               Center(child: Text("Data")),
               Center(child: Text("Script")),

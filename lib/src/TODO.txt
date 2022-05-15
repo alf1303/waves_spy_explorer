@@ -1,8 +1,17 @@
 ** 1) Decrese dApps names in dictionary (Waves Ducks Incubator - WD Incubator)
 ** 2) Make addresses widgets scrollable in horizontal direction
-3) Implement Assets tab
+**3) Implement Assets tab
+**    - add filtering
+**    - add waves balance
+**    - add priority sorting
+** 3) Spit assets string to less then 2048 symbols;
 4) Implement NFT tab
 5) Implement Data tab (add mark if present in tab name)
 6) Implement Script tab (add mark if present in tab name)
 ** 7) Find bugs when loading new transaction (invalid char U)
 8) Deploy to Google hosting
+
+
+Future:
+
+1) Add showing staked balances for assets

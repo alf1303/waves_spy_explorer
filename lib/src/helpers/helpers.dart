@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:html';
 
 import 'package:waves_spy/src/constants.dart';
 import 'package:http/http.dart' as http;
@@ -11,6 +12,14 @@ Map<String, Asset> assetsGlobal = {};
 DateTime timestampToDate(int timestamp) {
     final date = DateTime.fromMillisecondsSinceEpoch(timestamp);
     return date;
+}
+
+Asset? getAssetFromLoaded(String id) {
+    if (assetsGlobal.containsKey(id)) {
+        return assetsGlobal[id];
+    } else {
+        return null;
+    }
 }
 
 int dateToTimestamp(DateTime? date) {
@@ -67,6 +76,7 @@ Future<Asset> fetchAssetInfo(String? id) async{
         data["decimals"] = 8;
         data['description'] = "Waves blockchain core token";
         data['reissuable'] = true;
+        data['scripted'] = false;
     } else {
         var resp = await http.get(Uri.parse("$nodeUrl/assets/details/$id"));
         data = jsonDecode(resp.body);
@@ -74,7 +84,7 @@ Future<Asset> fetchAssetInfo(String? id) async{
     if (data.containsKey("error")) {
         throw ("Can not fetch asset details data");
     }
-    return Asset(data["assetId"], data["name"], data["decimals"], data['description'], data['reissuable']);
+    return Asset(data["assetId"], data["name"], data["decimals"], data['description'], data['reissuable'], data["scripted"]);
 }
 
 Future<List<Asset?>>? getAssetInfoLabel(String id) async{
@@ -99,29 +109,52 @@ Future<List<Asset?>>? getAssetInfoLabel(String id) async{
 }
 
 Future<void> getMassAssetsInfo(Map<String, String> ids) async{
-    final keys = ids.keys;
-    String tmpstr = "";
-    String tmpsepar = "";
-    for (var id in keys) {
-        if (id != "WAVES") {
-          tmpstr += tmpsepar + id;
-          if (tmpsepar == "") {
-              tmpsepar = "&id=";
+    final keys = ids.keys.toList();
+    bool stop = false;
+    int start = 0;
+    while (!stop) {
+      String tmpstr = "";
+      String tmpsepar = "";
+      for (int i = start; i < keys.length; i++) {
+          if(i == keys.length - 1) {
+              stop = true;
           }
-        }
-    }
-    var resp = await http.get(Uri.parse("$nodeUrl/assets/details?id=$tmpstr"));
-
-    if (resp.statusCode == 200) {
-      List<dynamic> assetDetails = jsonDecode(resp.body);
-      for (var ass in assetDetails) {
-          if (!assetsGlobal.containsKey(ass['assetId'])) {
-              Asset a = Asset(ass['assetId'], ass['name'], ass['decimals'], ass['description'], ass['reissuable']);
-              assetsGlobal[a.id] = a;
+          if(keys[i] != "WAVES") {
+              if((tmpstr.length + keys[i].length) >= 2048) {
+                  start = i;
+                  break;
+              }
+              tmpstr += tmpsepar + keys[i];
+              if (tmpsepar == "") {
+                  tmpsepar = "&id=";
+              }
           }
       }
-    } else {
-        throw("Failed to load assets details: " + resp.body);
+
+      // for (var id in keys) {
+      //     if (id != "WAVES") {
+      //       tmpstr += tmpsepar + id;
+      //       if (tmpsepar == "") {
+      //           tmpsepar = "&id=";
+      //       }
+      //     }
+      // }
+
+
+
+      var resp = await http.get(Uri.parse("$nodeUrl/assets/details?id=$tmpstr"));
+      if (resp.statusCode == 200) {
+        List<dynamic> assetDetails = jsonDecode(resp.body);
+        for (var ass in assetDetails) {
+            if (!assetsGlobal.containsKey(ass['assetId'])) {
+                // print(ass);
+                Asset a = Asset(ass['assetId'], ass['name'], ass['decimals'], ass['description'], ass['reissuable'], ass["scripted"]);
+                assetsGlobal[a.id] = a;
+            }
+        }
+      } else {
+          throw("Failed to load assets details: " + resp.body);
+      }
     }
 }
 

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:waves_spy/src/constants.dart';
 import 'package:waves_spy/src/helpers/helpers.dart';
+import 'package:waves_spy/src/providers/asset_provider.dart';
 import 'package:waves_spy/src/providers/filter_provider.dart';
 import 'package:waves_spy/src/providers/progress_bars_provider.dart';
 
@@ -18,9 +19,10 @@ class TransactionProvider extends ChangeNotifier {
   TransactionProvider._internal();
 
   final progressProvider = ProgressProvider();
+  final assetProvider = AssetProvider();
   String curAddr = "";
   String afterGlob = "";
-  int limit = 20;
+  int limit = 25;
 
   String header = "";
   String filterData = "";
@@ -29,7 +31,6 @@ class TransactionProvider extends ChangeNotifier {
   List<dynamic> filteredTransactions = List.empty(growable: true);
 
   List<dynamic> nft = List.empty(growable: true);
-  List<dynamic> assets = List.empty(growable: true);
   List<dynamic> data = List.empty(growable: true);
   String script = "";
   dynamic wavesBalance = {
@@ -48,6 +49,9 @@ class TransactionProvider extends ChangeNotifier {
     curAddr = address;
     afterGlob = "";
     allTransactions.clear();
+    assetProvider.assets.clear();
+    Asset waves = await fetchAssetInfo("WAVES");
+    assetsGlobal[waves.id] = waves;
     await getTransactions(address: curAddr);
     await getAssets(curAddr);
     // await getNft(curAddr); //implement
@@ -75,7 +79,7 @@ class TransactionProvider extends ChangeNotifier {
         if (resp.statusCode == 200) {
           final json = jsonDecode(resp.body);
           res = json[0];
-          print("Loaded: " + res.length.toString());
+          // print("Loaded: " + res.length.toString());
           if(res.isEmpty) {
             print("--- TransactionProvider getTransactions() empty transactions list got");
           }
@@ -109,6 +113,17 @@ class TransactionProvider extends ChangeNotifier {
       // allTransactions = allTransactions.where((element) => element["type"] == 16).toList();
       progressProvider.stop();
     }
+  }
+
+  Future<dynamic> getWavesBalances() async {
+    dynamic res;
+    var resp = await http.get(Uri.parse("$nodeUrl/addresses/balance/details/$curAddr"));
+    if (resp.statusCode == 200) {
+      res = jsonDecode(resp.body);
+    } else {
+      throw("Error while loading waves balances");
+    }
+    return res;
   }
 
   // Loop through transactions and find all assets ids and addresses present in transaction
@@ -173,16 +188,39 @@ class TransactionProvider extends ChangeNotifier {
   }
 
   Future<void> getAssets(String address) async {
+    var tmpass = <String, String> {};
     var res = <dynamic>[];
     var resp = await http.get(Uri.parse("$nodeUrl/assets/balance/$address"));
     if (resp.statusCode == 200) {
       final json = jsonDecode(resp.body);
-      // print(resp.body);
       res = json["balances"];
-      assets = res;
+      for (dynamic el in res) {
+        tmpass[el["assetId"]] = el["balance"].toString();
+      }
     } else {
       throw("Failed to load assets list. \n" + resp.body);
     }
+
+    await getMassAssetsInfo(tmpass);
+    dynamic wavesBalances = await getWavesBalances();
+    AccAsset wavesAsset = AccAsset(assetsGlobal["WAVES"], wavesBalances["available"], 3);
+    wavesAsset.staked = wavesBalances["regular"] - wavesBalances["available"];
+    assetProvider.assets.add(wavesAsset);
+    tmpass.forEach((key, value) {
+      int priority = 0;
+      if(priorityThree.contains(assetsGlobal[key]!.name)) {
+        priority = 3;
+      }
+      if(priorityTwo.contains(assetsGlobal[key]!.name)) {
+        priority = 2;
+      }
+      if(priorityOne.contains(assetsGlobal[key]!.name)) {
+        priority = 1;
+      }
+      assetProvider.assets.add(AccAsset(assetsGlobal[key], int.parse(value), priority));
+    });
+    assetProvider.sortAssets();
+    assetProvider.filterAssets();
   }
 
   Future<void> getNft(String address) async {}
@@ -205,17 +243,17 @@ class TransactionProvider extends ChangeNotifier {
   void filterTransactions() {
     final filterProvider = FilterProvider();
     List<dynamic> datedTransactions = List.from(allTransactions);
-    print("Transactions loaded: " + datedTransactions.length.toString());
+    // print("Transactions loaded: " + datedTransactions.length.toString());
     if (filterProvider.to != null) {
       int toTS = dateToTimestamp(filterProvider.to!);
       datedTransactions = datedTransactions.where((tr) => tr["timestamp"] < toTS).toList();
     }
-    print("Transactions to: " + datedTransactions.length.toString());
+    // print("Transactions to: " + datedTransactions.length.toString());
     if (filterProvider.from != null) {
       int fromTS = dateToTimestamp(filterProvider.from!);
       datedTransactions = datedTransactions.where((tr) => tr["timestamp"] >= fromTS).toList();
     }
-    print("Transactions from: " + datedTransactions.length.toString());
+    // print("Transactions from: " + datedTransactions.length.toString());
     if (filterProvider.fType != 0) {
       filteredTransactions = datedTransactions
           .where((tr) => tr["type"] == filterProvider.fType)

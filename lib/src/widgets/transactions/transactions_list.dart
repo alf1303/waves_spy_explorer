@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:waves_spy/src/widgets/filter_widger.dart';
 import 'package:waves_spy/src/widgets/transactions/transaction_view.dart';
 
 import '../../providers/transaction_provider.dart';
@@ -44,16 +45,24 @@ class _TransactionsListState extends State<TransactionsList> {
     final _transactionProvider = TransactionProvider();
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Consumer<TransactionProvider>(
-        builder: (context, model, child) {
-          return ListView.builder(
-            itemCount: model.filteredTransactions.length,
-              controller: controller,
-              itemBuilder: (context, i) {
-                return TransView(td: model.filteredTransactions[i]);
-              }
-          );
-        },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          FilterWidget(),
+          Expanded(
+            child: Consumer<TransactionProvider>(
+              builder: (context, model, child) {
+                return ListView.builder(
+                  itemCount: model.filteredTransactions.length,
+                    controller: controller,
+                    itemBuilder: (context, i) {
+                      return TransView(td: model.filteredTransactions[i]);
+                    }
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
