@@ -108,7 +108,7 @@ Future<List<Asset?>>? getAssetInfoLabel(String id) async{
     return [asset, priceAsset];
 }
 
-Future<void> getMassAssetsInfo(Map<String, String> ids) async{
+Future<void> getMassAssetsInfo(Map<String, dynamic> ids) async{
     final keys = ids.keys.toList();
     bool stop = false;
     int start = 0;

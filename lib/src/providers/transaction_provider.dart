@@ -188,14 +188,14 @@ class TransactionProvider extends ChangeNotifier {
   }
 
   Future<void> getAssets(String address) async {
-    var tmpass = <String, String> {};
+    var tmpass = <String, dynamic> {};
     var res = <dynamic>[];
     var resp = await http.get(Uri.parse("$nodeUrl/assets/balance/$address"));
     if (resp.statusCode == 200) {
       final json = jsonDecode(resp.body);
       res = json["balances"];
       for (dynamic el in res) {
-        tmpass[el["assetId"]] = el["balance"].toString();
+        tmpass[el["assetId"]] = el;
       }
     } else {
       throw("Failed to load assets list. \n" + resp.body);
@@ -203,7 +203,7 @@ class TransactionProvider extends ChangeNotifier {
 
     await getMassAssetsInfo(tmpass);
     dynamic wavesBalances = await getWavesBalances();
-    AccAsset wavesAsset = AccAsset(assetsGlobal["WAVES"], wavesBalances["available"], 3);
+    AccAsset wavesAsset = AccAsset(assetsGlobal["WAVES"], wavesBalances["available"], 3, "");
     wavesAsset.staked = wavesBalances["regular"] - wavesBalances["available"];
     assetProvider.assets.add(wavesAsset);
     tmpass.forEach((key, value) {
@@ -217,7 +217,7 @@ class TransactionProvider extends ChangeNotifier {
       if(priorityOne.contains(assetsGlobal[key]!.name)) {
         priority = 1;
       }
-      assetProvider.assets.add(AccAsset(assetsGlobal[key], int.parse(value), priority));
+      assetProvider.assets.add(AccAsset(assetsGlobal[key], value["balance"], priority, value));
     });
     assetProvider.sortAssets();
     assetProvider.filterAssets();

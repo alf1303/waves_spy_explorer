@@ -19,6 +19,7 @@ class AccAsset {
   int priority = 0;
   int amount = 0;
   int staked = 0;
+  dynamic data;
 
-  AccAsset(this.asset, this.amount, this.priority);
+  AccAsset(this.asset, this.amount, this.priority, this.data);
 }

@@ -10,6 +10,7 @@
 6) Implement Script tab (add mark if present in tab name)
 ** 7) Find bugs when loading new transaction (invalid char U)
 8) Deploy to Google hosting
+9) Implement one row view for transaction and button in app bar to switch views
 
 
 Future:

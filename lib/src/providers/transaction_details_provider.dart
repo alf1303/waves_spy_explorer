@@ -20,7 +20,6 @@ class TransactionDetailsProvider extends ChangeNotifier{
   setTransaction(trs) {
     JsonEncoder encoder = const JsonEncoder.withIndent('  ');
     tr = encoder.convert(trs);
-
     notifyListeners();
   }
 

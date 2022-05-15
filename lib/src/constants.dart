@@ -9,6 +9,7 @@ const nodeUrl = 'https://nodes.wavesnodes.com';
 
 const dAppsDict = {
 "3P5UKXpQbom7GB2WGdPG5yGQPeQQuM3hFmw": "Keeper Aggregator",
+  "3PKUxbZaSYfsR7wu2HaAgiirHYwAMupDrYW" : "Puzzle Eagles",
 "3PEZe3Z2FqaVbMTjWJUpnQGxhWh2JRptujM": "PUZZLE WW_POOL",
 "3P4bSEVNM3xdmFaefX5nc9qT4fDtbwo9Dx4": "PUZZLE GLOBAL_??",
 "3P9EydokbUM5XFrHgEUT9bNVgfF7fGmtxLk": "PUZZLE MUNA_BNB",
