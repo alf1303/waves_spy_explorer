@@ -70,7 +70,8 @@ class TransactionProvider extends ChangeNotifier {
         String afterId = after == null ? "" : afterGlob;
         after = true;
         var resp = await http.get(Uri.parse("$nodeUrl/transactions/address/$address/limit/$limit?after=$afterId"));
-        // print(resp.body);
+        print(resp.body);
+        print("");
         if (resp.statusCode == 200) {
           final json = jsonDecode(resp.body);
           res = json[0];

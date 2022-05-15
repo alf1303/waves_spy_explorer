@@ -151,7 +151,7 @@ Widget invokeHeader(Map<String, dynamic> p) {
   return Row(
     children: [
       SizedBox(width: 240, child: LabeledText("function:", p["function"], "", invokeColor)),
-      SizedBox(width: 500, child: LabeledText("dApp:", p["dApp"], p["dAppName"], invokeColor),),
+      SizedBox(width: 500, child: SingleChildScrollView(scrollDirection: Axis.horizontal, child: LabeledText("dApp:", p["dApp"], p["dAppName"], invokeColor)),),
       SizedBox(child: LabeledText("Sender:", p["sender"], "", invokeColor),),
     ],
   );
