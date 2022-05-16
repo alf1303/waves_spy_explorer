@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:waves_spy/src/providers/transaction_details_provider.dart';
+import 'package:waves_spy/src/styles.dart';
 
 import '../../models/asset.dart';
 
@@ -18,6 +19,7 @@ class AssetView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      hoverColor: hoverColor,
       onTap: showDetails,
       child: Container(
         padding: EdgeInsets.all(5),

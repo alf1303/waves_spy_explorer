@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:waves_spy/src/providers/asset_provider.dart';
 import 'package:waves_spy/src/providers/filter_provider.dart';
+import 'package:waves_spy/src/providers/nft_provider.dart';
 import 'package:waves_spy/src/providers/progress_bars_provider.dart';
 import 'package:waves_spy/src/providers/transaction_details_provider.dart';
 import 'package:waves_spy/src/providers/transaction_provider.dart';
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
       ChangeNotifierProvider<ProgressProvider>(create: (_) => ProgressProvider()),
       ChangeNotifierProvider<TransactionDetailsProvider>(create: (_) => TransactionDetailsProvider()),
       ChangeNotifierProvider<AssetProvider>(create: (_) => AssetProvider()),
+      ChangeNotifierProvider<NftProvider>(create: (_) => NftProvider()),
 
     ],
       child: MaterialApp(

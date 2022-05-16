@@ -5,6 +5,7 @@ import 'package:waves_spy/src/constants.dart';
 import 'package:waves_spy/src/helpers/helpers.dart';
 import 'package:waves_spy/src/providers/asset_provider.dart';
 import 'package:waves_spy/src/providers/filter_provider.dart';
+import 'package:waves_spy/src/providers/nft_provider.dart';
 import 'package:waves_spy/src/providers/progress_bars_provider.dart';
 
 import '../models/asset.dart';
@@ -20,9 +21,12 @@ class TransactionProvider extends ChangeNotifier {
 
   final progressProvider = ProgressProvider();
   final assetProvider = AssetProvider();
+  final nftProvider = NftProvider();
   String curAddr = "";
   String afterGlob = "";
+  String afterGlobNft = "";
   int limit = 25;
+  int limitNft = 1000;
 
   String header = "";
   String filterData = "";
@@ -30,7 +34,6 @@ class TransactionProvider extends ChangeNotifier {
   List<dynamic> allTransactions = List.empty(growable: true);
   List<dynamic> filteredTransactions = List.empty(growable: true);
 
-  List<dynamic> nft = List.empty(growable: true);
   List<dynamic> data = List.empty(growable: true);
   String script = "";
   dynamic wavesBalance = {
@@ -54,6 +57,7 @@ class TransactionProvider extends ChangeNotifier {
     assetsGlobal[waves.id] = waves;
     await getTransactions(address: curAddr);
     await getAssets(curAddr);
+    await getNft(address: address);
     // await getNft(curAddr); //implement
     // await getData(curAddr); //implement
     // await getScript(curAddr); //implement
@@ -223,7 +227,30 @@ class TransactionProvider extends ChangeNotifier {
     assetProvider.filterAssets();
   }
 
-  Future<void> getNft(String address) async {}
+  Future<void> getMoreNfts() async{
+    await getNft(address: curAddr, after: true);
+  }
+
+  Future<void> getNft({required String address, bool? after}) async {
+    List<dynamic> res = List.empty(growable: true);
+    if(curAddr.isNotEmpty) {
+      String afterId = after == null ? "" : afterGlobNft;
+      var resp = await http.get(Uri.parse("$nodeUrl/assets/nft/$address/limit/$limitNft?after=$afterId"));
+      if(resp.statusCode == 200) {
+        final json = jsonDecode(resp.body);
+        res = json;
+      } else {
+        throw("Cant fetch NFTs list: " + resp.body);
+      }
+      if(afterId.isEmpty) {
+        nftProvider.nfts = res;
+      } else {
+        nftProvider.nfts.addAll(res);
+      }
+      // print("Loaded Nfts: " + nftProvider.nfts.length.toString());
+      nftProvider.filterNfts();
+    }
+  }
 
   getData(String address) {
   }

@@ -36,7 +36,6 @@ class _TransactionsListState extends State<TransactionsList> {
       _loadingM = true;
       await _transactionProvider.getMoreTransactions();
       _loadingM = false;
-
     }
   }
 

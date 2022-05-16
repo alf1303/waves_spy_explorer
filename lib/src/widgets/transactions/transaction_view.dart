@@ -43,6 +43,7 @@ class TransView extends StatelessWidget {
          color = Colors.white;
     }
     return InkWell(
+      hoverColor: hoverColor,
       onTap: showDetails,
       child: Container(
         padding: EdgeInsets.all(5),

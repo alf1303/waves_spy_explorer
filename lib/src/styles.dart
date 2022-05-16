@@ -6,6 +6,8 @@ const massTransferColor = Colors.deepOrangeAccent;
 const exchangeColor = Colors.deepPurpleAccent;
 const burnColor = Colors.red;
 
+const hoverColor = Colors.white12;
+
 const inAssetsColor = Colors.green;
 const outAssetsColor = Colors.red;
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:waves_spy/src/providers/transaction_provider.dart';
 import 'package:waves_spy/src/widgets/filter_widger.dart';
+import 'package:waves_spy/src/widgets/nfts/nfts_list.dart';
 import 'package:waves_spy/src/widgets/transactions/transactions_list.dart';
 
 import 'assets/assets_list.dart';
@@ -45,7 +46,7 @@ class _MainAreaState extends State<MainArea>  with SingleTickerProviderStateMixi
                 children: [
               TransactionsList(),
               const AssetsList(),
-              Center(child: Text("NFTs")),
+              NftList(),
               Center(child: Text("Data")),
               Center(child: Text("Script")),
             ]),
