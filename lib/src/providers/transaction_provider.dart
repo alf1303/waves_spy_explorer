@@ -1,9 +1,12 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:waves_spy/src/constants.dart';
 import 'package:waves_spy/src/helpers/helpers.dart';
 import 'package:waves_spy/src/providers/asset_provider.dart';
+import 'package:waves_spy/src/providers/data_script_provider.dart';
 import 'package:waves_spy/src/providers/filter_provider.dart';
 import 'package:waves_spy/src/providers/nft_provider.dart';
 import 'package:waves_spy/src/providers/progress_bars_provider.dart';
@@ -22,6 +25,7 @@ class TransactionProvider extends ChangeNotifier {
   final progressProvider = ProgressProvider();
   final assetProvider = AssetProvider();
   final nftProvider = NftProvider();
+  final dataScriptProvider = DataScriptProvider();
   String curAddr = "";
   String afterGlob = "";
   String afterGlobNft = "";
@@ -55,12 +59,14 @@ class TransactionProvider extends ChangeNotifier {
     assetProvider.assets.clear();
     Asset waves = await fetchAssetInfo("WAVES");
     assetsGlobal[waves.id] = waves;
+    progressProvider.start();
     await getTransactions(address: curAddr);
     await getAssets(curAddr);
     await getNft(address: address);
     // await getNft(curAddr); //implement
-    // await getData(curAddr); //implement
-    // await getScript(curAddr); //implement
+    await getData(curAddr); //implement
+    await getScript(curAddr); //implement
+    progressProvider.stop();
     notifyListeners();
   }
 
@@ -70,9 +76,9 @@ class TransactionProvider extends ChangeNotifier {
 
   Future<void> getTransactions({required String address, bool? after}) async {
     if (curAddr.isNotEmpty) {
+      progressProvider.startTransactions();
       final filterProvider = FilterProvider();
       bool stopDate = false;
-      progressProvider.start();
       List<dynamic> res = List.empty(growable: true);
       while (!stopDate) {
         String afterId = after == null ? "" : afterGlob;
@@ -85,14 +91,18 @@ class TransactionProvider extends ChangeNotifier {
           res = json[0];
           // print("Loaded: " + res.length.toString());
           if(res.isEmpty) {
+            stopDate = true;
             print("--- TransactionProvider getTransactions() empty transactions list got");
+          } else {
+            var lastTrans = res[res.length - 1];
+            afterGlob = lastTrans["id"];
+            final curFromDateTs = dateToTimestamp(filterProvider.from);
+            stopDate = lastTrans["timestamp"] < curFromDateTs || curFromDateTs == 0;
+            // print("LastTrans: $afterGlob, trts: ${lastTrans["timestamp"]}, curFromDateTs: $curFromDateTs");
           }
-          var lastTrans = res[res.length - 1];
-          afterGlob = lastTrans["id"];
-          final curFromDateTs = dateToTimestamp(filterProvider.from);
-          stopDate = lastTrans["timestamp"] < curFromDateTs || curFromDateTs == 0;
-          // print("LastTrans: $afterGlob, trts: ${lastTrans["timestamp"]}, curFromDateTs: $curFromDateTs");
+
         } else {
+          progressProvider.stopTransactions();
           throw("Failed to load transactions list\n" + resp.body);
         }
       
@@ -115,7 +125,7 @@ class TransactionProvider extends ChangeNotifier {
       //   print(encoder.convert(value));
       // }
       // allTransactions = allTransactions.where((element) => element["type"] == 16).toList();
-      progressProvider.stop();
+      progressProvider.stopTransactions();
     }
   }
 
@@ -192,6 +202,7 @@ class TransactionProvider extends ChangeNotifier {
   }
 
   Future<void> getAssets(String address) async {
+    progressProvider.startAssets();
     var tmpass = <String, dynamic> {};
     var res = <dynamic>[];
     var resp = await http.get(Uri.parse("$nodeUrl/assets/balance/$address"));
@@ -202,6 +213,7 @@ class TransactionProvider extends ChangeNotifier {
         tmpass[el["assetId"]] = el;
       }
     } else {
+      progressProvider.stopAssets();
       throw("Failed to load assets list. \n" + resp.body);
     }
 
@@ -225,6 +237,7 @@ class TransactionProvider extends ChangeNotifier {
     });
     assetProvider.sortAssets();
     assetProvider.filterAssets();
+    progressProvider.stopAssets();
   }
 
   Future<void> getMoreNfts() async{
@@ -234,12 +247,14 @@ class TransactionProvider extends ChangeNotifier {
   Future<void> getNft({required String address, bool? after}) async {
     List<dynamic> res = List.empty(growable: true);
     if(curAddr.isNotEmpty) {
+      progressProvider.startNfts();
       String afterId = after == null ? "" : afterGlobNft;
       var resp = await http.get(Uri.parse("$nodeUrl/assets/nft/$address/limit/$limitNft?after=$afterId"));
       if(resp.statusCode == 200) {
         final json = jsonDecode(resp.body);
         res = json;
       } else {
+        progressProvider.stopNfts();
         throw("Cant fetch NFTs list: " + resp.body);
       }
       if(afterId.isEmpty) {
@@ -249,13 +264,54 @@ class TransactionProvider extends ChangeNotifier {
       }
       // print("Loaded Nfts: " + nftProvider.nfts.length.toString());
       nftProvider.filterNfts();
+      progressProvider.stopNfts();
     }
   }
 
-  getData(String address) {
+  Future<void> getData(String address) async{
+    progressProvider.startData();
+    List<dynamic> res = List.empty(growable: true);
+    var resp = await http.get(Uri.parse("$nodeUrl/addresses/data/$curAddr"));
+    if(resp.statusCode == 200) {
+      final json = jsonDecode(resp.body);
+      // print(json);
+      res = json;
+    } else {
+      progressProvider.stopData();
+      throw("Cant fetch data from account data storage :" + resp.body);
+    }
+    dataScriptProvider.data = res;
+    dataScriptProvider.filterData();
+    progressProvider.stopData();
   }
 
-  getScript(String address) {}
+  Future<void> getScript(String address) async{
+    if (curAddr.isNotEmpty) {
+      dataScriptProvider.script = "";
+      progressProvider.startScript();
+      var resp = await http.get(Uri.parse("$nodeUrl/addresses/scriptInfo/$curAddr"));
+      if(resp.statusCode == 200) {
+        final json = jsonDecode(resp.body);
+        var scrpt = json["script"];
+        if (scrpt != null) {
+          String ftf = scrpt.toString().substring(7);
+          var decoded = await http.post(Uri.parse("$nodeUrl/utils/script/decompile"), body: ftf);
+          if(decoded.statusCode == 200) {
+            final jsn = jsonDecode(decoded.body);
+            dataScriptProvider.script = jsn["script"];
+          } else {
+            progressProvider.stopScript();
+            throw("Cant fetch decompiled script: " + decoded.body);
+          }
+        }
+      } else {
+        progressProvider.stopScript();
+        throw("Cant load account script: " + resp.body);
+      }
+      dataScriptProvider.notifyListeners();
+      progressProvider.stopScript();
+    }
+  }
 
   void fillTransactionsWithAssetsNames(List<dynamic> res) {
     for (var tr in res) {

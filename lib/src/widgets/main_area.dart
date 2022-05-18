@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:waves_spy/src/providers/transaction_provider.dart';
+import 'package:waves_spy/src/widgets/data/data_list.dart';
 import 'package:waves_spy/src/widgets/filter_widger.dart';
 import 'package:waves_spy/src/widgets/nfts/nfts_list.dart';
+import 'package:waves_spy/src/widgets/script/script_view.dart';
 import 'package:waves_spy/src/widgets/transactions/transactions_list.dart';
 
 import 'assets/assets_list.dart';
+import 'other/progress_bar.dart';
 
 TabController? tabController;
 
@@ -45,10 +48,10 @@ class _MainAreaState extends State<MainArea>  with SingleTickerProviderStateMixi
                 controller: tabController,
                 children: [
               TransactionsList(),
-              const AssetsList(),
+              AssetsList(),
               NftList(),
-              Center(child: Text("Data")),
-              Center(child: Text("Script")),
+              DataList(),
+              ScriptView(),
             ]),
           ),
         ],

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:waves_spy/src/providers/nft_provider.dart';
 import 'package:waves_spy/src/providers/transaction_provider.dart';
+import 'package:waves_spy/src/widgets/data/data_list.dart';
 import 'package:waves_spy/src/widgets/nfts/nft_view.dart';
+import 'package:waves_spy/src/widgets/other/progress_bar.dart';
 
 class NftList extends StatefulWidget {
   const NftList({Key? key, this.nftsList}) : super(key: key);
@@ -43,6 +45,7 @@ Future<void> _scrollListener() async{
       padding: const EdgeInsets.all(8),
       child: Column(
         children: [
+          const MyProgressBar(label: "nfts"),
           Padding(
             padding: const EdgeInsets.only(left: 6.0),
             child: Row(
@@ -56,13 +59,7 @@ Future<void> _scrollListener() async{
           Expanded(
               child: Consumer<NftProvider>(
                 builder: (context, model, child) {
-                  return ListView.builder(
-                    controller: controller,
-                    itemCount: model.filteredNfts.length,
-                      itemBuilder: (context, i) {
-                        return NftView(nft: model.filteredNfts[i]);
-                      }
-                  );
+                  return BaseListWidget(model: model);
                 },
               ))
         ],
@@ -71,3 +68,4 @@ Future<void> _scrollListener() async{
   }
 
 }
+

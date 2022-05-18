@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:waves_spy/src/constants.dart';
 import 'package:waves_spy/src/helpers/helpers.dart';
 import 'package:waves_spy/src/providers/transaction_provider.dart';
+import 'package:waves_spy/src/widgets/nfts/nft_view.dart';
 
 
 class NftProvider extends ChangeNotifier{
@@ -14,7 +15,7 @@ class NftProvider extends ChangeNotifier{
   NftProvider._internal();
 
   List<dynamic> nfts = List.empty(growable: true);
-  List<dynamic> filteredNfts = List.empty(growable: true);
+  List<dynamic> filteredList = List.empty(growable: true);
 
   String nftName = "";
 
@@ -35,12 +36,16 @@ class NftProvider extends ChangeNotifier{
   }
 
   filterNfts() {
-    filteredNfts = List.from(nfts);
+    filteredList = List.from(nfts);
     if(nftName.isNotEmpty) {
       String nameLowered = nftName.toLowerCase();
-      filteredNfts = nfts.where((element) => element["name"].toLowerCase().contains(nameLowered)).toList();
+      filteredList = nfts.where((element) => element["name"].toLowerCase().contains(nameLowered)).toList();
     }
     notifyListeners();
+  }
+
+  getItem(item) {
+    return NftView(nft: item);
   }
 
 }

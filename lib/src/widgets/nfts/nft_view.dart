@@ -56,35 +56,36 @@ class NftView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String link = getUrl();
-    return Container(
-      padding: EdgeInsets.all(5),
-      margin: EdgeInsets.all(2),
-      decoration: BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: BorderRadius.all(Radius.circular(5))),
-      child: Row(
-        children: [
-          InkWell(
-            hoverColor: hoverColor,
-              onTap: showDetails,
-              child: SizedBox(width: 250, child: Text(nft["name"]))),
-          SizedBox(width: 350, child: Row(
-            children: [
-              Tooltip(
-                message: link,
-                child: RichText(
-                  text: TextSpan(
-                    style: link.isNotEmpty ? TextStyle(color: Colors.cyan, decoration: TextDecoration.underline, decorationThickness: 2) : null,
-                    text: nft["name"],
-                    recognizer: TapGestureRecognizer()..onTap = () async {
-                      await _launchURL(link);
-                    }
+    return InkWell(
+      hoverColor: hoverColor,
+      onTap: showDetails,
+      child: Container(
+        padding: EdgeInsets.all(5),
+        margin: EdgeInsets.all(2),
+        decoration: BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: BorderRadius.all(Radius.circular(5))),
+        child: Row(
+          children: [
+            SizedBox(width: 250, child: Text(nft["name"])),
+            SizedBox(width: 350, child: Row(
+              children: [
+                Tooltip(
+                  message: link,
+                  child: RichText(
+                    text: TextSpan(
+                      style: link.isNotEmpty ? TextStyle(color: Colors.cyan, decoration: TextDecoration.underline, decorationThickness: 2) : null,
+                      text: nft["name"],
+                      recognizer: TapGestureRecognizer()..onTap = () async {
+                        await _launchURL(link);
+                      }
+                    ),
                   ),
                 ),
-              ),
-              Expanded(child: Container(),)
-            ],
-          )),
-          SizedBox(child: SelectableText("${getAddrName(nft["issuer"])} (${nft["issuer"]})"))
-        ],
+                Expanded(child: Container(),)
+              ],
+            )),
+            SizedBox(child: SelectableText("${getAddrName(nft["issuer"])} (${nft["issuer"]})"))
+          ],
+        ),
       ),
     );
   }

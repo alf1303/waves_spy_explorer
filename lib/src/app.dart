@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:waves_spy/src/providers/asset_provider.dart';
+import 'package:waves_spy/src/providers/data_script_provider.dart';
 import 'package:waves_spy/src/providers/filter_provider.dart';
 import 'package:waves_spy/src/providers/nft_provider.dart';
 import 'package:waves_spy/src/providers/progress_bars_provider.dart';
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
       ChangeNotifierProvider<TransactionDetailsProvider>(create: (_) => TransactionDetailsProvider()),
       ChangeNotifierProvider<AssetProvider>(create: (_) => AssetProvider()),
       ChangeNotifierProvider<NftProvider>(create: (_) => NftProvider()),
-
+      ChangeNotifierProvider<DataScriptProvider>(create: (_) => DataScriptProvider()),
     ],
       child: MaterialApp(
         // Providing a restorationScopeId allows the Navigator built by the

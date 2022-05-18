@@ -131,27 +131,20 @@ Future<void> getMassAssetsInfo(Map<String, dynamic> ids) async{
           }
       }
 
-      // for (var id in keys) {
-      //     if (id != "WAVES") {
-      //       tmpstr += tmpsepar + id;
-      //       if (tmpsepar == "") {
-      //           tmpsepar = "&id=";
-      //       }
-      //     }
-      // }
-
-
-
       var resp = await http.get(Uri.parse("$nodeUrl/assets/details?id=$tmpstr"));
       if (resp.statusCode == 200) {
         List<dynamic> assetDetails = jsonDecode(resp.body);
-        for (var ass in assetDetails) {
-            if (!assetsGlobal.containsKey(ass['assetId'])) {
-                // print(ass);
-                Asset a = Asset(ass['assetId'], ass['name'], ass['decimals'], ass['description'], ass['reissuable'], ass["scripted"]);
-                assetsGlobal[a.id] = a;
-            }
-        }
+          for (var ass in assetDetails) {
+              if (!ass.containsKey("error")) {
+                if (!assetsGlobal.containsKey(ass['assetId'])) {
+                    Asset a = Asset(ass['assetId'], ass['name'], ass['decimals'], ass['description'], ass['reissuable'], ass["scripted"]);
+                    assetsGlobal[a.id] = a;
+                }
+              } else {
+                  stop = true;
+                  print("Error: " + ass.toString());
+              }
+          }
       } else {
           throw("Failed to load assets details: " + resp.body);
       }

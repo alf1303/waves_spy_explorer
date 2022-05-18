@@ -13,19 +13,93 @@ class ProgressProvider extends ChangeNotifier{
     return _instance;
   }
   ProgressProvider._internal();
+  bool loading = false;
   bool loadingTrans = false;
+  bool loadingAssets = false;
+  bool loadingNfts = false;
+  bool loadingData = false;
+  bool loadingScript = false;
 
   void start() {
-    loadingTrans = true;
+    loading = true;
     notify();
   }
 
   void stop() {
+    loading = false;
+    notify();
+  }
+
+  void startTransactions() {
+    loadingTrans = true;
+    notify();
+  }
+
+  void stopTransactions() {
     loadingTrans = false;
+    notify();
+  }
+
+  void startAssets() {
+    loadingAssets = true;
+    notify();
+  }
+
+  void stopAssets() {
+    loadingAssets = false;
+    notify();
+  }
+
+  void startNfts() {
+    loadingNfts = true;
+    notify();
+  }
+
+  void stopNfts() {
+    loadingNfts = false;
+    notify();
+  }
+
+  void startData() {
+    loadingData = true;
+    notify();
+  }
+
+  void stopData() {
+    loadingData = false;
+    notify();
+  }
+
+  void startScript() {
+    loadingScript = true;
+    notify();
+  }
+
+  void stopScript() {
+    loadingScript = false;
     notify();
   }
 
   notify() {
     notifyListeners();
+  }
+
+  getBool(String label) {
+    switch(label) {
+      case "main":
+        return loading;
+      case "trans":
+        return loadingTrans;
+      case "assets":
+        return loadingAssets;
+      case "nfts":
+          return loadingNfts;
+      case "data":
+        return loadingData;
+      case "script":
+        return loadingScript;
+      default:
+        return false;
+    }
   }
 }

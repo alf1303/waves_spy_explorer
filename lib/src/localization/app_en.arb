@@ -3,7 +3,7 @@
   "@appTitle": {
     "description": "The title of the application"
   },
-    "headerTitle": "Waves Spy Explorer 3PAtzncjJGWRpCtkR55wAzcfZ9fubMeA4JU",
+    "headerTitle": "Waves Spy Explorer",
     "@headerTitle": {
       "description": "The title of the Scaffold"
     },
@@ -12,5 +12,5 @@
     "addrHint" : "Enter or Paste address",
     "clearAsset" : "clear asset name",
     "clearFunction" : "clear function name",
-    "loadMore" : "Load more"
+    "loadMore" : "Load more transactions"
  }

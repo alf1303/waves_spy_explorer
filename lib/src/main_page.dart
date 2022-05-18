@@ -24,7 +24,7 @@ class MainPage extends StatelessWidget {
       ),
       body: Column(
         children: [
-          const MyProgressBar(),
+          const MyProgressBar(label: "main"),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
