@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -29,7 +30,7 @@ class TransactionProvider extends ChangeNotifier {
   String curAddr = "";
   String afterGlob = "";
   String afterGlobNft = "";
-  int limit = 25;
+  int limit = 40;
   int limitNft = 1000;
 
   String header = "";
@@ -118,7 +119,6 @@ class TransactionProvider extends ChangeNotifier {
       
       filteredTransactions = allTransactions;
       // print("Loaded ${allTransactions.length}, last: $afterGlob");
-      
       filterTransactions();
       // JsonEncoder encoder = const JsonEncoder.withIndent('  ');
       // for (var value in allTransactions) {
@@ -147,6 +147,8 @@ class TransactionProvider extends ChangeNotifier {
     for (var tr in transactions) {
       final transAssetsMap = <String, String>{};
       final trAddressesMap = <String, String>{};
+      final Map<String, double> inAssetsIds = {};
+      final Map<String, double> outAssetsIds = {};
       int type = tr["type"];
 
       if (tr.containsKey("sender")) {
@@ -160,6 +162,30 @@ class TransactionProvider extends ChangeNotifier {
       if (type == 4 || type == 11 || type == 6) {
         String assetId = tr["assetId"] ?? "WAVES";
         transAssetsMap[assetId] = assetId == "WAVES" ? "WAVES" : "";
+
+        if(type == 6) {
+          outAssetsIds[assetId] = tr["amount"];
+        }
+        if(type == 4) {
+          curAddr == tr["sender"] ? outAssetsIds[assetId] == tr["amount"] : inAssetsIds[assetId] = tr["amount"];
+        }
+        if(type == 11) {
+          bool income = true;
+          double sum = 0;
+          final transfers = tr["transfers"];
+          for (var el in transfers) {
+            if(curAddr == tr["sender"]) {
+              income = false;
+              sum += el["amount"];
+            } else {
+              if(el["recipient"] == curAddr) {
+                sum += el["amount"];
+              }
+            }
+          }
+          income ? inAssetsIds[assetId] = sum : outAssetsIds[assetId] = sum;
+        }
+
       }
 
       // invokeScript
@@ -168,34 +194,53 @@ class TransactionProvider extends ChangeNotifier {
         for (var pay in payment) {
           String assetId = pay["assetId"] ?? "WAVES";
           transAssetsMap[assetId] = assetId == "WAVES" ? "WAVES" : "";
+          if(curAddr == tr["dApp"]) {
+            inAssetsIds[assetId] = pay["amount"];
+          } else {
+            outAssetsIds[assetId] = pay["amount"];
+          }
         }
       }
 
       //invokeScript
       if (type == 16) {
+        final isDapp = tr["dApp"] == curAddr;
         List<dynamic> transfers = tr["stateChanges"]["transfers"];
         for (var pay in transfers) {
-          String asset = pay["asset"] ?? "WAVES";
-          transAssetsMap[asset] = asset == "WAVES" ? "WAVES" : "";
-          trAddressesMap[pay["address"]] = getAddrName(pay["address"]);
+          if (isDapp && (pay["address"] == tr["sender"]) || (!isDapp && pay["address"] == curAddr)) {
+            String asset = pay["asset"] ?? "WAVES";
+            transAssetsMap[asset] = asset == "WAVES" ? "WAVES" : "";
+            trAddressesMap[pay["address"]] = getAddrName(pay["address"]);
+            if(curAddr == tr["dApp"]) {
+              outAssetsIds[asset] = pay["amount"];
+            } else {
+              inAssetsIds[asset] = pay["amount"];
+            }
+          }
         }
       }
 
       // exchange
       if (type == 7) {
-        final assId = tr['order1']['assetPair']['amountAsset'] ?? "WAVES";
-        final prassId = tr['order1']['assetPair']['priceAsset'] ?? "WAVES";
+        final p = parseTransactionType(tr);
+        final assId = p["amountAsset"];
+        final prassId = p["priceAsset"];
         transAssetsMap[assId] = "";
         transAssetsMap[prassId] = "";
-        final seller = tr["order2"]["sender"];
-        final buyer = tr["order1"]["sender"];
+        final seller = p["seller"];
+        final buyer = p["buyer"];
         trAddressesMap[seller] = getAddrName(seller);
         trAddressesMap[buyer] = getAddrName(buyer);
+          outAssetsIds.addAll(p["payment"]);
+          inAssetsIds.addAll(p["transfers"]);
       }
 
       tr["addresses"] = trAddressesMap;
       tr["assetsIds"] = transAssetsMap;
       tr["addressesNames"] = trAddressesMap.values.join(",");
+
+      tr["inAssetsIds"] = inAssetsIds;
+      tr["outAssetsIds"] = outAssetsIds;
       assetsLocalIds.addAll(transAssetsMap);
     }
     return assetsLocalIds;
@@ -315,11 +360,37 @@ class TransactionProvider extends ChangeNotifier {
 
   void fillTransactionsWithAssetsNames(List<dynamic> res) {
     for (var tr in res) {
+      // print(tr);
       Map<String, String> assets = tr["assetsIds"];
       for (String e in assets.keys) {
         assets[e] = assetsGlobal.containsKey(e) ? assetsGlobal[e]!.name : "";
       }
       tr["assetsNames"] = assets.values.join(",");
+
+      //create in/out assets names strings
+      final List<String> inNames = List.empty(growable: true);
+      final List<String> outNames = List.empty(growable: true);
+      for(String el in tr["inAssetsIds"].keys) {
+        inNames.add(assetsGlobal.containsKey(el) ? assetsGlobal[el]!.name : "");
+      }
+      for(String el in tr["outAssetsIds"].keys) {
+        outNames.add(assetsGlobal.containsKey(el) ? assetsGlobal[el]!.name : "");
+      }
+      tr["inAssetsNames"] = inNames.join(",");
+      tr["outAssetsNames"] = outNames.join(",");
+
+      //correcting decimals for price asset for exchange transactions
+      if(tr["type"] == 7) {
+        final priceAsset = tr["order1"]["assetPair"]["priceAsset"] ?? "WAVES";
+        final amountAsset = tr["order1"]["assetPair"]["amountAsset"] ?? "WAVES";
+        final amountDecimals = assetsGlobal[amountAsset]!.decimals;
+        if(tr["inAssetsIds"].containsKey(priceAsset)) {
+          tr["inAssetsIds"][priceAsset] = tr["inAssetsIds"][priceAsset]/pow(10, amountDecimals);
+        }
+        if(tr["outAssetsIds"].containsKey(priceAsset)) {
+          tr["outAssetsIds"][priceAsset] = tr["outAssetsIds"][priceAsset]/pow(10, amountDecimals);
+        }
+      }
     }
   }
 
@@ -350,15 +421,17 @@ class TransactionProvider extends ChangeNotifier {
     }
     final trToFilter = filterProvider.isFiltered() ? filteredTransactions : datedTransactions;
 
-    // print("*** 2");
-    // trToFilter.forEach((element) {
-    //   // print(element["id"].toString() + ": " + element["assetsNames"]);
-    //   print("id: ${element.containsKey("id")}, assetsNames: ${element.containsKey("assetsNames")}");
-    // });
-    // print("*** 3");
-    // print("**************");
-    filteredTransactions = trToFilter.where((tr) => tr["assetsNames"].toLowerCase().contains(filterProvider.assetName.toLowerCase())).toList();
-    // print("*** 4");
+    print("Filtering direction: ${filterProvider.direction}");
+    if(filterProvider.direction == "all") {
+      filteredTransactions = trToFilter.where((tr) => tr["assetsNames"].toLowerCase().contains(filterProvider.assetName.toLowerCase())).toList();
+    }
+    if(filterProvider.direction == "in") {
+      filteredTransactions = trToFilter.where((tr) => tr["inAssetsNames"].toLowerCase().contains(filterProvider.assetName.toLowerCase())).toList();
+    }
+    if(filterProvider.direction == "out") {
+      filteredTransactions = trToFilter.where((tr) => tr["outAssetsNames"].toLowerCase().contains(filterProvider.assetName.toLowerCase())).toList();
+    }
+
     createInfo();
     notifyListeners();
   }

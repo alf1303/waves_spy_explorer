@@ -131,7 +131,9 @@ const dAppsDict = {
 "3P3188GUzTypcP2hKNe7Ys5X1S9yoNYjCU3": "Dasha Rewards",
 "3PD8eT53J3LcUM5HLnHMcYNAuLEKrQgC4bR": "Buy the Dip PUZzle",
 "3P3EgRSuPaavrVx8AavNVrTMLqtyPsNwPiy": "Dima @Kript_on",
-  "3PBwHmugtD1QXqGBzgQRnUdpGAUuE3VqTt6": "Waves Ducks Memes?"
+  "3PBwHmugtD1QXqGBzgQRnUdpGAUuE3VqTt6": "Waves Ducks Memes?",
+
+  "3P8JkeL2hVmp957Se45kaxXqXkggZ1SDNZd" : "seller1"
 };
 
 const typeDict = {

@@ -13,6 +13,15 @@ class FilterWidget extends StatelessWidget {
   final selectedColor = Colors.cyanAccent;
   final functController = TextEditingController();
   final assetController = TextEditingController();
+  String dirValue = "";
+
+  final dirs = ["all", "in", "out"];
+
+  void onChangedDirection(val) {
+    print("new direction: $val");
+    final _filterProvider = FilterProvider();
+    _filterProvider.changeDirection(val);
+  }
 
   void onTypeChanged(val) {
     final _filterProvider = FilterProvider();
@@ -68,7 +77,7 @@ void clearToDate() {
         functController.text = _filterProvider.functName;
         assetController.selection = TextSelection.fromPosition(TextPosition(offset: assetController.text.length));
         functController.selection = TextSelection.fromPosition(TextPosition(offset: functController.text.length));
-
+        dirValue = _filterProvider.direction;
         bool funcNameVisible = _filterProvider.fType == 16;
         return Column(
           children: [
@@ -97,6 +106,16 @@ void clearToDate() {
                         Expanded(
                           child: InputWidget(controller: assetController, onchanged: assetChanged, clearFunc: clearAsset, label: "asset name", hint: apploc?.clearAsset),
                         ),
+                        DropdownButton(
+                            items: dirs.map((String items) {
+                              return DropdownMenuItem(
+                                value: items,
+                                child: Text(items),
+                              );
+                            }).toList(),
+                            value: dirValue,
+                            isDense: true,
+                            onChanged: onChangedDirection),
                         Expanded(
                           child: Visibility(child: InputWidget(controller: functController, onchanged: functChanged, clearFunc: clearFunc, label: "function name", hint: apploc?.clearFunction),
                             visible: funcNameVisible,)

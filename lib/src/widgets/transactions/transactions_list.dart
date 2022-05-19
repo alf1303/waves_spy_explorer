@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:waves_spy/src/widgets/filter_widger.dart';
 import 'package:waves_spy/src/widgets/other/progress_bar.dart';
+import 'package:waves_spy/src/widgets/transactions/base_transaction_view.dart';
 import 'package:waves_spy/src/widgets/transactions/transaction_view.dart';
 
 import '../../providers/transaction_provider.dart';
 
 class TransactionsList extends StatefulWidget {
-  TransactionsList({Key? key, this.transactionsList}) : super(key: key);
+  const TransactionsList({Key? key, this.transactionsList}) : super(key: key);
   final List<dynamic>? transactionsList;
 
   @override
@@ -57,7 +58,7 @@ class _TransactionsListState extends State<TransactionsList> {
                   itemCount: model.filteredTransactions.length,
                     controller: controller,
                     itemBuilder: (context, i) {
-                      return TransView(td: model.filteredTransactions[i]);
+                      return BaseTransactionView(td: model.filteredTransactions[i]);
                     }
                 );
               },

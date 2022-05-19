@@ -156,7 +156,7 @@ getTransfers({required bool isDapp, required String sender, required String curA
     for (dynamic el in transfers) {
         double amount = el["amount"] ?? 0;
         // bool condition = isDapp ?
-        if (el["address"] == sender || (!isDapp && el["address"] == curAddr)) {
+        if ((isDapp && el["address"] == sender) || (!isDapp && el["address"] == curAddr)) {
             final assetId = el["asset"] ?? "WAVES";
             if (resDict.containsKey(assetId)) {
                 double prevAm = resDict[assetId] ?? 0;

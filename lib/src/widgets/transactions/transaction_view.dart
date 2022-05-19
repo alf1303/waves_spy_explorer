@@ -21,49 +21,51 @@ class TransView extends StatelessWidget {
   void showDetails() {
     final _trDetailsProvider = TransactionDetailsProvider();
     _trDetailsProvider.setTransaction(td);
-    // print("Tap" + td);
   }
 
   @override
   Widget build(BuildContext context) {
     String formattedDate = DateFormat('dd-MM-yyyy  kk:mm:ss.SSS').format(timestampToDate(td["timestamp"]));
     Color color = Colors.white;
-    switch(td["type"]) {
-      case 4:
-         color = transferColor; break;
-      case 6:
-         color = burnColor; break;
-      case 7:
-         color = exchangeColor; break;
-      case 11:
-         color = massTransferColor; break;
-      case 16:
-         color = invokeColor; break;
-      default:
-         color = Colors.white;
-    }
+    color = getColorByType(td["type"]);
     return InkWell(
       hoverColor: hoverColor,
       onTap: showDetails,
       child: Container(
-        padding: EdgeInsets.all(5),
-        margin: EdgeInsets.all(2),
-        decoration: BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: BorderRadius.all(Radius.circular(5))),
+        padding: const EdgeInsets.all(5),
+        margin: const EdgeInsets.all(2),
+        decoration: BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: const BorderRadius.all(Radius.circular(5))),
         child: Column(
           children: [
           Row(
             children: [
             SizedBox(width: 240, child: LabeledText("type: ", getTypeName(td["type"]), "${td["type"]}", color), ),
-            // Container(color: Colors.white, width: 3, height: 10,),
             SizedBox(width: 300, child: LabeledText("date: ", formattedDate, "", color)),
             SizedBox(width: 200, child: LabeledText("height: ", td["height"].toString(), "", color)),
             LabeledText("id: ", td["id"], "", color),
           ],),
-            Divider(),
+            const Divider(),
             Details(td: td)
         ],)
       ),
     );
+  }
+
+  Color getColorByType(type) {
+    switch(type) {
+      case 4:
+        return transferColor;
+      case 6:
+        return burnColor;
+      case 7:
+        return exchangeColor;
+      case 11:
+        return  massTransferColor;
+      case 16:
+        return invokeColor;
+      default:
+        return Colors.white;
+    }
   }
 }
 
@@ -200,9 +202,11 @@ Widget transferHeader(Map<String, dynamic> p) {
 }
 
 Widget massTransferHeader(Map<String, dynamic> p) {
+  final _transactionProvider = TransactionProvider();
   return Row(
     children: [
-      SizedBox(child: LabeledText("From", p["anotherAddr"], p["name"], massTransferColor),),
+      SizedBox(width: 740, child: LabeledText("From", p["anotherAddr"], p["name"], massTransferColor),),
+      SizedBox(child: LabeledText("Receiver", _transactionProvider.curAddr, "", massTransferColor),),
       // SizedBox(width: 800, child: LabeledText("dApp:", "${p["dApp"]} (${p["dAppName"]})"),),
     ],
   );
@@ -213,7 +217,8 @@ Widget burnHeader(Map<String, dynamic> p) {
   return Container();
 }
 
-Widget assetBuilder(String id, val, exop, String amountId, String dir) {
+Widget assetBuilder(String id, val, exop, String amountId, String dir, [String? receiver]) {
+  String rec = receiver == null ? "" : " to $receiver";
   String tmpAss = id + ".|." + amountId;
   return FutureBuilder<List<Asset?>>(
       future: getAssetInfoLabel(tmpAss),
@@ -228,7 +233,7 @@ Widget assetBuilder(String id, val, exop, String amountId, String dir) {
               value = value / pow(10, exchDecimals);
             }
           }
-          widget = Text("${value.truncat(decimals)} ${snapshot.data![0]!.name}", style: TextStyle(color: dir == "in" ? inAssetsColor : outAssetsColor),);
+          widget = value != 0 ?Text("${value.truncat(decimals)} ${snapshot.data![0]!.name}$rec", style: TextStyle(color: dir == "in" ? inAssetsColor : outAssetsColor),) : Container();
         } else if (snapshot.hasError) {
           print(snapshot.error.toString());
           widget = Text("Error");
