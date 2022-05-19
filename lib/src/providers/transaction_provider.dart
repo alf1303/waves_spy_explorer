@@ -30,7 +30,7 @@ class TransactionProvider extends ChangeNotifier {
   String curAddr = "";
   String afterGlob = "";
   String afterGlobNft = "";
-  int limit = 40;
+  int limit = 500;
   int limitNft = 1000;
 
   String header = "";
@@ -112,20 +112,26 @@ class TransactionProvider extends ChangeNotifier {
         } else {
           allTransactions.addAll(res);
         }
+        final ids = await extractAssets(res);
+        await getMassAssetsInfo(ids);
+        fillTransactionsWithAssetsNames(res);
+
+        filteredTransactions = allTransactions;
+        final lastTrans = allTransactions.isEmpty ? null : allTransactions[allTransactions.length-1];
+        final firstTrans = allTransactions.isEmpty ? null : allTransactions[0];
+        filterProvider.actualFrom = lastTrans == null ? DateTime.now() : timestampToDate(lastTrans["timestamp"]);
+        filterProvider.actualTo = firstTrans == null ? DateTime.now() : timestampToDate(firstTrans["timestamp"]);
+        filterTransactions();
       }
-      final ids = await extractAssets(res);
-      await getMassAssetsInfo(ids);
-      fillTransactionsWithAssetsNames(res);
-      
-      filteredTransactions = allTransactions;
+
+      progressProvider.stopTransactions();
+
       // print("Loaded ${allTransactions.length}, last: $afterGlob");
-      filterTransactions();
       // JsonEncoder encoder = const JsonEncoder.withIndent('  ');
       // for (var value in allTransactions) {
       //   print(encoder.convert(value));
       // }
       // allTransactions = allTransactions.where((element) => element["type"] == 16).toList();
-      progressProvider.stopTransactions();
     }
   }
 

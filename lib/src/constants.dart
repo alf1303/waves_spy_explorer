@@ -26,6 +26,8 @@ const dAppsDict = {
 "3PHTDdjz8Kb5JcAkhzfR57MCUYoe73pyxxK": "SWOP.FI WEST/EAST",
 "3PBHyEwmERR1CEkrTNbPj2bgyisTfPRqfee": "SWOP.FI PUZZLE/USDN",
 "3PHaNgomBkrvEL2QnuJarQVJa71wjw9qiqG": "SWOP.FI WAVES/USDN",
+"3P8FVZgAJUAq32UEZtTw84qS4zLqEREiEiP": "SWOP.FI WAVES/BTC",
+"3PACj2DLTw3uUhsUmT98zHU5M4hPufbHKav": "SWOP.FI BTC/USDN",
 "3PEcDN4sLSx6Pp4Y3m9vZzrgxtExfpFJr8w": "SWOP.FI EURN/USDN",
 "3P2V63Xd6BviDkeMzxhUw2SJyojByRz8a8m": "SWOP.FI NSBT/USDN",
 "3P8bovWtkLFVToB8LxP8AZLoWVwC8rDZLQQ": "SWOP.FI ENNO/USDN",
@@ -133,7 +135,9 @@ const dAppsDict = {
 "3P3EgRSuPaavrVx8AavNVrTMLqtyPsNwPiy": "Dima @Kript_on",
   "3PBwHmugtD1QXqGBzgQRnUdpGAUuE3VqTt6": "Waves Ducks Memes?",
 
-  "3P8JkeL2hVmp957Se45kaxXqXkggZ1SDNZd" : "seller1"
+  "3P8JkeL2hVmp957Se45kaxXqXkggZ1SDNZd" : "seller1",
+
+  "3PPAAPAcT3rUV6LXfxj4e3MJ5wgxi37pDAM" : "abuser_Puz_1"
 };
 
 const typeDict = {

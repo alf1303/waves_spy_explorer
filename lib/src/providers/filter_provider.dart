@@ -17,6 +17,8 @@ class FilterProvider extends ChangeNotifier{
   }
   FilterProvider._internal();
   final _transactionProvider = TransactionProvider();
+  DateTime? actualFrom;
+  DateTime? actualTo;
   DateTime? from;
   DateTime? to;
   int fType = 0;
@@ -24,30 +26,45 @@ class FilterProvider extends ChangeNotifier{
   String assetName = "";
   String direction = "all";
 
+  Map<String, double> finalList = {};
+  double sumacum = 0;
   //create string for indicating current filter parameters
   String createFilterData() {
     String type = fType == 0 ? "" : "Type: ${typeDict[fType].toString()}, ";
     String functionName = functName.isEmpty ? "" : "Call: $functName, ";
     String assetNameStr = assetName.isEmpty ? "" : "Asset name: $assetName, ";
-    String fromDate = from == null ? "" : "From: ${from.toString()}, ";
-    String toDate = to == null ? "" : "To: ${to.toString()}, ";
+    String fromDate = actualFrom == null ? "" : "From: ${actualFrom.toString()}, ";
+    String toDate = actualTo == null ? "" : "To: ${actualTo.toString()}, ";
     String dir = direction == "all" ? "" : direction == "in" ? "incomes" : "outcomes";
     String sum = "";
-    // TODO fix this to include/
+    
+    //Calculating income/outcome summs
     if(assetName.isNotEmpty && direction != "all") {
-      double sumacum = 0;
+      sumacum = 0;
       String assId = "";
       for (var tr in _transactionProvider.filteredTransactions) {
         if(direction == "in") {
-          assId = tr["inAssetsIds"].keys.toList()[0];
-          sumacum += tr["inAssetsIds"][assId];
+            assId = tr["inAssetsIds"].keys.toList()[0];
+            sumacum += tr["inAssetsIds"][assId];
+            if(finalList.containsKey(tr["sender"])) {
+              finalList[tr["sender"]] = (finalList[tr["sender"]]! + tr["inAssetsIds"][assId]!);
+            } else {
+              finalList[tr["sender"]] = tr["inAssetsIds"][assId];
+            }
         }
+
         if(direction == "out") {
           assId = tr["outAssetsIds"].keys.toList()[0];
-          sumacum += tr["ouAssetsIds"][assId];
+          sumacum += tr["outAssetsIds"][assId];
+          if(finalList.containsKey(tr["sender"])) {
+            finalList[tr["sender"]] = (finalList[tr["sender"]]! + tr["outAssetsIds"][assId]!);
+          } else {
+            finalList[tr["sender"]] = tr["outAssetsIds"][assId];
+          }
         }
       }
       int decimals = assetsGlobal[assId] == null ? 1 : assetsGlobal[assId]!.decimals;
+      finalList.updateAll((key, value) => value/pow(10, decimals));
       sumacum = sumacum/pow(10, decimals);
       sum = sumacum.toStringAsFixed(5);
     }

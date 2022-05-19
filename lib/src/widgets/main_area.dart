@@ -5,6 +5,7 @@ import 'package:waves_spy/src/widgets/data/data_list.dart';
 import 'package:waves_spy/src/widgets/filter_widger.dart';
 import 'package:waves_spy/src/widgets/nfts/nfts_list.dart';
 import 'package:waves_spy/src/widgets/script/script_view.dart';
+import 'package:waves_spy/src/widgets/stats/stats_view.dart';
 import 'package:waves_spy/src/widgets/transactions/transactions_list.dart';
 
 import 'assets/assets_list.dart';
@@ -23,7 +24,7 @@ class _MainAreaState extends State<MainArea>  with SingleTickerProviderStateMixi
 
   @override
   void initState() {
-    tabController = TabController(vsync: this, length: 5);
+    tabController = TabController(vsync: this, length: 6);
   }
 
   @override
@@ -39,6 +40,8 @@ class _MainAreaState extends State<MainArea>  with SingleTickerProviderStateMixi
           Tab(text: "NFTs",),
           Tab(text: "Data",),
           Tab(text: "Script",),
+          Tab(text: "Stats",),
+
         ]),
       ),
       body: Column(
@@ -52,6 +55,7 @@ class _MainAreaState extends State<MainArea>  with SingleTickerProviderStateMixi
               NftList(),
               DataList(),
               ScriptView(),
+              StatsView()
             ]),
           ),
         ],
