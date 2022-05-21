@@ -59,6 +59,9 @@ class TransactionProvider extends ChangeNotifier {
     final filterProvider = FilterProvider();
     filterProvider.finalList.clear();
     assetProvider.assets.clear();
+    nftProvider.nfts.clear();
+    dataScriptProvider.data.clear();
+    dataScriptProvider.script = "";
     Asset waves = await fetchAssetInfo("WAVES");
     assetsGlobal[waves.id] = waves;
     progressProvider.start();

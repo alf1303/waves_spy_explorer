@@ -102,4 +102,8 @@ class ProgressProvider extends ChangeNotifier{
         return false;
     }
   }
+
+  bool isPresent(String label) {
+    return isPresentData(label);
+  }
 }

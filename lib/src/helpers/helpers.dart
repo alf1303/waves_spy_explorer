@@ -3,11 +3,18 @@ import 'dart:html';
 
 import 'package:waves_spy/src/constants.dart';
 import 'package:http/http.dart' as http;
+import 'package:waves_spy/src/providers/asset_provider.dart';
+import 'package:waves_spy/src/providers/data_script_provider.dart';
+import 'package:waves_spy/src/providers/nft_provider.dart';
 
 import '../models/asset.dart';
 import '../providers/transaction_provider.dart';
 import 'package:intl/intl.dart';
 
+final transactionProvider = TransactionProvider();
+final assetProvider = AssetProvider();
+final nftProvider = NftProvider();
+final dataProvider = DataScriptProvider();
 
 String getFormattedDate(DateTime? dt) {
     return dt != null ? DateFormat('yyyy-MM-dd kk:mm').format(dt) : "nul";
@@ -281,4 +288,21 @@ parseTransactionType(Map<String, dynamic> td)  {
     p['transfers'] = transfers;
     p['payment'] = payment;
     return p;
+}
+
+bool isPresentData(String label) {
+    switch (label) {
+        case "trans":
+            return transactionProvider.allTransactions.isNotEmpty;
+        case "assets":
+            return assetProvider.assets.isNotEmpty;
+        case "nfts":
+            return nftProvider.nfts.isNotEmpty;
+        case "data":
+            return dataProvider.data.isNotEmpty;
+        case "script":
+            return dataProvider.script.isNotEmpty;
+        default:
+            return false;
+    }
 }
