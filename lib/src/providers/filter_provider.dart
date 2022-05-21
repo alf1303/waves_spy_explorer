@@ -7,6 +7,7 @@ import 'package:waves_spy/src/constants.dart';
 import 'package:waves_spy/src/helpers/helpers.dart';
 import 'package:waves_spy/src/providers/transaction_provider.dart';
 import 'package:waves_spy/src/styles.dart';
+import 'package:waves_spy/src/widgets/transactions/transaction_view.dart';
 
 import '../models/asset.dart';
 
@@ -29,16 +30,16 @@ class FilterProvider extends ChangeNotifier{
   Map<String, double> finalList = {};
   double sumacum = 0;
   //create string for indicating current filter parameters
-  String createFilterData() {
+  Widget createFilterData(int allTrxLength, int filteredTrxLength) {
     final types = fType.map((e) => typeDict[e]).join(", ");
-    String type = fType.isEmpty ? "" : "Types: $types, ";
-    String functionName = functName.isEmpty ? "" : "Call: $functName, ";
-    String assetNameStr = assetName.isEmpty ? "" : "Asset name: $assetName, ";
-    String fromDate = actualFrom == null ? "" : "From: ${actualFrom.toString()}, ";
-    String toDate = actualTo == null ? "" : "To: ${actualTo.toString()}, ";
-    String dir = direction == "all" ? "" : direction == "in" ? "incomes: " : "outcomes: ";
     String sum = "";
-    
+
+    Widget typeW = fType.isEmpty ? Container() : LabeledText("types: ", "$types, ");
+    Widget functionNameW = functName.isEmpty ? Container() : LabeledText("call: ", "$functName, ");
+    Widget assetNameStrW = assetName.isEmpty ? Container() : LabeledText("asset: ", "$assetName, ");
+    Widget fromDateW = actualFrom == null ? Container() : LabeledText("from: ", getFormattedDate(actualFrom));
+    Widget toDateW = actualTo == null ? Container() : LabeledText("to: ", getFormattedDate(actualTo));
+
     //Calculating income/outcome summs
     if(assetName.isNotEmpty && direction != "all") {
       sumacum = 0;
@@ -69,7 +70,17 @@ class FilterProvider extends ChangeNotifier{
       sumacum = sumacum/pow(10, decimals);
       sum = sumacum.toStringAsFixed(5);
     }
-    return "Filter options: " + type + functionName + assetNameStr + fromDate + toDate + dir + sum;
+    Widget headerW = Row(children: [
+      LabeledText("Loaded transactions: ", "${allTrxLength.toString()}, "),
+      LabeledText("Filtered transactions: ", "${filteredTrxLength.toString()}"),
+    ],);
+    Widget dirW = direction == "all" ? Container() : direction == "in" ? LabeledText("incomes: $sum") : LabeledText("outcomes: $sum");
+    Widget out = Column(children: [
+      headerW,
+      Row(children: [typeW, functionNameW, assetNameStrW, fromDateW, toDateW, dirW])
+    ]);
+    // return "Filter options: " + type + functionName + assetNameStr + fromDate + toDate + dir + sum;
+    return  out;
   }
 
   bool isFiltered() {

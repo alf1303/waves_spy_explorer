@@ -30,7 +30,7 @@ class _TransViewState extends State<TransView> with AutomaticKeepAliveClientMixi
 
   @override
   Widget build(BuildContext context) {
-    String formattedDate = DateFormat('dd-MM-yyyy  kk:mm:ss.SSS').format(timestampToDate(widget.td["timestamp"]));
+    String formattedDate = DateFormat('dd-MM-yyyy  kk:mm:ss').format(timestampToDate(widget.td["timestamp"]));
     Color color = Colors.white;
     color = getColorByType(widget.td["type"]);
     return InkWell(

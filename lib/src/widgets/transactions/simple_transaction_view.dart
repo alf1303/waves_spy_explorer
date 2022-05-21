@@ -26,7 +26,7 @@ class _SimpleTransViewState extends State<SimpleTransView> with AutomaticKeepAli
 
   @override
   Widget build(BuildContext context) {
-    String formattedDate = DateFormat('dd-MM-yyyy  kk:mm:ss.SSS').format(timestampToDate(widget.td["timestamp"]));
+    String formattedDate = DateFormat('dd-MM-yyyy  kk:mm:ss').format(timestampToDate(widget.td["timestamp"]));
     Color color = Colors.white;
     color = getColorByType(widget.td["type"]);
     final _transactionProvider = TransactionProvider();
@@ -94,7 +94,7 @@ class _SimpleTransViewState extends State<SimpleTransView> with AutomaticKeepAli
           decoration: BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: const BorderRadius.all(Radius.circular(5))),
           child: Row(
             children: [
-              SizedBox(width: 200, child: LabeledText("", formattedDate, "", color)),
+              SizedBox(width: 150, child: LabeledText("", formattedDate, "", color)),
               SizedBox(width: 150, child: LabeledText("", getTypeName(widget.td["type"]), "${widget.td["type"]}", color), ),
               Expanded(
                 child: SizedBox(width: 350, child:

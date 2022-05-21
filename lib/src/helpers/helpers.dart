@@ -6,6 +6,12 @@ import 'package:http/http.dart' as http;
 
 import '../models/asset.dart';
 import '../providers/transaction_provider.dart';
+import 'package:intl/intl.dart';
+
+
+String getFormattedDate(DateTime? dt) {
+    return dt != null ? DateFormat('yyyy-MM-dd kk:mm').format(dt) : "nul";
+}
 
 Map<String, Asset> assetsGlobal = {};
 

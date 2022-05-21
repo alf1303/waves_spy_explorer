@@ -11,6 +11,7 @@ import 'package:waves_spy/src/providers/data_script_provider.dart';
 import 'package:waves_spy/src/providers/filter_provider.dart';
 import 'package:waves_spy/src/providers/nft_provider.dart';
 import 'package:waves_spy/src/providers/progress_bars_provider.dart';
+import 'package:waves_spy/src/widgets/transactions/transaction_view.dart';
 
 import '../models/asset.dart';
 
@@ -33,8 +34,7 @@ class TransactionProvider extends ChangeNotifier {
   int limit = 500;
   int limitNft = 1000;
 
-  String header = "";
-  String filterData = "";
+  Widget filterData = LabeledText("", "Filter options: ");
 
   List<dynamic> allTransactions = List.empty(growable: true);
   List<dynamic> filteredTransactions = List.empty(growable: true);
@@ -49,8 +49,7 @@ class TransactionProvider extends ChangeNotifier {
 
   void createInfo() {
     final _filterProvider = FilterProvider();
-    header = "Loaded transactions: ${allTransactions.length}, Filtered: ${filteredTransactions.length}";
-    filterData = _filterProvider.createFilterData();
+    filterData = _filterProvider.createFilterData(allTransactions.length, filteredTransactions.length);
   }
 
   Future<void> setCurrAddr(String address) async {

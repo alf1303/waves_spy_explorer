@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:waves_spy/src/constants.dart';
+import 'package:waves_spy/src/helpers/helpers.dart';
 import 'package:waves_spy/src/providers/filter_provider.dart';
 import 'package:waves_spy/src/providers/transaction_provider.dart';
 import 'package:waves_spy/src/widgets/transactions/transaction_view.dart';
@@ -26,8 +27,8 @@ class StatsView extends StatelessWidget {
                     children: [
                       LabeledText("summ: ", "${model.sumacum.toStringAsFixed(5)}, "),
                       LabeledText("asset: ", "${model.assetName}, "),
-                      LabeledText("from: ", "${model.actualFrom.toString()}, "),
-                      LabeledText("to: ", "${model.actualTo.toString()}, "),
+                      LabeledText("from: ", "${getFormattedDate(model.actualFrom)}, "),
+                      LabeledText("to: ", "${getFormattedDate(model.actualTo)}, "),
                       LabeledText("addr: ", "${_trProvider.curAddr}, ", "${getAddrName(_trProvider.curAddr)}"),
                       LabeledText("direction: ", "${model.direction.toUpperCase()}")
                     ],

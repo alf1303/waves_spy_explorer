@@ -72,124 +72,141 @@ void clearToDate() {
     final apploc = AppLocalizations.of(context);
     final _filterProvider = FilterProvider();
     final _transactionProvider = TransactionProvider();
-    return Consumer<FilterProvider>(
-      builder: (context, model, child) {
-        assetController.text = _filterProvider.assetName;
-        functController.text = _filterProvider.functName;
-        assetController.selection = TextSelection.fromPosition(TextPosition(offset: assetController.text.length));
-        functController.selection = TextSelection.fromPosition(TextPosition(offset: functController.text.length));
-        dirValue = _filterProvider.direction;
-        bool funcNameVisible = _filterProvider.fType.contains(16);
-        return Column(
-          children: [
-            Row(
-              children: [
-                Container(
-                  height: 57,
-                  padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
-                  // decoration: BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: BorderRadius.all(Radius.circular(5))),
-                  child: Row(
-                    children: [
-                      CustomGroupRadio(label: "Asset transfer", value: 4, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor,),
-                      CustomGroupRadio(label: "Mass Payment", value: 11, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor),
-                      CustomGroupRadio(label: "Invoke", value: 16, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor),
-                      CustomGroupRadio(label: "Exchange", value: 7, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor),
-                      IconButton(onPressed: clearType, icon: const Icon(Icons.close,), tooltip: "clear type",)
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Container(
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16.0),
+      child: Consumer<FilterProvider>(
+        builder: (context, model, child) {
+          assetController.text = _filterProvider.assetName;
+          functController.text = _filterProvider.functName;
+          assetController.selection = TextSelection.fromPosition(TextPosition(offset: assetController.text.length));
+          functController.selection = TextSelection.fromPosition(TextPosition(offset: functController.text.length));
+          dirValue = _filterProvider.direction;
+          bool funcNameVisible = _filterProvider.fType.contains(16);
+          return Column(
+            children: [
+              Row(
+                children: [
+                  Container(
+                    height: 57,
                     padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
                     // decoration: BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: BorderRadius.all(Radius.circular(5))),
                     child: Row(
                       children: [
-                        Expanded(
-                          child: InputWidget(controller: assetController, onchanged: assetChanged, clearFunc: clearAsset, label: "asset name", hint: apploc?.clearAsset),
-                        ),
-                        DropdownButton(
-                            items: dirs.map((String items) {
-                              return DropdownMenuItem(
-                                value: items,
-                                child: Text(items),
-                              );
-                            }).toList(),
-                            value: dirValue,
-                            isDense: true,
-                            onChanged: onChangedDirection),
-                        Expanded(
-                          child: Visibility(child: InputWidget(controller: functController, onchanged: functChanged, clearFunc: clearFunc, label: "function name", hint: apploc?.clearFunction),
-                            visible: funcNameVisible,)
-                ),
-              ],
-            )
-            )
-            )
-            ]),
-            Row(
-              children: [
-                Expanded(
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: DateTimePicker(
-                          type: DateTimePickerType.dateTime,
-                          firstDate: DateTime(2018),
-                          lastDate: DateTime(2023),
-                          dateLabelText: "from",
-                          initialValue: DateTime(2022).toString(),
-                          onChanged: (val) async{
-                            await _filterProvider.changeFromDate(DateTime.parse(val));
-                          },
-                        ),
-                      ),
-                      IconButton(onPressed: clearFromDate, icon: const Icon(Icons.close,), tooltip: "clear from date",)
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: DateTimePicker(
-                          type: DateTimePickerType.dateTime,
-                          firstDate: DateTime(2018),
-                          lastDate: DateTime(2023),
-                          dateLabelText: "to",
-                          initialValue: DateTime.now().add(Duration(hours: 1)).toString(),
-                          onChanged: (val) {
-                            _filterProvider.changeToDate(DateTime.parse(val));
-                          },
-                        ),
-                      ),
-                      IconButton(onPressed: clearFunc, icon: const Icon(Icons.close,), tooltip: "clear to date",)
-                    ],
-                  ),
-                ),
-                Expanded(
-                  flex: 3,
-                  child: Container(
-                    padding: EdgeInsets.all(4),
-                    decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
-                    child: Consumer<TransactionProvider>(
-                      builder: (context, model, child) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(model.header),
-                            Text(model.filterData)
-                          ],
-                        );
-                      },
+                        CustomGroupRadio(label: "Asset transfer", value: 4, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor,),
+                        CustomGroupRadio(label: "Mass Payment", value: 11, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor),
+                        CustomGroupRadio(label: "Invoke", value: 16, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor),
+                        CustomGroupRadio(label: "Exchange", value: 7, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor),
+                        IconButton(onPressed: clearType, icon: const Icon(Icons.close,), tooltip: "clear type",)
+                      ],
                     ),
                   ),
-                )
-              ],
-            )
-          ],
-        );
-      },
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
+                      // decoration: BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: BorderRadius.all(Radius.circular(5))),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: InputWidget(controller: assetController, onchanged: assetChanged, clearFunc: clearAsset, label: "asset name", hint: apploc?.clearAsset),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: DropdownButton(
+                                items: dirs.map((String items) {
+                                  return DropdownMenuItem(
+                                    value: items,
+                                    child: Text(items),
+                                  );
+                                }).toList(),
+                                value: dirValue,
+                                isDense: true,
+                                onChanged: onChangedDirection),
+                          ),
+                          Expanded(
+                            child: Visibility(child: InputWidget(controller: functController, onchanged: functChanged, clearFunc: clearFunc, label: "function name", hint: apploc?.clearFunction),
+                              visible: funcNameVisible,)
+                  ),
+                ],
+              )
+              )
+              )
+              ]),
+              Row(
+                children: [
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: DateTimePicker(
+                            type: DateTimePickerType.dateTime,
+                            firstDate: DateTime(2018),
+                            lastDate: DateTime(2023),
+                            // dateLabelText: "from",
+                            decoration: InputDecoration(
+                              border: const OutlineInputBorder(),
+                              isDense: true,
+                              labelText: "from",
+                              suffixIcon: IconButton(onPressed: clearFromDate, icon: const Icon(Icons.close,), tooltip: "clear from date",)
+                            ),
+                            initialValue: DateTime(2022).toString(),
+                            onChanged: (val) async{
+                              await _filterProvider.changeFromDate(DateTime.parse(val));
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(width: 15,),
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: DateTimePicker(
+                            type: DateTimePickerType.dateTime,
+                            firstDate: DateTime(2018),
+                            lastDate: DateTime(2023),
+                            // dateLabelText: "to",
+                            decoration: InputDecoration(
+                              isDense: true,
+                              border: const OutlineInputBorder(),
+                              labelText: "to",
+                              suffixIcon: IconButton(onPressed: clearFunc, icon: const Icon(Icons.close,), tooltip: "clear to date",),
+                            ),
+                            initialValue: DateTime.now().add(Duration(hours: 1)).toString(),
+                            onChanged: (val) {
+                              _filterProvider.changeToDate(DateTime.parse(val));
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 8,),
+                  Expanded(
+                    flex: 3,
+                    child: Container(
+                      padding: EdgeInsets.all(4),
+                      decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
+                      child: Consumer<TransactionProvider>(
+                        builder: (context, model, child) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              model.filterData
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                  )
+                ],
+              )
+            ],
+          );
+        },
+      ),
     );
   }
 
@@ -207,10 +224,10 @@ void clearToDate() {
                 border: OutlineInputBorder(),
                 isDense: true,
                 labelText: label,
+                suffixIcon: IconButton(onPressed: clearFunc, icon: const Icon(Icons.close,), tooltip: hint,)
               ),
             ),
           ),
-          IconButton(onPressed: clearFunc, icon: const Icon(Icons.close,), tooltip: hint,)
         ],
       ),
     );

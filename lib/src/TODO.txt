@@ -11,9 +11,9 @@
 ** 7) Find bugs when loading new transaction (invalid char U)
 
 10) Implement button for collapsing/hiding addresses in stats view
-11) Remove frames from data strings in transactions views and filter data and stats
-12) Move buttons for clearing filter options inside filter options area and add border ( to achieve combined look)
-13) Combine filter info texts from LabeledView? To separate labels and info
+** 11) Remove frames from data strings in transactions views and filter data and stats
+** 12) Move buttons for clearing filter options inside filter options area and add border ( to achieve combined look)
+** 13) Combine filter info texts from LabeledView? To separate labels and info
 14) Add info tab to nft view (show nft count, staked count, etc)
 15) Implement including Ducks on farming, in battles
 16) Implement showing staked Farm Tokens

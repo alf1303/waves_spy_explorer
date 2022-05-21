@@ -31,6 +31,7 @@ class InputWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final apploc = AppLocalizations.of(context);
+    _inputController.text = _transactionProvider.curAddr.isEmpty ? "3PGFHzVGT4NTigwCKP1NcwoXkodVZwvBuuU" : _transactionProvider.curAddr;
     return Row(children: [
       IconButton(
           onPressed: pasteFromClipboard,
