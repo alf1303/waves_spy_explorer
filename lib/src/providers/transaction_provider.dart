@@ -34,7 +34,7 @@ class TransactionProvider extends ChangeNotifier {
   int limit = 500;
   int limitNft = 1000;
 
-  Widget filterData = LabeledText("", "Filter options: ");
+  Widget filterData = Text("Filter options: ");
 
   List<dynamic> allTransactions = List.empty(growable: true);
   List<dynamic> filteredTransactions = List.empty(growable: true);
@@ -49,7 +49,7 @@ class TransactionProvider extends ChangeNotifier {
 
   void createInfo() {
     final _filterProvider = FilterProvider();
-    filterData = _filterProvider.createFilterData(allTransactions.length, filteredTransactions.length);
+    filterData = _filterProvider.createFilterDataString(allTransactions.length, filteredTransactions.length);
   }
 
   Future<void> setCurrAddr(String address) async {

@@ -65,11 +65,13 @@ class FilterProvider extends ChangeNotifier{
           }
         }
       }
+
       int decimals = assetsGlobal[assId] == null ? 1 : assetsGlobal[assId]!.decimals;
       finalList.updateAll((key, value) => value/pow(10, decimals));
       sumacum = sumacum/pow(10, decimals);
       sum = sumacum.toStringAsFixed(5);
     }
+
     Widget headerW = Row(children: [
       LabeledText("Loaded transactions: ", "${allTrxLength.toString()}, "),
       LabeledText("Filtered transactions: ", "${filteredTrxLength.toString()}"),
@@ -80,6 +82,69 @@ class FilterProvider extends ChangeNotifier{
       Row(children: [typeW, functionNameW, assetNameStrW, fromDateW, toDateW, dirW])
     ]);
     // return "Filter options: " + type + functionName + assetNameStr + fromDate + toDate + dir + sum;
+    return  out;
+  }
+
+  Widget createFilterDataString(int allTrxLength, int filteredTrxLength) {
+    final types = fType.map((e) => typeDict[e]).join(", ");
+    String sum = "";
+
+    String type = fType.isEmpty ? "" : types;
+    String functionName = functName.isEmpty ? "" : functName;
+    String assetNameStr = assetName.isEmpty ? "" : assetName;
+    String fromDate = actualFrom == null ? "" : getFormattedDate(actualFrom);
+    String toDate = actualTo == null ? "" : getFormattedDate(actualTo);
+
+    //Calculating income/outcome summs
+    if(assetName.isNotEmpty && direction != "all") {
+      sumacum = 0;
+      String assId = "";
+      for (var tr in _transactionProvider.filteredTransactions) {
+        if(direction == "in") {
+          assId = tr["inAssetsIds"].keys.toList()[0];
+          sumacum += tr["inAssetsIds"][assId];
+          if(finalList.containsKey(tr["sender"])) {
+            finalList[tr["sender"]] = (finalList[tr["sender"]]! + tr["inAssetsIds"][assId]!);
+          } else {
+            finalList[tr["sender"]] = tr["inAssetsIds"][assId];
+          }
+        }
+
+        if(direction == "out") {
+          assId = tr["outAssetsIds"].keys.toList()[0];
+          sumacum += tr["outAssetsIds"][assId];
+          if(finalList.containsKey(tr["sender"])) {
+            finalList[tr["sender"]] = (finalList[tr["sender"]]! + tr["outAssetsIds"][assId]!);
+          } else {
+            finalList[tr["sender"]] = tr["outAssetsIds"][assId];
+          }
+        }
+      }
+
+      int decimals = assetsGlobal[assId] == null ? 1 : assetsGlobal[assId]!.decimals;
+      finalList.updateAll((key, value) => value/pow(10, decimals));
+      sumacum = sumacum/pow(10, decimals);
+      sum = sumacum.toStringAsFixed(5);
+    }
+
+    String dir = direction == "all" ? "" : direction == "in" ? "incomes" : "outcomes";
+
+    Widget out = RichText(
+      text: TextSpan(
+          children: [
+            LblGroup("Loaded transactions", allTrxLength.toString()),
+            LblGroup("Filtered transactions", filteredTrxLength.toString()),
+            LblGroup("from", fromDate),
+            LblGroup("to", toDate),
+            LblGroup("types", type),
+            LblGroup("assetName", assetNameStr),
+            LblGroup("function", functionName),
+            LblGroup(dir, sum.toString())
+          ]
+      ),
+    );
+
+    // return header + type + functionName + assetNameStr + fromDate + toDate + dir;
     return  out;
   }
 
@@ -165,5 +230,20 @@ class FilterProvider extends ChangeNotifier{
     notifyAll();
   }
 
+}
+
+TextSpan  LblGroup(String label, String val) {
+  return val.isEmpty ? TextSpan() : TextSpan(
+    children: [
+      TextSpan(
+        style: TextStyle(color: Colors.grey),
+        text: label + ": "
+      ),
+      TextSpan(
+        style: TextStyle(color: Colors.white),
+        text: val + ", "
+      )
+    ]
+  );
 }
 
