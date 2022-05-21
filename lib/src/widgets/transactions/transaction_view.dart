@@ -309,9 +309,26 @@ Widget LabeledText([String? label, String? value, String? name, Color? colr]) {
   final nam = name ?? "";
   final col = colr ?? Colors.white;
   // print("$labl, $val, $nam");
-  return Row(children: [
+  return Row(
+    mainAxisSize: MainAxisSize.min,
+    children: [
     Text(labl, style: const TextStyle(color: Colors.grey),),
     nam == "" ? Text("") : SelectableText("($name)", style: TextStyle(color: col)),
-    SelectableText(val + " ", style: TextStyle(color: col),),
+    Expanded(child: SingleChildScrollView(scrollDirection: Axis.horizontal, child: SelectableText(val + " ", style: TextStyle(color: col),))),
   ],);
+}
+
+Widget LabeledTextNoScroll([String? label, String? value, String? name, Color? colr]) {
+  final labl = label ?? "";
+  final val = value ?? "";
+  final nam = name ?? "";
+  final col = colr ?? Colors.white;
+  // print("$labl, $val, $nam");
+  return Row(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Text(labl, style: const TextStyle(color: Colors.grey),),
+      nam == "" ? Text("") : SelectableText("($name)", style: TextStyle(color: col)),
+      SelectableText(val + " ", style: TextStyle(color: col),),
+    ],);
 }

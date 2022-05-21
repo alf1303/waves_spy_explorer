@@ -25,12 +25,12 @@ class StatsView extends StatelessWidget {
                   padding: const EdgeInsets.all(8),
                   child: Row(
                     children: [
-                      LabeledText("summ: ", "${model.sumacum.toStringAsFixed(5)}, "),
-                      LabeledText("asset: ", "${model.assetName}, "),
-                      LabeledText("from: ", "${getFormattedDate(model.actualFrom)}, "),
-                      LabeledText("to: ", "${getFormattedDate(model.actualTo)}, "),
-                      LabeledText("addr: ", "${_trProvider.curAddr}, ", "${getAddrName(_trProvider.curAddr)}"),
-                      LabeledText("direction: ", "${model.direction.toUpperCase()}")
+                      LabeledTextNoScroll("summ: ", "${model.sumacum.toStringAsFixed(5)}, "),
+                      LabeledTextNoScroll("asset: ", "${model.assetName}, "),
+                      LabeledTextNoScroll("from: ", "${getFormattedDate(model.actualFrom)}, "),
+                      LabeledTextNoScroll("to: ", "${getFormattedDate(model.actualTo)}, "),
+                      LabeledTextNoScroll("addr: ", "${_trProvider.curAddr}, ", "${getAddrName(_trProvider.curAddr)}"),
+                      LabeledTextNoScroll("direction: ", "${model.direction.toUpperCase()}")
                     ],
                   )),
               Expanded(

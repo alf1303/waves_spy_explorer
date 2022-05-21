@@ -35,11 +35,11 @@ class _MainAreaState extends State<MainArea>  with SingleTickerProviderStateMixi
         title: TabBar(
           controller: tabController,
             tabs: const [
-          Tab(text: "Transactions",),
-          Tab(text: "Assets",),
-          Tab(text: "NFTs",),
-          Tab(text: "Data",),
-          Tab(text: "Script",),
+          Tab(text: "Transactions", icon: MyProgressBar(label: "trans")),
+          Tab(text: "Assets", icon: MyProgressBar(label: "assets")),
+          Tab(text: "NFTs", icon: MyProgressBar(label: "nfts")),
+          Tab(text: "Data", icon: MyProgressBar(label: "data")),
+          Tab(text: "Script", icon: MyProgressBar(label: "script")),
           Tab(text: "Stats",),
 
         ]),

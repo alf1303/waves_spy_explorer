@@ -18,7 +18,7 @@
 15) Implement including Ducks on farming, in battles
 16) Implement showing staked Farm Tokens
 17) Add indicators to TabHeader to indicate Data/Script are present
-17.1) Move singleChildScrollView into labeled view for name item
+** 17.1) Move singleChildScrollView into labeled view for name item
 
 18) Deploy to Google hosting
 19) Implement one row view for transaction and button in app bar to switch views

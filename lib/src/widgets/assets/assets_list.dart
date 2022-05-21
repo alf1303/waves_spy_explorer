@@ -29,7 +29,7 @@ class AssetsList extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
-          const MyProgressBar(label: "assets"),
+          // const MyProgressBar(label: "assets"),
           Padding(
             padding: const EdgeInsets.only(left: 6.0),
             child: Row(

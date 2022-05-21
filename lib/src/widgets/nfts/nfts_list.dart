@@ -45,7 +45,7 @@ Future<void> _scrollListener() async{
       padding: const EdgeInsets.all(8),
       child: Column(
         children: [
-          const MyProgressBar(label: "nfts"),
+          // const MyProgressBar(label: "nfts"),
           Padding(
             padding: const EdgeInsets.only(left: 6.0),
             child: Row(

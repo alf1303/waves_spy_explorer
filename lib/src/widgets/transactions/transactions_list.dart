@@ -49,7 +49,7 @@ class _TransactionsListState extends State<TransactionsList> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const MyProgressBar(label: "trans"),
+          // const MyProgressBar(label: "trans"),
           FilterWidget(),
           Expanded(
             child: Consumer<TransactionProvider>(

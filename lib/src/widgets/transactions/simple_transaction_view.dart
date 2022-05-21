@@ -156,17 +156,12 @@ Widget invokeHeader(Map<String, dynamic> p) {
         Expanded(
           child: Padding(
             padding: const EdgeInsets.only(right: 8.0),
-            child: SizedBox(width: 150, child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: LabeledText("", p["function"], "", invokeColor))),
+            child: SizedBox(width: 150, child: LabeledText("", p["function"], "", invokeColor)),
           ),
         ),
-        Expanded(child: SingleChildScrollView(scrollDirection: Axis.horizontal, child:
-        p["dApp"] == _trProvider.curAddr ?
+        Expanded(child: p["dApp"] == _trProvider.curAddr ?
           LabeledText("sender:", p["sender"], getAddrName(p["sender"]), invokeColor) :
-            LabeledText("dApp:", p["dApp"], getAddrName(p["dApp"]), invokeColor)
-        
-        )),
+            LabeledText("dApp:", p["dApp"], getAddrName(p["dApp"]), invokeColor)),
       ],
     ),
   );
@@ -208,7 +203,7 @@ Widget transferHeader(Map<String, dynamic> p) {
     child: Row(
       children: [
         SizedBox(width: 150, child: Container(),),
-        Expanded(child: SingleChildScrollView(scrollDirection: Axis.horizontal, child: LabeledText(suffix, p["anotherAddr"], "", transferColor))),
+        Expanded(child: LabeledText(suffix, p["anotherAddr"], "", transferColor)),
       ],
     ),
   );
@@ -221,7 +216,7 @@ Widget massTransferHeader(Map<String, dynamic> p) {
     child: Row(
       children: [
         SizedBox(width: 150, child: Container(),),
-        Expanded(child: SingleChildScrollView(scrollDirection: Axis.horizontal, child: SizedBox(width: 740, child: LabeledText("from: ", p["anotherAddr"], p["name"], massTransferColor),))),
+        Expanded(child: SizedBox(width: 740, child: LabeledText("from: ", p["anotherAddr"], p["name"], massTransferColor),)),
       ],
     ),
   );
@@ -229,6 +224,9 @@ Widget massTransferHeader(Map<String, dynamic> p) {
 
 // TODO
 Widget burnHeader(Map<String, dynamic> p) {
-  return Container();
+  return Padding(
+    padding: const EdgeInsets.only(right: 8.0),
+    child: Container()
+  );
 }
 

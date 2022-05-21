@@ -26,7 +26,7 @@ class DataList extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
-          const MyProgressBar(label: "data"),
+          // const MyProgressBar(label: "data"),
           Padding(padding: const EdgeInsets.only(left: 6),
             child: Row(
               children: [
