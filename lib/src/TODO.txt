@@ -5,14 +5,26 @@
 **    - add waves balance
 **    - add priority sorting
 ** 3) Spit assets string to less then 2048 symbols;
-4) Implement NFT tab
-5) Implement Data tab (add mark if present in tab name)
-6) Implement Script tab (add mark if present in tab name)
+** 4) Implement NFT tab
+** 5) Implement Data tab (add mark if present in tab name)
+** 6) Implement Script tab (add mark if present in tab name)
 ** 7) Find bugs when loading new transaction (invalid char U)
-8) Deploy to Google hosting
-9) Implement one row view for transaction and button in app bar to switch views
+
+10) Implement button for collapsing/hiding addresses in stats view
+11) Remove frames from data strings in transactions views and filter data and stats
+12) Move buttons for clearing filter options inside filter options area and add border ( to achieve combined look)
+13) Combine filter info texts from LabeledView? To separate labels and info
+14) Add info tab to nft view (show nft count, staked count, etc)
+15) Implement including Ducks on farming, in battles
+16) Implement showing staked Farm Tokens
+17) Add indicators to TabHeader to indicate Data/Script are present
+17.1) Move singleChildScrollView into labeled view for name item
+
+18) Deploy to Google hosting
+19) Implement one row view for transaction and button in app bar to switch views
+20) Implement passing address and data for filtering into address string
+21) Implement opening new tab in browser when clicking on address with passsing this address as parameter
+22)
 
 
-Future:
 
-1) Add showing staked balances for assets
