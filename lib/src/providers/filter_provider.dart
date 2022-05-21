@@ -21,7 +21,7 @@ class FilterProvider extends ChangeNotifier{
   DateTime? actualTo;
   DateTime? from;
   DateTime? to;
-  int fType = 0;
+  List<int> fType = [];
   String functName = "";
   String assetName = "";
   String direction = "all";
@@ -30,12 +30,13 @@ class FilterProvider extends ChangeNotifier{
   double sumacum = 0;
   //create string for indicating current filter parameters
   String createFilterData() {
-    String type = fType == 0 ? "" : "Type: ${typeDict[fType].toString()}, ";
+    final types = fType.map((e) => typeDict[e]).join(", ");
+    String type = fType.isEmpty ? "" : "Types: $types, ";
     String functionName = functName.isEmpty ? "" : "Call: $functName, ";
     String assetNameStr = assetName.isEmpty ? "" : "Asset name: $assetName, ";
     String fromDate = actualFrom == null ? "" : "From: ${actualFrom.toString()}, ";
     String toDate = actualTo == null ? "" : "To: ${actualTo.toString()}, ";
-    String dir = direction == "all" ? "" : direction == "in" ? "incomes" : "outcomes";
+    String dir = direction == "all" ? "" : direction == "in" ? "incomes: " : "outcomes: ";
     String sum = "";
     
     //Calculating income/outcome summs
@@ -87,13 +88,17 @@ class FilterProvider extends ChangeNotifier{
   }
 
   void changeType(int val) {
-    fType = val;
+    if(fType.contains(val)) {
+      fType.remove(val);
+    } else {
+      fType.add(val);
+    }
     notifyAll();
     _transactionProvider.filterTransactions();
   }
 
   void clearType() {
-    fType = 0;
+    fType.clear();
     _transactionProvider.filterTransactions();
     notifyAll();
   }

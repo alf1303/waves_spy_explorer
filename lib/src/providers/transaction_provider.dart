@@ -57,6 +57,8 @@ class TransactionProvider extends ChangeNotifier {
     curAddr = address;
     afterGlob = "";
     allTransactions.clear();
+    final filterProvider = FilterProvider();
+    filterProvider.finalList.clear();
     assetProvider.assets.clear();
     Asset waves = await fetchAssetInfo("WAVES");
     assetsGlobal[waves.id] = waves;
@@ -173,13 +175,19 @@ class TransactionProvider extends ChangeNotifier {
           outAssetsIds[assetId] = tr["amount"];
         }
         if(type == 4) {
-          curAddr == tr["sender"] ? outAssetsIds[assetId] == tr["amount"] : inAssetsIds[assetId] = tr["amount"];
+          // curAddr == tr["sender"] ? outAssetsIds[assetId] == tr["amount"] : inAssetsIds[assetId] = tr["amount"];
+          if(curAddr == tr["sender"]) {
+            outAssetsIds[assetId] = tr["amount"];
+          } else {
+            inAssetsIds[assetId] = tr["amount"];
+          }
         }
         if(type == 11) {
           bool income = true;
           double sum = 0;
           final transfers = tr["transfers"];
           for (var el in transfers) {
+            income = true;
             if(curAddr == tr["sender"]) {
               income = false;
               sum += el["amount"];
@@ -274,18 +282,24 @@ class TransactionProvider extends ChangeNotifier {
     wavesAsset.staked = wavesBalances["regular"] - wavesBalances["available"];
     assetProvider.assets.add(wavesAsset);
     tmpass.forEach((key, value) {
+      // print("$key : ${assetsGlobal.containsKey(key)}");
       int priority = 0;
-      if(priorityThree.contains(assetsGlobal[key]!.name)) {
-        priority = 3;
+      if(assetsGlobal.containsKey(key)) {
+        if(priorityThree.contains(assetsGlobal[key]!.name)) {
+          priority = 3;
+        }
+        if(priorityTwo.contains(assetsGlobal[key]!.name)) {
+          priority = 2;
+        }
+        if(priorityOne.contains(assetsGlobal[key]!.name)) {
+          priority = 1;
+        }
+        assetProvider.assets.add(AccAsset(assetsGlobal[key], value["balance"], priority, value));
+      } else {
+        throw("Assets id $key is not preset in assetsGlobal");
       }
-      if(priorityTwo.contains(assetsGlobal[key]!.name)) {
-        priority = 2;
-      }
-      if(priorityOne.contains(assetsGlobal[key]!.name)) {
-        priority = 1;
-      }
-      assetProvider.assets.add(AccAsset(assetsGlobal[key], value["balance"], priority, value));
     });
+    print("3");
     assetProvider.sortAssets();
     assetProvider.filterAssets();
     progressProvider.stopAssets();
@@ -414,16 +428,19 @@ class TransactionProvider extends ChangeNotifier {
       datedTransactions = datedTransactions.where((tr) => tr["timestamp"] >= fromTS).toList();
     }
     // print("Transactions from: " + datedTransactions.length.toString());
-    if (filterProvider.fType != 0) {
+    if (filterProvider.fType.isNotEmpty) {
       filteredTransactions = datedTransactions
-          .where((tr) => tr["type"] == filterProvider.fType)
+          .where((tr) => filterProvider.fType.contains(tr["type"]))
           .toList();
     } else {
       filteredTransactions = datedTransactions;
     }
     // print("*** 1");
-    if(filterProvider.fType == 16) {
-      filteredTransactions = filteredTransactions.where((tr) => tr["call"]["function"].toLowerCase().contains(filterProvider.functName.toLowerCase())).toList();
+    if(filterProvider.fType.contains(16) && filterProvider.functName.isNotEmpty) {
+      List<dynamic> invokeTrs = filteredTransactions.where((tr) => tr["type"] == 16).toList();
+      filteredTransactions.removeWhere((tr) => tr["type"] == 16);
+      invokeTrs = invokeTrs.where((tr) => tr["call"]["function"].toLowerCase().contains(filterProvider.functName.toLowerCase())).toList();
+      filteredTransactions.addAll(invokeTrs);
     }
     final trToFilter = filterProvider.isFiltered() ? filteredTransactions : datedTransactions;
 

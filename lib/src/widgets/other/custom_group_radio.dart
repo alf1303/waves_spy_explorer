@@ -32,8 +32,9 @@ class CustomGroupRadio extends StatefulWidget {
 class CustomGroupRadioState extends State<CustomGroupRadio> {
   void onTapFunction() {
     setState(() {
-      bool res = widget.value == widget.groupValue;
-      widget.onChanged!(res ? null : widget.value);
+      // bool res = widget.value == widget.groupValue;
+      bool res = widget.groupValue.contains(widget.value);
+      widget.onChanged!(widget.value);
     });
   }
 
@@ -44,12 +45,12 @@ class CustomGroupRadioState extends State<CustomGroupRadio> {
     return GestureDetector(
       onTap: widget.enabled ? onTapFunction : null,
       child: AnimatedContainer(
-        duration: Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 300),
         margin: EdgeInsets.symmetric(vertical: 5, horizontal: widget.margin == null ? 5 : widget.margin!),
         padding: EdgeInsets.symmetric(vertical: 5, horizontal: widget.padding == null ? 5 : widget.padding!),
         decoration: BoxDecoration(
-            border: Border.all(color: (widget.enabled && widget.value == widget.groupValue) ? widget.color! : Colors.transparent),
-            color: widget.selectedCol == null ? Colors.black12 : (widget.enabled && widget.value == widget.groupValue) ? widget.selectedCol : Colors.grey,
+            border: Border.all(color: (widget.enabled && widget.groupValue.contains(widget.value)) ? widget.color! : Colors.transparent),
+            color: widget.selectedCol == null ? Colors.black12 : (widget.enabled && widget.groupValue.contains(widget.value)) ? widget.selectedCol : Colors.grey,
             borderRadius: BorderRadius.circular(7)
         ),
         child: FittedBox(fit: BoxFit.fitWidth, child: Text(widget.label, style: TextStyle(fontSize: widget.fontSize == null ? 14 : widget.fontSize, color: Colors.white),)),

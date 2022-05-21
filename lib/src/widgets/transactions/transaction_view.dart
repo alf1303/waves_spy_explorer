@@ -14,20 +14,25 @@ extension TruncateDoubles on double {
       fractionalDigits)).truncate() / pow(10, fractionalDigits);
 }
 
-class TransView extends StatelessWidget {
+class TransView extends StatefulWidget {
   const TransView({Key? key, required this.td}) : super(key: key);
   final dynamic td;
 
+  @override
+  State<TransView> createState() => _TransViewState();
+}
+
+class _TransViewState extends State<TransView> with AutomaticKeepAliveClientMixin{
   void showDetails() {
     final _trDetailsProvider = TransactionDetailsProvider();
-    _trDetailsProvider.setTransaction(td);
+    _trDetailsProvider.setTransaction(widget.td);
   }
 
   @override
   Widget build(BuildContext context) {
-    String formattedDate = DateFormat('dd-MM-yyyy  kk:mm:ss.SSS').format(timestampToDate(td["timestamp"]));
+    String formattedDate = DateFormat('dd-MM-yyyy  kk:mm:ss.SSS').format(timestampToDate(widget.td["timestamp"]));
     Color color = Colors.white;
-    color = getColorByType(td["type"]);
+    color = getColorByType(widget.td["type"]);
     return InkWell(
       hoverColor: hoverColor,
       onTap: showDetails,
@@ -39,13 +44,13 @@ class TransView extends StatelessWidget {
           children: [
           Row(
             children: [
-            SizedBox(width: 240, child: LabeledText("type: ", getTypeName(td["type"]), "${td["type"]}", color), ),
+            SizedBox(width: 240, child: LabeledText("type: ", getTypeName(widget.td["type"]), "${widget.td["type"]}", color), ),
             SizedBox(width: 300, child: LabeledText("date: ", formattedDate, "", color)),
-            SizedBox(width: 200, child: LabeledText("height: ", td["height"].toString(), "", color)),
-            LabeledText("id: ", td["id"], "", color),
+            SizedBox(width: 200, child: LabeledText("height: ", widget.td["height"].toString(), "", color)),
+            LabeledText("id: ", widget.td["id"], "", color),
           ],),
             const Divider(),
-            Details(td: td)
+            Details(td: widget.td)
         ],)
       ),
     );
@@ -67,6 +72,9 @@ class TransView extends StatelessWidget {
         return Colors.white;
     }
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class Details extends StatelessWidget {
@@ -220,20 +228,32 @@ Widget burnHeader(Map<String, dynamic> p) {
 Widget assetBuilder(String id, val, exop, String amountId, String dir, [String? receiver]) {
   String rec = receiver == null ? "" : " to $receiver";
   String tmpAss = id + ".|." + amountId;
+  // print("$id, $val, $exop, $amountId, $dir, $receiver");
   return FutureBuilder<List<Asset?>>(
       future: getAssetInfoLabel(tmpAss),
       builder: (context, snapshot) {
         Widget widget;
         if (snapshot.hasData) {
+            // print("${snapshot.data![1]} - $exop, $id, $amountId, $val");
           int decimals = snapshot.data![0]!.decimals;
           double value = val / pow(10, decimals);
+          //TODO some strange things with null value
           if (exop) {
-            int exchDecimals = snapshot.data![1]!.decimals;
-            if (id != amountId) {
-              value = value / pow(10, exchDecimals);
+            if (snapshot.data![1] != null) {
+              int exchDecimals = snapshot.data![1]!.decimals;
+              if (id != amountId) {
+                value = value / pow(10, 8);
+              }
+            } else {
+              // print("Alarm: ${snapshot.data![0]!.name}");
+              // value = 555;
             }
           }
+          // print(snapshot.data);
           widget = value != 0 ?Text("${value.truncat(decimals)} ${snapshot.data![0]!.name}$rec", style: TextStyle(color: dir == "in" ? inAssetsColor : outAssetsColor),) : Container();
+          if(value == 555) {
+            widget = Container(color: Colors.yellow, child: Text("Alarm"),);
+          }
         } else if (snapshot.hasError) {
           print(snapshot.error.toString());
           widget = Text("Error");

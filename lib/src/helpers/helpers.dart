@@ -115,12 +115,14 @@ Future<void> getMassAssetsInfo(Map<String, dynamic> ids) async{
     while (!stop) {
       String tmpstr = "";
       String tmpsepar = "";
-      for (int i = start; i < keys.length; i++) {
-          if(i == keys.length - 1) {
+      for (int i = start; i < keys.length+1; i++) {
+          if(i == keys.length ) {
               stop = true;
+              break;
           }
           if(keys[i] != "WAVES") {
-              if((tmpstr.length + keys[i].length) >= 2048) {
+              final lll = (tmpstr.length + keys[i].length);
+              if(lll >= 1948) {
                   start = i;
                   break;
               }
@@ -130,7 +132,8 @@ Future<void> getMassAssetsInfo(Map<String, dynamic> ids) async{
               }
           }
       }
-
+      // print("tmpstr: ${tmpstr}, start: $start, lenght: ${keys.length}");
+      // print("${keys[keys.length - 2]}, ${keys[keys.length - 1]}");
       var resp = await http.get(Uri.parse("$nodeUrl/assets/details?id=$tmpstr"));
       if (resp.statusCode == 200) {
         List<dynamic> assetDetails = jsonDecode(resp.body);
@@ -142,7 +145,7 @@ Future<void> getMassAssetsInfo(Map<String, dynamic> ids) async{
                 }
               } else {
                   stop = true;
-                  print("Error: " + ass.toString());
+                  print("Error: ${ass.toString()} $tmpstr");
               }
           }
       } else {
@@ -243,6 +246,7 @@ parseTransactionType(Map<String, dynamic> td)  {
             p['seller'] = sell['sender'];
             p['buyer'] = buy['sender'];
             double amount = sell['amount'] < buy['amount'] ? sell['amount'] : buy['amount'];
+            String orderDirection = sell['amount'] < buy['amount'] ? "sell" : "buy";
             if(buy["sender"] == _transactionProvider.curAddr) {
                 transfers[amountAsset] = amount;
                 double val = amount*buy["price"];
@@ -252,6 +256,16 @@ parseTransactionType(Map<String, dynamic> td)  {
                 double val = amount*sell["price"];
                 transfers[priceAsset] = val;
                 payment[amountAsset] = amount;
+            }
+            if(td["sender"] == _transactionProvider.curAddr) {
+                if(orderDirection == "sell") {
+                    payment[amountAsset] = amount;
+                    transfers[priceAsset] = amount*sell["price"];
+                } else {
+                    payment[priceAsset] = amount*sell["price"];
+                    transfers[amountAsset] = amount;
+                }
+
             }
             // print(transfers)
             p["header"] = "exchange";

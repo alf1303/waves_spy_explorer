@@ -24,6 +24,7 @@ class FilterWidget extends StatelessWidget {
   }
 
   void onTypeChanged(val) {
+    print(val);
     final _filterProvider = FilterProvider();
     _filterProvider.changeType(val);
   }
@@ -78,7 +79,7 @@ void clearToDate() {
         assetController.selection = TextSelection.fromPosition(TextPosition(offset: assetController.text.length));
         functController.selection = TextSelection.fromPosition(TextPosition(offset: functController.text.length));
         dirValue = _filterProvider.direction;
-        bool funcNameVisible = _filterProvider.fType == 16;
+        bool funcNameVisible = _filterProvider.fType.contains(16);
         return Column(
           children: [
             Row(

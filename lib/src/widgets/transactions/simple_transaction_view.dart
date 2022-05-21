@@ -10,26 +10,31 @@ import 'package:waves_spy/src/providers/transaction_provider.dart';
 import 'package:waves_spy/src/styles.dart';
 import 'package:waves_spy/src/widgets/transactions/transaction_view.dart';
 
-class SimpleTransView extends StatelessWidget {
+class SimpleTransView extends StatefulWidget {
   const SimpleTransView({Key? key, required this.td}) : super(key: key);
   final dynamic td;
 
+  @override
+  State<SimpleTransView> createState() => _SimpleTransViewState();
+}
+
+class _SimpleTransViewState extends State<SimpleTransView> with AutomaticKeepAliveClientMixin{
   void showDetails() {
     final _trDetailsProvider = TransactionDetailsProvider();
-    _trDetailsProvider.setTransaction(td);
+    _trDetailsProvider.setTransaction(widget.td);
   }
 
   @override
   Widget build(BuildContext context) {
-    String formattedDate = DateFormat('dd-MM-yyyy  kk:mm:ss.SSS').format(timestampToDate(td["timestamp"]));
+    String formattedDate = DateFormat('dd-MM-yyyy  kk:mm:ss.SSS').format(timestampToDate(widget.td["timestamp"]));
     Color color = Colors.white;
-    color = getColorByType(td["type"]);
+    color = getColorByType(widget.td["type"]);
     final _transactionProvider = TransactionProvider();
-    final type = td["type"];
+    final type = widget.td["type"];
     bool exop = false;
     Widget header = Text("");
 
-    Map<String, dynamic> p = parseTransactionType(td);
+    Map<String, dynamic> p = parseTransactionType(widget.td);
     exop = p['exchPriceAsset'] == " " ? false : true;
     Map<String, double> payment = p['payment'];
     Map<String, double> transfers = p["transfers"];
@@ -72,12 +77,14 @@ class SimpleTransView extends StatelessWidget {
         break;
     }
     String dApp = "";
-    if (td.containsKey("dApp")) {dApp = td["dApp"];}
+    if (widget.td.containsKey("dApp")) {dApp = widget.td["dApp"];}
     String out = _transactionProvider.curAddr != dApp ? "out" : "in";
     String inn = _transactionProvider.curAddr != dApp ? "in" : "out";
+    // print("PPRR: ${p["exchPriceAsset"]}");
+    // print("Paylist : ${payment}");
+    // print("inList : ${transfers}");
     List<Widget> payList = payment.entries.map((e) => assetBuilder(e.key, e.value, exop, p["exchPriceAsset"], out)).toList();
     List<Widget> inList = transfers.entries.map((e) => assetBuilder(e.key, e.value, exop, p["exchPriceAsset"], inn)).toList();
-
     return InkWell(
       hoverColor: hoverColor,
       onTap: showDetails,
@@ -88,12 +95,12 @@ class SimpleTransView extends StatelessWidget {
           child: Row(
             children: [
               SizedBox(width: 200, child: LabeledText("", formattedDate, "", color)),
-              SizedBox(width: 150, child: LabeledText("", getTypeName(td["type"]), "${td["type"]}", color), ),
+              SizedBox(width: 150, child: LabeledText("", getTypeName(widget.td["type"]), "${widget.td["type"]}", color), ),
               Expanded(
                 child: SizedBox(width: 350, child:
-                td["type"] == 16 ? invokeHeader(p) :
-                  td["type"] == 4 ? transferHeader(p) :
-                      td["type"] == 11 ? massTransferHeader(p) :
+                widget.td["type"] == 16 ? invokeHeader(p) :
+                  widget.td["type"] == 4 ? transferHeader(p) :
+                      widget.td["type"] == 11 ? massTransferHeader(p) :
                           Container(),
                 ),
               ),
@@ -134,16 +141,32 @@ class SimpleTransView extends StatelessWidget {
         return Colors.white;
     }
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 
 Widget invokeHeader(Map<String, dynamic> p) {
+  final _trProvider = TransactionProvider();
   return Padding(
     padding: const EdgeInsets.only(right: 8.0),
     child: Row(
       children: [
-        SizedBox(width: 150, child: LabeledText("", p["function"], "", invokeColor)),
-        Expanded(child: SingleChildScrollView(scrollDirection: Axis.horizontal, child: LabeledText("sender:", p["sender"], "", invokeColor))),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: SizedBox(width: 150, child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: LabeledText("", p["function"], "", invokeColor))),
+          ),
+        ),
+        Expanded(child: SingleChildScrollView(scrollDirection: Axis.horizontal, child:
+        p["dApp"] == _trProvider.curAddr ?
+          LabeledText("sender:", p["sender"], getAddrName(p["sender"]), invokeColor) :
+            LabeledText("dApp:", p["dApp"], getAddrName(p["dApp"]), invokeColor)
+        
+        )),
       ],
     ),
   );
@@ -193,7 +216,15 @@ Widget transferHeader(Map<String, dynamic> p) {
 
 Widget massTransferHeader(Map<String, dynamic> p) {
   final _transactionProvider = TransactionProvider();
-  return SingleChildScrollView(child: SizedBox(width: 740, child: LabeledText("from", p["anotherAddr"], p["name"], massTransferColor),));
+  return Padding(
+    padding: const EdgeInsets.only(right: 8.0),
+    child: Row(
+      children: [
+        SizedBox(width: 150, child: Container(),),
+        Expanded(child: SingleChildScrollView(scrollDirection: Axis.horizontal, child: SizedBox(width: 740, child: LabeledText("from: ", p["anotherAddr"], p["name"], massTransferColor),))),
+      ],
+    ),
+  );
 }
 
 // TODO

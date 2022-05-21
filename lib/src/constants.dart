@@ -22,6 +22,7 @@ const dAppsDict = {
 "3PAviuHPCX8fD7M5fGpFTQZb4HchWCJb3ct": "PUZZLE WWW_POOL",
 "3PLiXyywNThdvf3vVEUxwc7TJTucjZvuegh": "PUZZLE BTC_ETH_POOL",
 "3PEStCRPQuW3phthTtQ5upGeb4WZ47kssyM": "PUZZLE SNSBT_POOL",
+  "3P4v7QaMk6us7PdxSuoR5LmZmemv5ruD6oj": "SWOP.FI Router",
 "3P3Z8Gn665CJr14bTLv4d5USDBUQCTeeCaT": "SWOP.FI RACE/EGG",
 "3PHTDdjz8Kb5JcAkhzfR57MCUYoe73pyxxK": "SWOP.FI WEST/EAST",
 "3PBHyEwmERR1CEkrTNbPj2bgyisTfPRqfee": "SWOP.FI PUZZLE/USDN",
@@ -62,7 +63,7 @@ const dAppsDict = {
 "3PKmLiGEfqLWMC1H9xhzqvAZKUXfFm8uoeg": "WD - Baby Duckling",
 "3PEktVux2RhchSN63DsDo4b4mz4QqzKSeDv": "WD - Incubator",
   "3PR87TwfWio6HVUScSaHGMnFYkGyaVdFeqT": "WD - Artifacts",
-"3PEjHv3JGjcWNpYEEkif2w8NXV4kbhnoGgu": "Waves.Exchange",
+"3PEjHv3JGjcWNpYEEkif2w8NXV4kbhnoGgu": "WEX Matcher",
 "3PGFHzVGT4NTigwCKP1NcwoXkodVZwvBuuU": "Puzzle Aggregator",
 "3PPG6zVNrMKnkqMthk5i2oHWQ5SHs9ertBM": "Team Rewards",
 
@@ -134,6 +135,7 @@ const dAppsDict = {
 "3PD8eT53J3LcUM5HLnHMcYNAuLEKrQgC4bR": "Buy the Dip PUZzle",
 "3P3EgRSuPaavrVx8AavNVrTMLqtyPsNwPiy": "Dima @Kript_on",
   "3PBwHmugtD1QXqGBzgQRnUdpGAUuE3VqTt6": "Waves Ducks Memes?",
+  "3PAtzncjJGWRpCtkR55wAzcfZ9fubMeA4JU": "Roma",
 
   "3P8JkeL2hVmp957Se45kaxXqXkggZ1SDNZd" : "seller1",
 
