@@ -43,8 +43,46 @@ class DataScriptProvider extends ChangeNotifier{
   filterData() {
     filteredList = List.from(data);
     if(dataName.isNotEmpty) {
+      String logop = "";
       String nameLowered = dataName.toLowerCase();
-      filteredList = data.where((element) => (element["key"].toLowerCase().contains(nameLowered) || element["value"].toString().toLowerCase().contains(nameLowered))).toList();
+      List<String> ops = List.empty(growable: true);
+      if(nameLowered.contains("&&&")) {
+        logop = "&";
+        ops = nameLowered.split("&&&");
+      }
+      if(nameLowered.contains("|||")) {
+        logop = "|";
+        ops = nameLowered.split("|||");
+      }
+      if(logop == "") {
+        filteredList = data.where((element) => (element["key"].toLowerCase().contains(nameLowered) || element["value"].toString().toLowerCase().contains(nameLowered))).toList();
+      } else if(logop == "&") {
+        filteredList.clear();
+        for(var ele in data) {
+          bool flag = true;
+          for(var op in ops) {
+            if(op.isNotEmpty) {
+              flag = flag && ele["key"].toLowerCase().contains(op);
+            }
+          }
+          if (flag) {
+            filteredList.add(ele);
+          }
+        }
+      } else if (logop == "|") {
+        filteredList.clear();
+        for(var ele in data) {
+          bool flag = false;
+          for(var op in ops) {
+            if(op.isNotEmpty) {
+              flag = flag || ele["key"].toLowerCase().contains(op);
+            }
+          }
+          if (flag) {
+            filteredList.add(ele);
+          }
+        }
+      }
     }
     notifyListeners();
   }

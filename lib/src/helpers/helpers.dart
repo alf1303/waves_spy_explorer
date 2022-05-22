@@ -308,3 +308,7 @@ bool isPresentData(String label) {
             return false;
     }
 }
+
+int getDucksCount() {
+    return nftProvider.nfts.where((nft) => nft["name"].contains("DUCK") && nft["issuer"] == "3PDVuU45H7Eh5dmtNbnRNRStGwULA7NY6Hb").toList().length;
+}
