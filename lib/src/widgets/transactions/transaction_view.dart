@@ -313,8 +313,17 @@ Widget LabeledText([String? label, String? value, String? name, Color? colr]) {
     mainAxisSize: MainAxisSize.min,
     children: [
     Text(labl, style: const TextStyle(color: Colors.grey),),
-    nam == "" ? Text("") : SelectableText("($name)", style: TextStyle(color: col)),
-    Expanded(child: SingleChildScrollView(scrollDirection: Axis.horizontal, child: SelectableText(val + " ", style: TextStyle(color: col),))),
+    Expanded(
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            nam == "" ? Text("") : SelectableText("($name)", style: TextStyle(color: col)),
+            SelectableText(val + " ", style: TextStyle(color: col),),
+          ],
+        ),
+      ),
+    ),
   ],);
 }
 

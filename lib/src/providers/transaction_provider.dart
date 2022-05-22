@@ -31,7 +31,7 @@ class TransactionProvider extends ChangeNotifier {
   String curAddr = "";
   String afterGlob = "";
   String afterGlobNft = "";
-  int limit = 500;
+  int limit = 1000;
   int limitNft = 1000;
 
   Widget filterData = Text("Filter options: ");

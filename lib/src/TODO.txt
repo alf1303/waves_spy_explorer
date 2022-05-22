@@ -24,7 +24,7 @@
 19) Implement one row view for transaction and button in app bar to switch views
 20) Implement passing address and data for filtering into address string
 21) Implement opening new tab in browser when clicking on address with passsing this address as parameter
-22)
+22) Implement changing node_url address in app header
 
 
 

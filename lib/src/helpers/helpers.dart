@@ -205,7 +205,9 @@ parseTransactionType(Map<String, dynamic> td)  {
 
             for (var element in td["payment"]) {
                 final assetId = element["assetId"] ?? "WAVES";
-                payment[assetId] = element["amount"];
+                if (td["sender"] == _transactionProvider.curAddr) {
+                  payment[assetId] = element["amount"];
+                }
             }
             getTransfers(isDapp: td["dApp"] == _transactionProvider.curAddr, sender: td["sender"], curAddr: _transactionProvider.curAddr, data: td, resDict: transfers);
             p["header"] = "invoke";
