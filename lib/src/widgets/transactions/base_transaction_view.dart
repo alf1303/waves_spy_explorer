@@ -35,7 +35,7 @@ class BaseTransactionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<dynamic> invokes = getInvokes();
+    final List<dynamic> invokes = getInvokes();
     // print("Internal invokes: ${invokes.length}");
     // print(td["id"]);
     return invokes.isEmpty ? SimpleTransView(td: td) : InvokeView(td: td, invokes: invokes,);

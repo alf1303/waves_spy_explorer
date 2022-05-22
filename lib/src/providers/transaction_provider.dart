@@ -11,6 +11,7 @@ import 'package:waves_spy/src/providers/data_script_provider.dart';
 import 'package:waves_spy/src/providers/filter_provider.dart';
 import 'package:waves_spy/src/providers/nft_provider.dart';
 import 'package:waves_spy/src/providers/progress_bars_provider.dart';
+import 'package:waves_spy/src/providers/stats_provider.dart';
 import 'package:waves_spy/src/widgets/transactions/transaction_view.dart';
 
 import '../models/asset.dart';
@@ -28,10 +29,11 @@ class TransactionProvider extends ChangeNotifier {
   final assetProvider = AssetProvider();
   final nftProvider = NftProvider();
   final dataScriptProvider = DataScriptProvider();
+  final statsProvider = StatsProvider();
   String curAddr = "";
   String afterGlob = "";
   String afterGlobNft = "";
-  int limit = 1000;
+  int limit = 200;
   int limitNft = 1000;
 
   Widget filterData = Text("Filter options: ");
@@ -128,6 +130,7 @@ class TransactionProvider extends ChangeNotifier {
         filterProvider.actualFrom = lastTrans == null ? DateTime.now() : timestampToDate(lastTrans["timestamp"]);
         filterProvider.actualTo = firstTrans == null ? DateTime.now() : timestampToDate(firstTrans["timestamp"]);
         filterProvider.notifyAll();
+        statsProvider.notifyAll();
       }
 
       progressProvider.stopTransactions();
