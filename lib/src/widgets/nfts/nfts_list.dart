@@ -51,7 +51,7 @@ Future<void> _scrollListener() async{
             child: Row(
               children: const [
                 SizedBox(width: 300, child: Text("Name"),),
-                SizedBox(width: 500, child: Text("Id"),),
+                SizedBox(width: 450, child: Text("Id"),),
                 SizedBox(child: Text("Issuer"),),
               ],
             ),

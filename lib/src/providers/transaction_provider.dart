@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:waves_spy/src/constants.dart';
 import 'package:waves_spy/src/helpers/helpers.dart';
+import 'package:waves_spy/src/models/nft.dart';
 import 'package:waves_spy/src/providers/asset_provider.dart';
 import 'package:waves_spy/src/providers/data_script_provider.dart';
 import 'package:waves_spy/src/providers/filter_provider.dart';
@@ -35,6 +36,9 @@ class TransactionProvider extends ChangeNotifier {
   String afterGlobNft = "";
   int limit = 200;
   int limitNft = 1000;
+
+  bool stakedDucksLoaded = false;
+  bool jediDucksLoaded = false;
 
   Widget filterData = Text("Filter options: ");
 
@@ -306,7 +310,7 @@ class TransactionProvider extends ChangeNotifier {
         throw("Assets id $key is not preset in assetsGlobal");
       }
     });
-    print("3");
+    // print("3");
     assetProvider.sortAssets();
     assetProvider.filterAssets();
     progressProvider.stopAssets();
@@ -329,12 +333,30 @@ class TransactionProvider extends ChangeNotifier {
         progressProvider.stopNfts();
         throw("Cant fetch NFTs list: " + resp.body);
       }
+      List<Nft> nftList = res.map((e) => Nft(
+          data: e,
+          isDuck: e["name"].contains("DUCK") && (e["issuer"] == "3PEktVux2RhchSN63DsDo4b4mz4QqzKSeDv" || e["issuer"] == "3PDVuU45H7Eh5dmtNbnRNRStGwULA7NY6Hb" || e["issuer"] == "3PKmLiGEfqLWMC1H9xhzqvAZKUXfFm8uoeg"),
+          isFarming: false,
+          farmingPower: 0
+      )).toList();
       if(afterId.isEmpty) {
-        nftProvider.nfts = res;
+        nftProvider.nfts = nftList;
       } else {
-        nftProvider.nfts.addAll(res);
+        nftProvider.nfts.addAll(nftList);
       }
       // print("Loaded Nfts: " + nftProvider.nfts.length.toString());
+      if(!stakedDucksLoaded) {
+        Map<String, int> stakedDucks = await getStakedDucks(address);
+        List<dynamic> stakedDucksData = await getMassAssets(stakedDucks);
+        List<Nft> stakedDucksNft = stakedDucksData.map((el) => Nft(
+          data: el,
+          isDuck: true,
+          isFarming: true,
+          farmingPower: stakedDucks[el["assetId"]] ?? 0
+        )).toList();
+        stakedDucksLoaded = true;
+        nftProvider.nfts.addAll(stakedDucksNft);
+      }
       nftProvider.filterNfts();
       progressProvider.stopNfts();
     }
@@ -464,6 +486,22 @@ class TransactionProvider extends ChangeNotifier {
 
     createInfo();
     notifyListeners();
+  }
+
+  Future<Map<String, int>> getStakedDucks(String address) async{
+    List<dynamic> res = List.empty(growable: true);
+    String farmingAddress = "3PAETTtuW7aSiyKtn9GuML3RgtV1xdq1mQW";
+    var resp = await http.get(Uri.parse("$nodeUrl/addresses/data/$farmingAddress"));
+    if(resp.statusCode == 200) {
+      final json = jsonDecode(resp.body);
+      // print(json);
+      res = json;
+    } else {
+      throw("Cant fetch data from account data storage for staked ducks:" + resp.body);
+    }
+    final List<dynamic> filtered = res.where((ele) => ele["key"].contains(address) && ele["key"].contains("_farmingPower") && ele["value"] > 0).toList();
+    final Map<String, int> ress = { for (var e in filtered) e["key"].split("_")[3] : e["value"] };
+    return ress;
   }
 }
 

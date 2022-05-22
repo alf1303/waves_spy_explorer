@@ -121,10 +121,21 @@ Future<List<Asset?>>? getAssetInfoLabel(String id) async{
     return [asset, priceAsset];
 }
 
-Future<void> getMassAssetsInfo(Map<String, dynamic> ids) async{
+Future<void> getMassAssetsInfo(Map<String, dynamic> ids) async {
+    List<dynamic> assetDetails = await getMassAssets(ids);
+    for (var ass in assetDetails) {
+            if (!assetsGlobal.containsKey(ass['assetId'])) {
+                Asset a = Asset(ass['assetId'], ass['name'], ass['decimals'], ass['description'], ass['reissuable'], ass["scripted"]);
+                assetsGlobal[a.id] = a;
+            }
+    }
+}
+
+Future<List<dynamic>> getMassAssets(Map<String, dynamic> ids) async{
     final keys = ids.keys.toList();
     bool stop = false;
     int start = 0;
+    List<dynamic> assetDetails = List.empty(growable: true);
     while (!stop) {
       String tmpstr = "";
       String tmpsepar = "";
@@ -145,26 +156,26 @@ Future<void> getMassAssetsInfo(Map<String, dynamic> ids) async{
               }
           }
       }
-      // print("tmpstr: ${tmpstr}, start: $start, lenght: ${keys.length}");
-      // print("${keys[keys.length - 2]}, ${keys[keys.length - 1]}");
       var resp = await http.get(Uri.parse("$nodeUrl/assets/details?id=$tmpstr"));
       if (resp.statusCode == 200) {
-        List<dynamic> assetDetails = jsonDecode(resp.body);
-          for (var ass in assetDetails) {
-              if (!ass.containsKey("error")) {
-                if (!assetsGlobal.containsKey(ass['assetId'])) {
-                    Asset a = Asset(ass['assetId'], ass['name'], ass['decimals'], ass['description'], ass['reissuable'], ass["scripted"]);
-                    assetsGlobal[a.id] = a;
-                }
-              } else {
-                  stop = true;
-                  print("Error: ${ass.toString()} $tmpstr");
-              }
-          }
+        List<dynamic> tmp = jsonDecode(resp.body);
+        bool err = false;
+        for(var el in tmp) {
+            if(el.containsKey("error")) {
+                stop = true;
+                print("Error: ${el.toString()} $tmpstr");
+                err = true;
+                break;
+            }
+        }
+        if(!err) {
+            assetDetails.addAll(jsonDecode(resp.body));
+        }
       } else {
           throw("Failed to load assets details: " + resp.body);
       }
     }
+    return assetDetails;
 }
 
 getTransfers({required bool isDapp, required String sender, required String curAddr, dynamic data, required Map<String, double> resDict}) {
@@ -310,5 +321,6 @@ bool isPresentData(String label) {
 }
 
 int getDucksCount() {
-    return nftProvider.nfts.where((nft) => nft["name"].contains("DUCK") && nft["issuer"] == "3PDVuU45H7Eh5dmtNbnRNRStGwULA7NY6Hb").toList().length;
+    throw("NOT IMPLEMENTED");
+    // return nftProvider.nfts.where((nft) => nft["name"].contains("DUCK") && nft["issuer"] == "3PDVuU45H7Eh5dmtNbnRNRStGwULA7NY6Hb").toList().length;
 }
