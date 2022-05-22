@@ -121,11 +121,13 @@ class TransactionProvider extends ChangeNotifier {
         fillTransactionsWithAssetsNames(res);
 
         filteredTransactions = allTransactions;
-        final lastTrans = allTransactions.isEmpty ? null : allTransactions[allTransactions.length-1];
-        final firstTrans = allTransactions.isEmpty ? null : allTransactions[0];
+
+        filterTransactions();
+        final lastTrans = filteredTransactions.isEmpty ? null : filteredTransactions[filteredTransactions.length-1];
+        final firstTrans = filteredTransactions.isEmpty ? null : filteredTransactions[0];
         filterProvider.actualFrom = lastTrans == null ? DateTime.now() : timestampToDate(lastTrans["timestamp"]);
         filterProvider.actualTo = firstTrans == null ? DateTime.now() : timestampToDate(firstTrans["timestamp"]);
-        filterTransactions();
+        filterProvider.notifyAll();
       }
 
       progressProvider.stopTransactions();

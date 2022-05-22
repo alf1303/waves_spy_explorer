@@ -17,7 +17,7 @@
 14) Add info tab to nft view (show nft count, staked count, etc)
 15) Implement including Ducks on farming, in battles
 16) Implement showing staked Farm Tokens
-17) Add indicators to TabHeader to indicate Data/Script are present
+** 17) Add indicators to TabHeader to indicate Data/Script are present
 ** 17.1) Move singleChildScrollView into labeled view for name item
 
 18) Deploy to Google hosting

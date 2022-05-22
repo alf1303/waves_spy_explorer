@@ -66,7 +66,7 @@ class InvokeView extends StatelessWidget {
                 ],
               );
             }),
-        TransView(td: td)
+        SimpleTransView(td: td)
       ],)
     );
   }

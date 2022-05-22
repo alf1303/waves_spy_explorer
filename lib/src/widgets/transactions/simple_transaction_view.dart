@@ -96,6 +96,11 @@ class _SimpleTransViewState extends State<SimpleTransView> with AutomaticKeepAli
             children: [
               SizedBox(width: 150, child: LabeledText("", formattedDate, "", color)),
               SizedBox(width: 150, child: LabeledText("", getTypeName(widget.td["type"]), "${widget.td["type"]}", color), ),
+              Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: SizedBox(width: 100, child: LabeledText("", widget.td["id"], "", Colors.grey)),
+              ),
+
               Expanded(
                 child: SizedBox(width: 350, child:
                 widget.td["type"] == 16 ? invokeHeader(p) :
@@ -156,7 +161,7 @@ Widget invokeHeader(Map<String, dynamic> p) {
         Expanded(
           child: Padding(
             padding: const EdgeInsets.only(right: 8.0),
-            child: SizedBox(width: 150, child: LabeledText("", p["function"], "", invokeColor)),
+            child: SizedBox(width: 100, child: LabeledText("", p["function"], "", invokeColor)),
           ),
         ),
         Expanded(child: p["dApp"] == _trProvider.curAddr ?

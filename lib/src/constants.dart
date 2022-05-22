@@ -62,6 +62,7 @@ const dAppsDict = {
 "3PDVuU45H7Eh5dmtNbnRNRStGwULA7NY6Hb": "WD - Breeding",
 "3PKmLiGEfqLWMC1H9xhzqvAZKUXfFm8uoeg": "WD - Baby Duckling",
 "3PEktVux2RhchSN63DsDo4b4mz4QqzKSeDv": "WD - Incubator",
+  "3PCC6fVHNa6289DTDmcUo3RuLaFmteZZsmQ" : "WD - Rebirth",
   "3PR87TwfWio6HVUScSaHGMnFYkGyaVdFeqT": "WD - Artifacts",
 "3PEjHv3JGjcWNpYEEkif2w8NXV4kbhnoGgu": "WEX Matcher",
 "3PGFHzVGT4NTigwCKP1NcwoXkodVZwvBuuU": "Puzzle Aggregator",
@@ -131,10 +132,12 @@ const dAppsDict = {
 
 "3P9LTA2dBPNZfUhgnE7na9EyDeuqYdRSqTQ": "Dima Ivanov Main",
 "3PMyGoiQZgNQ8jWn4eKR6uZzSkRoWjdBdgW": "Dima Ivanov 2",
+  "3PPiRS1NfxRAdagsc2gS6F6GZeWadf8Ez1p ": "Dima Ivanov 3",
 "3P3188GUzTypcP2hKNe7Ys5X1S9yoNYjCU3": "Dasha Rewards",
 "3PD8eT53J3LcUM5HLnHMcYNAuLEKrQgC4bR": "Buy the Dip PUZzle",
 "3P3EgRSuPaavrVx8AavNVrTMLqtyPsNwPiy": "Dima @Kript_on",
   "3PBwHmugtD1QXqGBzgQRnUdpGAUuE3VqTt6": "Waves Ducks Memes?",
+  "3PPrR4GNrWdJibYCxezNXxDRkghJV5RVRbW" : "Ckolot",
   "3PAtzncjJGWRpCtkR55wAzcfZ9fubMeA4JU": "Roma",
 
   "3P8JkeL2hVmp957Se45kaxXqXkggZ1SDNZd" : "seller1",

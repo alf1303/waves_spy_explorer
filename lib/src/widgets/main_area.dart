@@ -36,7 +36,7 @@ class _MainAreaState extends State<MainArea>  with SingleTickerProviderStateMixi
       appBar: AppBar(
         title: TabBar(
           controller: tabController,
-            tabs: [
+            tabs: const [
           // const Tab(text: "Transactions", icon: const MyProgressBar(label: "trans"),),
           // Tab(text: "Assets", icon: MyProgressBar(label: "assets")),
           // Tab(text: "NFTs", icon: MyProgressBar(label: "nfts")),
@@ -44,12 +44,12 @@ class _MainAreaState extends State<MainArea>  with SingleTickerProviderStateMixi
           // Tab(icon: MyProgressBar(label: "data"), child: Row(children: [Text("Data"), Icon(Icons.check_rounded, color: Colors.greenAccent,)],),),
           // Tab(text: "Script", icon: MyProgressBar(label: "script")),
           // Tab(text: "Stats",),
-              TabHeaderWidget(name: "Transactions", label: "trans"),
-              TabHeaderWidget(name: "Assets", label: "assets"),
-              TabHeaderWidget(name: "Nfts", label: "nfts"),
-              TabHeaderWidget(name: "Data", label: "data"),
-              TabHeaderWidget(name: "Script", label: "script"),
-              TabHeaderWidget(name: "Stats", label: "none"),
+              TabHeaderWidget(name: "Transactions", label: "trans", index: 0),
+              TabHeaderWidget(name: "Assets", label: "assets",index: 1,),
+              TabHeaderWidget(name: "Nfts", label: "nfts", index: 2,),
+              TabHeaderWidget(name: "Data", label: "data", index: 3,),
+              TabHeaderWidget(name: "Script", label: "script", index: 4,),
+              TabHeaderWidget(name: "Stats", label: "none", index: 5,),
 
         ]),
       ),
@@ -74,9 +74,10 @@ class _MainAreaState extends State<MainArea>  with SingleTickerProviderStateMixi
 }
 
 class TabHeaderWidget extends StatelessWidget {
-  const TabHeaderWidget({Key? key, required String this.name, required String this.label}) : super(key: key);
+  const TabHeaderWidget({Key? key, required String this.name, required String this.label, required int this.index}) : super(key: key);
   final name;
   final label;
+  final index;
 
   @override
   Widget build(BuildContext context) {
@@ -84,11 +85,20 @@ class TabHeaderWidget extends StatelessWidget {
     return Consumer<ProgressProvider>(
       builder: (context, model, child) {
         return Tab(
-          icon: MyProgressBar(label: label),
-          child: Row( children: [
-            Text(name),
-            label == "none" ? Container() : model.isPresent(label) ? const Icon(Icons.check_rounded, color: Colors.greenAccent) : const Icon(Icons.remove, color: Colors.redAccent,)
-          ],
+          // icon: MyProgressBar(label: label),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              MyProgressBar(label: label),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                Text(name),
+                label == "none" ? Container() : model.isPresent(label) ? const Icon(Icons.check_rounded, color: Colors.greenAccent) : const Icon(Icons.remove, color: Colors.redAccent,)
+              ],
+              ),
+            ],
           ),
         );
       }
