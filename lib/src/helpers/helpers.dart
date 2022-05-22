@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:waves_spy/src/providers/asset_provider.dart';
 import 'package:waves_spy/src/providers/data_script_provider.dart';
 import 'package:waves_spy/src/providers/nft_provider.dart';
+import 'package:waves_spy/src/providers/stats_provider.dart';
 
 import '../models/asset.dart';
 import '../providers/transaction_provider.dart';
@@ -15,6 +16,7 @@ final transactionProvider = TransactionProvider();
 final assetProvider = AssetProvider();
 final nftProvider = NftProvider();
 final dataProvider = DataScriptProvider();
+final statsProvider = StatsProvider();
 
 String getFormattedDate(DateTime? dt) {
     return dt != null ? DateFormat('yyyy-MM-dd kk:mm').format(dt) : "nul";
@@ -323,4 +325,9 @@ bool isPresentData(String label) {
 int getDucksCount() {
     throw("NOT IMPLEMENTED");
     // return nftProvider.nfts.where((nft) => nft["name"].contains("DUCK") && nft["issuer"] == "3PDVuU45H7Eh5dmtNbnRNRStGwULA7NY6Hb").toList().length;
+}
+
+void setDucksStatsData() {
+    statsProvider.freeDucksCount = nftProvider.nfts.where((nft) => nft.isDuck && !nft.isFarming).toList().length;
+    statsProvider.stakedDucksCount = nftProvider.nfts.where((nft) => nft.isDuck && nft.isFarming).toList().length;
 }

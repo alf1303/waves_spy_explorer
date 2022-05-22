@@ -18,6 +18,14 @@ class StatsProvider extends ChangeNotifier{
   int stakedDucksCount = 0;
   Map<String, int> calls = {};
 
+  void addCall(String call) {
+    if(calls.containsKey(call)) {
+      calls[call] = calls[call]! + 1;
+    } else {
+      calls[call] = 1;
+    }
+  }
+
   notifyAll() {
     notifyListeners();
   }

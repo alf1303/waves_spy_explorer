@@ -5,6 +5,7 @@ import 'package:waves_spy/src/helpers/helpers.dart';
 import 'package:waves_spy/src/providers/filter_provider.dart';
 import 'package:waves_spy/src/providers/stats_provider.dart';
 import 'package:waves_spy/src/providers/transaction_provider.dart';
+import 'package:waves_spy/src/widgets/other/custom_widgets.dart';
 import 'package:waves_spy/src/widgets/transactions/transaction_view.dart';
 
 class DuckStatsView extends StatelessWidget {
@@ -31,7 +32,14 @@ class DuckStatsView extends StatelessWidget {
                     ],
                   )),
               Expanded(
-                child: Container(color: Colors.yellow,)
+                child: RichText(text: TextSpan(
+                    children:[
+                  LblGroup(label: "address", val: _trProvider.curAddr, newLine: true),
+                  LblGroup(label: "freeDucks", val: model.freeDucksCount.toString(), newLine: true),
+                  LblGroup(label: "stakedDucks", val: model.stakedDucksCount.toString(), newLine: true),
+                  const TextSpan(text: "Calls:\n", style: TextStyle(color: Colors.white)),
+                  TextSpan(children: getCallsList(model.calls))
+                ]),)
               ),
             ],
           );
@@ -39,4 +47,12 @@ class DuckStatsView extends StatelessWidget {
       ),
     );
   }
+}
+
+List<TextSpan> getCallsList(Map<String, int> calls) {
+  List<TextSpan> res = List.empty(growable: true);
+  calls.forEach((key, value) {
+    res.add(LblGroup(label: key, val: value.toString(), tab: "  ", newLine: true));
+  });
+  return res;
 }

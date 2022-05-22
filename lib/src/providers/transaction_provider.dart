@@ -34,7 +34,7 @@ class TransactionProvider extends ChangeNotifier {
   String curAddr = "";
   String afterGlob = "";
   String afterGlobNft = "";
-  int limit = 200;
+  int limit = 1000;
   int limitNft = 1000;
 
   bool stakedDucksLoaded = false;
@@ -74,6 +74,7 @@ class TransactionProvider extends ChangeNotifier {
     await getTransactions(address: curAddr);
     await getAssets(curAddr);
     await getNft(address: address);
+    setDucksStatsData();
     // await getNft(curAddr); //implement
     await getData(curAddr); //implement
     await getScript(curAddr); //implement
@@ -225,6 +226,7 @@ class TransactionProvider extends ChangeNotifier {
             outAssetsIds[assetId] = pay["amount"];
           }
         }
+        statsProvider.addCall(tr["call"]["function"]);
       }
 
       //invokeScript
@@ -357,6 +359,7 @@ class TransactionProvider extends ChangeNotifier {
         stakedDucksLoaded = true;
         nftProvider.nfts.addAll(stakedDucksNft);
       }
+      
       nftProvider.filterNfts();
       progressProvider.stopNfts();
     }

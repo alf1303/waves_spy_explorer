@@ -7,6 +7,7 @@ import 'package:waves_spy/src/constants.dart';
 import 'package:waves_spy/src/helpers/helpers.dart';
 import 'package:waves_spy/src/providers/transaction_provider.dart';
 import 'package:waves_spy/src/styles.dart';
+import 'package:waves_spy/src/widgets/other/custom_widgets.dart';
 import 'package:waves_spy/src/widgets/transactions/transaction_view.dart';
 
 import '../models/asset.dart';
@@ -78,14 +79,14 @@ class FilterProvider extends ChangeNotifier{
     Widget out = RichText(
       text: TextSpan(
           children: [
-            LblGroup("Loaded transactions", allTrxLength.toString()),
-            LblGroup("Filtered transactions", filteredTrxLength.toString()),
-            LblGroup("from", fromDate),
-            LblGroup("to", toDate),
-            LblGroup("types", type),
-            LblGroup("assetName", assetNameStr),
-            LblGroup("function", functionName),
-            LblGroup(dir, sum.toString())
+            LblGroup(label: "Loaded transactions", val: allTrxLength.toString()),
+            LblGroup(label: "Filtered transactions", val: filteredTrxLength.toString()),
+            LblGroup(label: "from", val: fromDate),
+            LblGroup(label: "to", val: toDate),
+            LblGroup(label: "types", val: type),
+            LblGroup(label: "assetName", val: assetNameStr),
+            LblGroup(label: "function", val: functionName),
+            LblGroup(label: dir, val: sum.toString())
           ]
       ),
     );
@@ -178,18 +179,4 @@ class FilterProvider extends ChangeNotifier{
 
 }
 
-TextSpan  LblGroup(String label, String val) {
-  return val.isEmpty ? TextSpan() : TextSpan(
-    children: [
-      TextSpan(
-        style: TextStyle(color: Colors.grey),
-        text: label + ": "
-      ),
-      TextSpan(
-        style: TextStyle(color: Colors.white),
-        text: val + ", "
-      )
-    ]
-  );
-}
 
