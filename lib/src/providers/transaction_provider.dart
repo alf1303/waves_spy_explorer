@@ -140,6 +140,7 @@ class TransactionProvider extends ChangeNotifier {
         final firstTrans = filteredTransactions.isEmpty ? null : filteredTransactions[0];
         filterProvider.actualFrom = lastTrans == null ? DateTime.now() : timestampToDate(lastTrans["timestamp"]);
         filterProvider.actualTo = firstTrans == null ? DateTime.now() : timestampToDate(firstTrans["timestamp"]);
+        createInfo();
         filterProvider.notifyAll();
         statsProvider.notifyAll();
       }

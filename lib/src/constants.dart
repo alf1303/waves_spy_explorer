@@ -7,7 +7,7 @@ String getAddrName(String address) {
 
 const publicNode = 'https://nodes.wavesnodes.com';
 const localNode = 'http://127.0.0.1:6869';
-const nodeUrl = localNode;
+const nodeUrl = publicNode;
 
 const dAppsDict = {
 "3P5UKXpQbom7GB2WGdPG5yGQPeQQuM3hFmw": "Keeper Aggregator",

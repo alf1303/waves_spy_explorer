@@ -10,23 +10,27 @@
 ** 6) Implement Script tab (add mark if present in tab name)
 ** 7) Find bugs when loading new transaction (invalid char U)
 
-10) Implement button for collapsing/hiding addresses in stats view
 ** 11) Remove frames from data strings in transactions views and filter data and stats
 ** 12) Move buttons for clearing filter options inside filter options area and add border ( to achieve combined look)
 ** 13) Combine filter info texts from LabeledView? To separate labels and info
 ** 17) Add indicators to TabHeader to indicate Data/Script are present
 ** 17.1) Move singleChildScrollView into labeled view for name item
 
+17.2) Implement addresses tab in stats area
 18) Remove FutureBuilder from assetsView widget to improve performance
-19) Implement one row view for transaction and button in app bar to switch views
 20) Implement passing address and data for filtering into address string
 21) Implement opening new tab in browser when clicking on address with passing this address as parameter
 22) Implement changing node_url address in app header
 23) Deploy to Google hosting
 
-
+9) Implemnt indicating number of items in tab names(data entries, nft count, transactions count)
+    - for transactions also indicate if all transactions were loaded
+10) Implement button for collapsing/hiding addresses in stats view
+19) Implement one row view for transaction and button in app bar to switch views
 24) Implement getting ducks in DuckWars and mantle level
 25) Implement toolbar for nft tab with filtering nfts/ducks
+25.2) Implement indicating Puzzle Eagle an Bored Ania nfts(staked/unstaked)
+25.1) Implement showing staked amount for tokens (Farm Tokens, Puzzle, )
 26) Add processing of Lease and LeaseCancel transactions to:
     - createFilterDataString
     - extractAssets
