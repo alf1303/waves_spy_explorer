@@ -125,9 +125,9 @@ class TransactionProvider extends ChangeNotifier {
         }
       
         if (after == "") {
-          allTransactions = res;
+          filterProvider.reverseTransactions ? allTransactions = res.reversed.toList() : allTransactions = res;
         } else {
-          allTransactions.addAll(res);
+          filterProvider.reverseTransactions ? allTransactions.insertAll(0, res.reversed) : allTransactions.addAll(res);
         }
         final ids = await extractAssets(res);
         await getMassAssetsInfo(ids);

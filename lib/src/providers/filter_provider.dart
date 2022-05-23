@@ -27,6 +27,7 @@ class FilterProvider extends ChangeNotifier{
   String functName = "";
   String assetName = "";
   String direction = "all";
+  bool reverseTransactions = false;
 
   Map<String, double> finalList = {};
   double sumacum = 0;
@@ -174,6 +175,14 @@ class FilterProvider extends ChangeNotifier{
   void clearToDate() {
     to = null;
     _transactionProvider.filterTransactions();
+    notifyAll();
+  }
+
+  void changeReverse() {
+    reverseTransactions = !reverseTransactions;
+    _transactionProvider.allTransactions = _transactionProvider.allTransactions.reversed.toList();
+    _transactionProvider.filterTransactions();
+    _transactionProvider.notifyListeners();
     notifyAll();
   }
 

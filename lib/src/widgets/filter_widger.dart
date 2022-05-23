@@ -23,6 +23,11 @@ class FilterWidget extends StatelessWidget {
     _filterProvider.changeDirection(val);
   }
 
+  void onReverseChange() {
+    final _filterProvider = FilterProvider();
+    _filterProvider.changeReverse();
+  }
+
   void onTypeChanged(val) {
     print(val);
     final _filterProvider = FilterProvider();
@@ -100,6 +105,9 @@ void clearToDate() {
                       ],
                     ),
                   ),
+                  IconButton(onPressed: onReverseChange,
+                    icon: Icon(model.reverseTransactions ? Icons.arrow_upward_outlined : Icons.arrow_downward_rounded),
+                    tooltip: model.reverseTransactions ? apploc!.newFirst : apploc!.oldFirst,),
                   Expanded(
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),

@@ -13,5 +13,7 @@
     "clearAsset" : "clear asset name",
     "clearFunction" : "clear function name",
     "loadMore" : "Load more transactions",
-    "loadAll" : "Load all transactions"
+    "loadAll" : "Load all transactions",
+    "oldFirst" : "switch to Older transactions first",
+    "newFirst" : "switch to Newer transactions first"
  }
