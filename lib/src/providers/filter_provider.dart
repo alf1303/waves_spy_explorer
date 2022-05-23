@@ -28,7 +28,7 @@ class FilterProvider extends ChangeNotifier{
   String assetName = "";
   String direction = "all";
   bool reverseTransactions = false;
-  double minValue = 0;
+  String minValue = "0";
 
   Map<String, double> finalList = {};
   double sumacum = 0;
@@ -204,17 +204,17 @@ class FilterProvider extends ChangeNotifier{
     notifyAll();
   }
 
-  void changeMinValue(val) {
-    val ??= 0;
-    if (val != null && val != "" && val != 0) {
-      minValue = double.parse(val);
+  void changeMinValue(String val) {
+    val ??= "0";
+    if (val != "0") {
+      minValue = val;
       _transactionProvider.filterTransactions();
       notifyAll();
     }
   }
 
   void clearMinValue() {
-    minValue = 0;
+    minValue = "0";
     _transactionProvider.filterTransactions();
     notifyAll();
   }

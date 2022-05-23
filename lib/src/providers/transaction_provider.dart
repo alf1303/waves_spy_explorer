@@ -484,16 +484,17 @@ class TransactionProvider extends ChangeNotifier {
     }
     final trToFilter = filterProvider.isFiltered() ? filteredTransactions : datedTransactions;
 
-    if(filterProvider.minValue > 0) {
+    double minval = double.parse(filterProvider.minValue);
+    if(minval > 0) {
       List<dynamic> res = List.empty(growable: true);
       for(var tr in trToFilter) {
         bool inHaveBigger = false;
         bool outHaveBigger = false;
         for(var p in tr["inAssetsIds"].keys) {
-          inHaveBigger = tr["inAssetsIds"][p]/pow(10, assetsGlobal[p]!.decimals) > filterProvider.minValue;
+          inHaveBigger = tr["inAssetsIds"][p]/pow(10, assetsGlobal[p]!.decimals) > minval;
         }
         for(var p in tr["outAssetsIds"].keys) {
-          outHaveBigger = tr["outAssetsIds"][p]/pow(10, assetsGlobal[p]!.decimals) > filterProvider.minValue;
+          outHaveBigger = tr["outAssetsIds"][p]/pow(10, assetsGlobal[p]!.decimals) > minval;
         }
         if (inHaveBigger || outHaveBigger) {
           res.add(tr);

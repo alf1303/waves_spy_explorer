@@ -30,9 +30,9 @@ class FilterWidget extends StatelessWidget {
     _filterProvider.changeReverse();
   }
 
-  void minValueChanged(val) {
+  void minValueChanged(String val) {
     final _filterProvider = FilterProvider();
-    _filterProvider.changeMinValue(val);
+    _filterProvider.changeMinValue(val.replaceFirst(",", "."));
   }
 
   void minValueClear() {
