@@ -82,6 +82,12 @@ class TransactionProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> getllTransactions() async{
+    final filterProvider = FilterProvider();
+    filterProvider.from = DateTime(2017);
+    await getTransactions(address: curAddr, after: true);
+  }
+
   Future<void> getMoreTransactions() async{
     await getTransactions(address: curAddr, after: true);
   }

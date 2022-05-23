@@ -19,6 +19,10 @@ class InputWidget extends StatelessWidget {
     await _transactionProvider.getMoreTransactions();
   }
 
+  loadAll() async {
+    await _transactionProvider.getllTransactions();
+  }
+
   pasteFromClipboard() async{
     ClipboardData? cdata = await Clipboard.getData(Clipboard.kTextPlain);
     String? copiedtext = cdata?.text;
@@ -55,7 +59,9 @@ class InputWidget extends StatelessWidget {
           onPressed: onSearch,
           tooltip: apploc.search,
           icon: const Icon(Icons.search_rounded)),
-      TextButton(onPressed: loadMore, child: Text(apploc.loadMore))
+      TextButton(onPressed: loadMore, child: Text(apploc.loadMore)),
+      TextButton(onPressed: loadAll, child: Text(apploc.loadAll))
+
 
     ],
     );

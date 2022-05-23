@@ -12,5 +12,6 @@
     "addrHint" : "Enter or Paste address",
     "clearAsset" : "clear asset name",
     "clearFunction" : "clear function name",
-    "loadMore" : "Load more transactions"
+    "loadMore" : "Load more transactions",
+    "loadAll" : "Load all transactions"
  }
