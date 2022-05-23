@@ -5,7 +5,9 @@ String getAddrName(String address) {
   return res;
 }
 
-const nodeUrl = 'https://nodes.wavesnodes.com';
+const publicNode = 'https://nodes.wavesnodes.com';
+const localNode = 'http://127.0.0.1:6869';
+const nodeUrl = localNode;
 
 const dAppsDict = {
 "3P5UKXpQbom7GB2WGdPG5yGQPeQQuM3hFmw": "Keeper Aggregator",
@@ -127,7 +129,10 @@ const dAppsDict = {
 "3PPsoLQYRjvhQTfLYnaEm6BVeJLznBFrwZK": "Neutrino - JPYN Collateral",
 "3P4PCxsJqMzQBALo8zANHtBDZRRquobHQp7": "Neutrino - Liquidation",
 
-  "3P6fAxtw12pjFhayEfpcUWxgu2BHVCeP78A": "PuzzleMarket",
+  "3PDEEMRU3tBJffag7sRPnjwEQ8GZGikUWBi" : "Deem Pichulin",
+  "3P5svutcwqdyivdjwfbapuehkxfnqsaquyf" : "Deem Pichulin 2?",
+
+  "3P6fAxtw12pjFhayEfpcUWxgu2BHVCeP78A" : "PuzzleMarket",
   "3P3pDosq4GCwfJkvq4yqKvvoTwmoqc9qPmo": "DuckWrapper - PuzzleMarket",
 
 "3P9LTA2dBPNZfUhgnE7na9EyDeuqYdRSqTQ": "Dima Ivanov Main",
@@ -138,7 +143,10 @@ const dAppsDict = {
 "3P3EgRSuPaavrVx8AavNVrTMLqtyPsNwPiy": "Dima @Kript_on",
   "3PBwHmugtD1QXqGBzgQRnUdpGAUuE3VqTt6": "Waves Ducks Memes?",
   "3PPrR4GNrWdJibYCxezNXxDRkghJV5RVRbW" : "Ckolot",
+
   "3PAtzncjJGWRpCtkR55wAzcfZ9fubMeA4JU": "Roma",
+  "3PMKAL4cd77onkYuuU35115Wov1sLMEcFsv": "Roma_Puz",
+  "3P55AbxhmLtLztfPjLzGKd2TL3tfqCTHQdF": "Roma_WaveSeed",
 
   "3P8JkeL2hVmp957Se45kaxXqXkggZ1SDNZd" : "seller1",
 

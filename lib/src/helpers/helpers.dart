@@ -218,7 +218,7 @@ parseTransactionType(Map<String, dynamic> td)  {
 
             for (var element in td["payment"]) {
                 final assetId = element["assetId"] ?? "WAVES";
-                if (td["sender"] == _transactionProvider.curAddr) {
+                if (td["sender"] == _transactionProvider.curAddr || td["dApp"] == _transactionProvider.curAddr) {
                   payment[assetId] = element["amount"];
                 }
             }

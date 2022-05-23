@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:date_time_picker/date_time_picker.dart';
@@ -13,6 +14,7 @@ class FilterWidget extends StatelessWidget {
   final selectedColor = Colors.cyanAccent;
   final functController = TextEditingController();
   final assetController = TextEditingController();
+  final minValueController = TextEditingController();
   String dirValue = "";
 
   final dirs = ["all", "in", "out"];
@@ -26,6 +28,16 @@ class FilterWidget extends StatelessWidget {
   void onReverseChange() {
     final _filterProvider = FilterProvider();
     _filterProvider.changeReverse();
+  }
+
+  void minValueChanged(val) {
+    final _filterProvider = FilterProvider();
+    _filterProvider.changeMinValue(val);
+  }
+
+  void minValueClear() {
+    final _filterProvider = FilterProvider();
+    _filterProvider.clearMinValue();
   }
 
   void onTypeChanged(val) {
@@ -83,8 +95,11 @@ void clearToDate() {
         builder: (context, model, child) {
           assetController.text = _filterProvider.assetName;
           functController.text = _filterProvider.functName;
+          minValueController.text = _filterProvider.minValue.toString();
           assetController.selection = TextSelection.fromPosition(TextPosition(offset: assetController.text.length));
           functController.selection = TextSelection.fromPosition(TextPosition(offset: functController.text.length));
+          minValueController.selection = TextSelection.fromPosition(TextPosition(offset: minValueController.text.length));
+
           dirValue = _filterProvider.direction;
           bool funcNameVisible = _filterProvider.fType.contains(16);
           return Column(
@@ -115,7 +130,7 @@ void clearToDate() {
                       child: Row(
                         children: [
                           Expanded(
-                            child: InputWidget(controller: assetController, onchanged: assetChanged, clearFunc: clearAsset, label: "asset name", hint: apploc?.clearAsset),
+                            child: InputWidget(controller: assetController, onchanged: assetChanged, clearFunc: clearAsset, label: "asset name", hint: apploc.clearAsset),
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -131,9 +146,13 @@ void clearToDate() {
                                 onChanged: onChangedDirection),
                           ),
                           Expanded(
-                            child: Visibility(child: InputWidget(controller: functController, onchanged: functChanged, clearFunc: clearFunc, label: "function name", hint: apploc?.clearFunction),
+                              child: InputWidget(controller: minValueController, onchanged: minValueChanged, clearFunc: minValueClear, label: "min value", hint: apploc.clearMinValue, isNumeric: true)
+                          ),
+                          Expanded(
+                            child: Visibility(child: InputWidget(controller: functController, onchanged: functChanged, clearFunc: clearFunc, label: "function name", hint: apploc.clearFunction),
                               visible: funcNameVisible,)
                   ),
+
                 ],
               )
               )
@@ -218,7 +237,8 @@ void clearToDate() {
     );
   }
 
-  Widget InputWidget({controller, onchanged, clearFunc, label, hint}) {
+  Widget InputWidget({controller, onchanged, clearFunc, label, hint, bool? isNumeric}) {
+    bool isNum = isNumeric ?? false;
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
       // decoration: BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: BorderRadius.all(Radius.circular(5))),
@@ -228,8 +248,12 @@ void clearToDate() {
             child: TextFormField(
               onChanged: onchanged,
               controller: controller,
+              keyboardType: isNum ? TextInputType.numberWithOptions(decimal: true) : null,
+              inputFormatters: isNum ? [
+                FilteringTextInputFormatter.allow(RegExp(r'[0-9]+[,.]{0,1}[0-9]*')),
+                  ] : [],
               decoration: InputDecoration(
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
                 isDense: true,
                 labelText: label,
                 suffixIcon: IconButton(onPressed: clearFunc, icon: const Icon(Icons.close,), tooltip: hint,)

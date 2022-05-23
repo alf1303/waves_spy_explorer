@@ -35,6 +35,7 @@ class DappStatsView extends StatelessWidget {
                   )),
               Expanded(
                 child: ListView(
+                  primary: false,
                   shrinkWrap: true,
                   children: getList(model.finalList, model.assetName),
                 ),
@@ -62,7 +63,7 @@ List<Widget> getList(Map<String, double> map, String assName) {
 
 Widget ResultWidget(String key, double value, String assName) {
   String val = key;
-  bool hidden = true;
+  bool hidden = false;
   return Container(
     padding: const EdgeInsets.all(5),
     margin: const EdgeInsets.all(2),
@@ -85,7 +86,8 @@ Widget ResultWidget(String key, double value, String assName) {
               ],
             );
           }),
-      SelectableText("${value.toStringAsFixed(5)} $assName")
+      SizedBox(width: 350, child: SelectableText("${value.toStringAsFixed(5)} $assName")),
+      SelectableText(getAddrName(val), style: const TextStyle(color: Colors.white60),)
     ],),
   );
 }

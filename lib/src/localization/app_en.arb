@@ -12,6 +12,7 @@
     "addrHint" : "Enter or Paste address",
     "clearAsset" : "clear asset name",
     "clearFunction" : "clear function name",
+    "clearMinValue" : "clear minimal value",
     "loadMore" : "Load more transactions",
     "loadAll" : "Load all transactions",
     "oldFirst" : "switch to Older transactions first",

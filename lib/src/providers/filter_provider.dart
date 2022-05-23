@@ -28,6 +28,7 @@ class FilterProvider extends ChangeNotifier{
   String assetName = "";
   String direction = "all";
   bool reverseTransactions = false;
+  double minValue = 0;
 
   Map<String, double> finalList = {};
   double sumacum = 0;
@@ -44,34 +45,51 @@ class FilterProvider extends ChangeNotifier{
     String toDate = actualTo == null ? "" : getFormattedDate(actualTo);
 
     //Calculating income/outcome summs
+    finalList.clear();
     if(assetName.isNotEmpty && direction != "all") {
       sumacum = 0;
       String assId = "";
       for (var tr in _transactionProvider.filteredTransactions) {
         if(direction == "in") {
           assId = tr["inAssetsIds"].keys.toList()[0];
-          sumacum += tr["inAssetsIds"][assId];
+          int decimals = assetsGlobal[assId] == null ? 1 : assetsGlobal[assId]!.decimals;
+          double val = tr["inAssetsIds"][assId]/pow(10, decimals);
+          sumacum += tr["inAssetsIds"][assId]/pow(10, decimals);
           if(finalList.containsKey(tr["sender"])) {
-            finalList[tr["sender"]] = (finalList[tr["sender"]]! + tr["inAssetsIds"][assId]!);
+            finalList[tr["sender"]] = (finalList[tr["sender"]]! + val);
           } else {
-            finalList[tr["sender"]] = tr["inAssetsIds"][assId];
+            finalList[tr["sender"]] = val;
           }
         }
 
         if(direction == "out") {
           assId = tr["outAssetsIds"].keys.toList()[0];
-          sumacum += tr["outAssetsIds"][assId];
-          if(finalList.containsKey(tr["sender"])) {
-            finalList[tr["sender"]] = (finalList[tr["sender"]]! + tr["outAssetsIds"][assId]!);
-          } else {
-            finalList[tr["sender"]] = tr["outAssetsIds"][assId];
+          int decimals = assetsGlobal[assId] == null ? 1 : assetsGlobal[assId]!.decimals;
+          double val = tr["outAssetsIds"][assId]/pow(10, decimals);
+          sumacum += val;
+          int type = tr["type"];
+          if (type == 16 && tr["dApp"] == _transactionProvider.curAddr) {
+            addNewEntryOrCombine(finalList, val, tr["sender"]);
+          } else if(type == 16) {
+            addNewEntryOrCombine(finalList, val, tr["dApp"]);
+          } else if(type == 4) {
+            addNewEntryOrCombine(finalList, val, tr["recipient"]);
+          } else if(type == 11) {
+            for(var transfer in tr["transfers"]) {
+              addNewEntryOrCombine(finalList, transfer["amount"], transfer["recipient"]);
+            }
+          } else if(type == 7) {
+            addNewEntryOrCombine(finalList, val, tr["sender"]);
+          } else if(type == 6) {
+            addNewEntryOrCombine(finalList, val, "Burn, baby, burn");
           }
         }
       }
 
       int decimals = assetsGlobal[assId] == null ? 1 : assetsGlobal[assId]!.decimals;
-      finalList.updateAll((key, value) => value/pow(10, decimals));
-      sumacum = sumacum/pow(10, decimals);
+      print("decimals: $decimals");
+      // finalList.updateAll((key, value) => value/pow(10, decimals));
+      // sumacum = sumacum/pow(10, decimals);
       sum = sumacum.toStringAsFixed(5);
     }
 
@@ -186,6 +204,29 @@ class FilterProvider extends ChangeNotifier{
     notifyAll();
   }
 
+  void changeMinValue(val) {
+    val ??= 0;
+    if (val != null && val != "" && val != 0) {
+      minValue = double.parse(val);
+      _transactionProvider.filterTransactions();
+      notifyAll();
+    }
+  }
+
+  void clearMinValue() {
+    minValue = 0;
+    _transactionProvider.filterTransactions();
+    notifyAll();
+  }
+
+  void addNewEntryOrCombine(Map<String, double> map, double val, String addr) {
+    if(map.containsKey(addr)) {
+      map[addr] = (map[addr]! + val);
+    } else {
+      map[addr] = val;
+    }
+  }
+  
 }
 
 

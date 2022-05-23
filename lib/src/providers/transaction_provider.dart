@@ -484,7 +484,25 @@ class TransactionProvider extends ChangeNotifier {
     }
     final trToFilter = filterProvider.isFiltered() ? filteredTransactions : datedTransactions;
 
-    print("Filtering direction: ${filterProvider.direction}");
+    if(filterProvider.minValue > 0) {
+      List<dynamic> res = List.empty(growable: true);
+      for(var tr in trToFilter) {
+        bool inHaveBigger = false;
+        bool outHaveBigger = false;
+        for(var p in tr["inAssetsIds"].keys) {
+          inHaveBigger = tr["inAssetsIds"][p]/pow(10, assetsGlobal[p]!.decimals) > filterProvider.minValue;
+        }
+        for(var p in tr["outAssetsIds"].keys) {
+          outHaveBigger = tr["outAssetsIds"][p]/pow(10, assetsGlobal[p]!.decimals) > filterProvider.minValue;
+        }
+        if (inHaveBigger || outHaveBigger) {
+          res.add(tr);
+        }
+      }
+      trToFilter.clear();
+      trToFilter.addAll(res);
+    }
+
     if(filterProvider.direction == "all") {
       filteredTransactions = trToFilter.where((tr) => tr["assetsNames"].toLowerCase().contains(filterProvider.assetName.toLowerCase())).toList();
     }
@@ -494,7 +512,7 @@ class TransactionProvider extends ChangeNotifier {
     if(filterProvider.direction == "out") {
       filteredTransactions = trToFilter.where((tr) => tr["outAssetsNames"].toLowerCase().contains(filterProvider.assetName.toLowerCase())).toList();
     }
-
+    filteredTransactions = filteredTransactions.toSet().toList();
     createInfo();
     notifyListeners();
   }

@@ -36,13 +36,13 @@ class _StatsViewState extends State<StatsView> with SingleTickerProviderStateMix
           TabBar(
               controller: statsController,
               tabs: const [
-            Tab(text: "Dapp"),
-            Tab(text: "Ducks"),
+            Tab(text: "Addresses"),
+            Tab(text: "Stats"),
           ]),
           Expanded(
             child: TabBarView(
                 controller: statsController,
-                children: [
+                children: const [
                   DappStatsView(),
                   DuckStatsView()
             ]),
