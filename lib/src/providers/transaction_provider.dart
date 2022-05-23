@@ -223,7 +223,9 @@ class TransactionProvider extends ChangeNotifier {
           if(curAddr == tr["dApp"]) {
             inAssetsIds[assetId] = pay["amount"];
           } else {
-            outAssetsIds[assetId] = pay["amount"];
+            if (curAddr == tr["sender"]) {
+              outAssetsIds[assetId] = pay["amount"];
+            }
           }
         }
         statsProvider.addCall(tr["call"]["function"]);

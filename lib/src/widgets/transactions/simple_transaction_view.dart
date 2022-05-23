@@ -216,12 +216,16 @@ Widget transferHeader(Map<String, dynamic> p) {
 
 Widget massTransferHeader(Map<String, dynamic> p) {
   final _transactionProvider = TransactionProvider();
+  String lbl = "from";
+  if(p["sender"] == _transactionProvider.curAddr) {
+    lbl = "sender";
+  }
   return Padding(
     padding: const EdgeInsets.only(right: 8.0),
     child: Row(
       children: [
         SizedBox(width: 150, child: Container(),),
-        Expanded(child: SizedBox(width: 740, child: LabeledText("from: ", p["anotherAddr"], p["name"], massTransferColor),)),
+        Expanded(child: SizedBox(width: 740, child: LabeledText(lbl, p["anotherAddr"], p["name"], massTransferColor),)),
       ],
     ),
   );

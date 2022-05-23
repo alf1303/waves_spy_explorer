@@ -253,6 +253,9 @@ parseTransactionType(Map<String, dynamic> td)  {
                     }
                 }
             });
+            if(td["sender"] == _transactionProvider.curAddr) {
+                payment[assetId] = td["totalAmount"];
+            }
             p["header"] = "massTransfer";
             break;
         case 6:
