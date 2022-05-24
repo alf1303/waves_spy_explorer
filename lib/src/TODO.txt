@@ -23,7 +23,7 @@
 22) Implement changing node_url address in app header
 23) Deploy to Google hosting
 
-9) Implemnt indicating number of items in tab names(data entries, nft count, transactions count)
+9) Implement indicating number of items in tab names(data entries, nft count, transactions count)
     - for transactions also indicate if all transactions were loaded
 10) Implement button for collapsing/hiding addresses in stats view
 19) Implement one row view for transaction and button in app bar to switch views

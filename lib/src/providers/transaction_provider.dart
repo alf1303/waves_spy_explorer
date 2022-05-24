@@ -34,7 +34,7 @@ class TransactionProvider extends ChangeNotifier {
   String curAddr = "";
   String afterGlob = "";
   String afterGlobNft = "";
-  int limit = 1000;
+  int limit = 15;
   int limitNft = 1000;
 
   bool stakedDucksLoaded = false;
@@ -476,7 +476,6 @@ class TransactionProvider extends ChangeNotifier {
     } else {
       filteredTransactions = datedTransactions;
     }
-    // print("*** 1");
     if(filterProvider.fType.contains(16) && filterProvider.functName.isNotEmpty) {
       List<dynamic> invokeTrs = filteredTransactions.where((tr) => tr["type"] == 16).toList();
       filteredTransactions.removeWhere((tr) => tr["type"] == 16);
@@ -506,13 +505,13 @@ class TransactionProvider extends ChangeNotifier {
     }
 
     if(filterProvider.direction == "all") {
-      filteredTransactions = trToFilter.where((tr) => tr["assetsNames"].toLowerCase().contains(filterProvider.assetName.toLowerCase())).toList();
+      filteredTransactions = trToFilter.where((tr) => tr["assetsNames"].toLowerCase().contains(filterProvider.assetName.name.toLowerCase())).toList();
     }
     if(filterProvider.direction == "in") {
-      filteredTransactions = trToFilter.where((tr) => tr["inAssetsNames"].toLowerCase().contains(filterProvider.assetName.toLowerCase())).toList();
+      filteredTransactions = trToFilter.where((tr) => tr["inAssetsNames"].toLowerCase().contains(filterProvider.assetName.name.toLowerCase())).toList();
     }
     if(filterProvider.direction == "out") {
-      filteredTransactions = trToFilter.where((tr) => tr["outAssetsNames"].toLowerCase().contains(filterProvider.assetName.toLowerCase())).toList();
+      filteredTransactions = trToFilter.where((tr) => tr["outAssetsNames"].toLowerCase().contains(filterProvider.assetName.name.toLowerCase())).toList();
     }
     filteredTransactions = filteredTransactions.toSet().toList();
     createInfo();

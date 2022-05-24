@@ -3,11 +3,14 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:date_time_picker/date_time_picker.dart';
+import 'package:waves_spy/src/helpers/helpers.dart';
+import 'package:waves_spy/src/models/asset.dart';
 import 'package:waves_spy/src/providers/filter_provider.dart';
 import 'package:waves_spy/src/providers/transaction_provider.dart';
 import 'package:waves_spy/src/widgets/main_area.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:waves_spy/src/widgets/other/custom_group_radio.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 
 class FilterWidget extends StatelessWidget {
   FilterWidget({Key? key}) : super(key: key);
@@ -62,8 +65,8 @@ class FilterWidget extends StatelessWidget {
     _filterProvider.clearFunc();
   }
 
-void assetChanged(val) {
-    print("asset: " + val);
+void assetChanged(Asset val) {
+    print("asset: " + val.name);
   final _filterProvider = FilterProvider();
   _filterProvider.changeAssetName(val);
 }
@@ -93,7 +96,7 @@ void clearToDate() {
       padding: const EdgeInsets.only(bottom: 16.0),
       child: Consumer<FilterProvider>(
         builder: (context, model, child) {
-          assetController.text = _filterProvider.assetName;
+          assetController.text = _filterProvider.assetName.name;
           functController.text = _filterProvider.functName;
           minValueController.text = _filterProvider.minValue.toString();
           assetController.selection = TextSelection.fromPosition(TextPosition(offset: assetController.text.length));
@@ -130,7 +133,14 @@ void clearToDate() {
                       child: Row(
                         children: [
                           Expanded(
-                            child: InputWidget(controller: assetController, onchanged: assetChanged, clearFunc: clearAsset, label: "asset name", hint: apploc.clearAsset),
+                            // child: InputWidget(controller: assetController, onchanged: assetChanged, clearFunc: clearAsset, label: "asset name", hint: apploc.clearAsset),
+                            child: DropdownSearch<Asset>(
+                              popupProps: PopupProps.menu(showSearchBox: true),
+                              dropdownSearchDecoration: InputDecoration(labelText: "asset name"),
+                              asyncItems: (String filter) => getData(filter),
+                              itemAsString: (Asset u) => u.name,
+                              onChanged: (Asset? data) => assetChanged(data!),
+                            )
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -264,4 +274,9 @@ void clearToDate() {
       ),
     );
   }
+
+  Future<List<Asset>> getData(String filter) async{
+    return assetsGlobal.values.where((ass) => ass.name.toLowerCase().contains(filter.toLowerCase())).toList();
+  }
+
 }

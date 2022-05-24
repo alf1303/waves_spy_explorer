@@ -4,12 +4,31 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:waves_spy/src/constants.dart';
 import 'package:waves_spy/src/helpers/helpers.dart';
+import 'package:waves_spy/src/models/addresses_stats_item.dart';
+import 'package:waves_spy/src/models/asset.dart';
 import 'package:waves_spy/src/providers/filter_provider.dart';
 import 'package:waves_spy/src/providers/transaction_provider.dart';
 import 'package:waves_spy/src/widgets/transactions/transaction_view.dart';
 
-class DappStatsView extends StatelessWidget {
+class DappStatsView extends StatefulWidget {
   const DappStatsView({Key? key}) : super(key: key);
+
+  @override
+  State<DappStatsView> createState() => _DappStatsViewState();
+}
+
+class _DappStatsViewState extends State<DappStatsView> {
+  bool income = true;
+  void sortByIn() {
+    final filterProvider = FilterProvider();
+    income = true;
+    filterProvider.notifyAll();
+  }
+
+  void sortByOut() {
+    final filterProvider = FilterProvider();
+    income = false;
+    filterProvider.notifyAll();  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +44,8 @@ class DappStatsView extends StatelessWidget {
                   padding: const EdgeInsets.all(8),
                   child: Row(
                     children: [
-                      LabeledTextNoScroll("summ: ", "${model.sumacum.toStringAsFixed(5)}, "),
+                      LabeledTextNoScroll("income: ", "${model.sumacum_in.toStringAsFixed(5)}, "),
+                      LabeledTextNoScroll("outcome: ", "${model.sumacum_out.toStringAsFixed(5)}, "),
                       LabeledTextNoScroll("asset: ", "${model.assetName}, "),
                       LabeledTextNoScroll("from: ", "${getFormattedDate(model.actualFrom)}, "),
                       LabeledTextNoScroll("to: ", "${getFormattedDate(model.actualTo)}, "),
@@ -33,11 +53,17 @@ class DappStatsView extends StatelessWidget {
                       LabeledTextNoScroll("direction: ", "${model.direction.toUpperCase()}")
                     ],
                   )),
+              Row(children: [
+                const SizedBox(width: 300, child: Center(child: Text("Address")),),
+                InkWell(child: const SizedBox(width: 300, child: Center(child: Text("In")),), onTap: sortByIn),
+                InkWell(child: const SizedBox(width: 200, child: Center(child: Text("Out")),), onTap: sortByOut,),
+                const SizedBox(width: 150, child: Center(child: Text("Address Name")),),
+              ],),
               Expanded(
                 child: ListView(
                   primary: false,
                   shrinkWrap: true,
-                  children: getList(model.finalList, model.assetName),
+                  children: getList(model.finalList, model.assetName, income),
                 ),
               ),
             ],
@@ -48,21 +74,22 @@ class DappStatsView extends StatelessWidget {
   }
 }
 
-List<Widget> getList(Map<String, double> map, String assName) {
+List<Widget> getList(Map<String, AddressesStatsItem> map, Asset assName, bool income) {
   List<Widget> list = List.empty(growable: true);
   var sortedKeys = map.keys.toList(growable:false)
-    ..sort((k1, k2) => map[k2]!.compareTo(map[k1]!));
+    ..sort((k1, k2) => income ? map[k2]!.income.compareTo(map[k1]!.income) : map[k2]!.outcome.compareTo(map[k1]!.outcome));
   final sortedMap =  LinkedHashMap
       .fromIterable(sortedKeys, key: (k) => k, value: (k) => map[k]);
   sortedMap.forEach((key, value) {
-    final ele = ResultWidget(key, value!, assName);
+    final ele = ResultWidget(value, assName.name);
     list.add(ele);
   });
   return list;
 }
 
-Widget ResultWidget(String key, double value, String assName) {
-  String val = key;
+Widget ResultWidget(AddressesStatsItem? it, String assName) {
+  String key = it!.address;
+  String val = it.address;
   bool hidden = false;
   return Container(
     padding: const EdgeInsets.all(5),
@@ -86,7 +113,8 @@ Widget ResultWidget(String key, double value, String assName) {
               ],
             );
           }),
-      SizedBox(width: 350, child: SelectableText("${value.toStringAsFixed(5)} $assName")),
+      SizedBox(width: 200, child: SelectableText("${it.income.toStringAsFixed(5)} $assName")),
+      SizedBox(width: 250, child: SelectableText("${it.outcome.toStringAsFixed(5)} $assName")),
       SelectableText(getAddrName(val), style: const TextStyle(color: Colors.white60),)
     ],),
   );
