@@ -5,6 +5,8 @@ import 'package:waves_spy/src/providers/asset_provider.dart';
 import 'package:waves_spy/src/providers/transaction_provider.dart';
 import 'package:waves_spy/src/widgets/assets/asset_view.dart';
 import 'package:waves_spy/src/widgets/data/data_list.dart';
+import 'package:waves_spy/src/widgets/filter_widger.dart';
+import 'package:waves_spy/src/widgets/input_widget.dart';
 import 'package:waves_spy/src/widgets/other/progress_bar.dart';
 
 
@@ -44,14 +46,8 @@ class AssetsList extends StatelessWidget {
                     builder: (context, model, child) {
                       return Row(
                         children: [
-                          Text("ID                     "),
-                          Expanded(child: TextFormField(
-                            controller: _textController,
-                            onChanged: filterByName,
-                            decoration: InputDecoration(isDense: false, hintText: "enter name or id to filter", hintStyle: TextStyle(color: Colors.cyan)),
-                          ),
-                          ),
-                          IconButton(onPressed: clearAssetName, icon: const Icon(Icons.close, color: Colors.cyan,), tooltip: "clear",)
+                          const Text("ID                     "),
+                          Expanded(child: InputWidgetFilter(controller: _textController, onchanged: filterByName, hint: "clear", clearFunc: clearAssetName, label: "enter name or id to filter")),
                         ],
                       );
                     },
