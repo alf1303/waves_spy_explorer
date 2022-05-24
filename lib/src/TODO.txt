@@ -16,8 +16,10 @@
 ** 17) Add indicators to TabHeader to indicate Data/Script are present
 ** 17.1) Move singleChildScrollView into labeled view for name item
 
-17.2) Implement addresses tab in stats area
-18) Remove FutureBuilder from assetsView widget to improve performance
+** 17.2) Implement addresses tab in stats area
+?? 18) Remove FutureBuilder from assetsView widget to improve performance
+18.1) Stylise asset name input, add clear button
+18.2) add filtering by addresses
 20) Implement passing address and data for filtering into address string
 21) Implement opening new tab in browser when clicking on address with passing this address as parameter
 22) Implement changing node_url address in app header

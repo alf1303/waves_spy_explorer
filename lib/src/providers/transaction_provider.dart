@@ -34,7 +34,7 @@ class TransactionProvider extends ChangeNotifier {
   String curAddr = "";
   String afterGlob = "";
   String afterGlobNft = "";
-  int limit = 15;
+  int limit = 1000;
   int limitNft = 1000;
 
   bool stakedDucksLoaded = false;

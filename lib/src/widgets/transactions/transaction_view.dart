@@ -225,6 +225,35 @@ Widget burnHeader(Map<String, dynamic> p) {
   return Container();
 }
 
+Widget assetBuilderLocal(String id, val, exop, String amountId, String dir, [String? receiver]) {
+  print("id: $id");
+  String rec = receiver == null ? "" : " to $receiver";
+  String tmpAss = id + ".|." + amountId;
+  print("1");
+  List<Asset?>? res = getAssetInfoLabelLocal(tmpAss);
+  print("2 $tmpAss");
+  print(res);
+  int decimals = res![0]!.decimals;
+  double value = val / pow(10, decimals);
+  //TODO some strange things with null value
+  print("3");
+  if (exop) {
+    if (res![1] != null) {
+      int exchDecimals = res![1]!.decimals;
+      if (id != amountId) {
+        value = value / pow(10, 8);
+      }
+    } else {
+      // print("Alarm: ${snapshot.data![0]!.name}");
+      // value = 555;
+    }
+  }
+  print("4");
+  Widget widget = value != 0 ?Text("${value.truncat(decimals)} ${res![0]!.name}$rec", style: TextStyle(color: dir == "in" ? inAssetsColor : outAssetsColor),) : Container();
+  print("end");
+  return widget;
+}
+
 Widget assetBuilder(String id, val, exop, String amountId, String dir, [String? receiver]) {
   String rec = receiver == null ? "" : " to $receiver";
   String tmpAss = id + ".|." + amountId;

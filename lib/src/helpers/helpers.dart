@@ -123,6 +123,27 @@ Future<List<Asset?>>? getAssetInfoLabel(String id) async{
     return [asset, priceAsset];
 }
 
+List<Asset?>? getAssetInfoLabelLocal(String id) {
+    Asset? asset;
+    List<String> ids = id.split(".|.");
+    if (assetsGlobal.containsKey(ids[0])) {
+        asset = assetsGlobal[ids[0]];
+    } else {
+        // asset = await fetchAssetInfo(ids[0]);
+        // assetsGlobal[ids[0]] = asset;
+    }
+    Asset? priceAsset;
+    if (ids[1] != " ") {
+        if (assetsGlobal.containsKey(ids[1])) {
+            priceAsset = assetsGlobal[ids[1]];
+        } else {
+            // priceAsset = await fetchAssetInfo(ids[1]);
+            // assetsGlobal[ids[1]] = priceAsset;
+        }
+    }
+    return [asset, priceAsset];
+}
+
 Future<void> getMassAssetsInfo(Map<String, dynamic> ids) async {
     List<dynamic> assetDetails = await getMassAssets(ids);
     for (var ass in assetDetails) {

@@ -55,6 +55,7 @@ class _TransactionsListState extends State<TransactionsList> {
             child: Consumer<TransactionProvider>(
               builder: (context, model, child) {
                 return ListView.builder(
+                  shrinkWrap: true,
                   itemCount: model.filteredTransactions.length,
                     controller: controller,
                     itemBuilder: (context, i) {

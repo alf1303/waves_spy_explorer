@@ -50,7 +50,7 @@ class _DappStatsViewState extends State<DappStatsView> {
                       LabeledTextNoScroll("from: ", "${getFormattedDate(model.actualFrom)}, "),
                       LabeledTextNoScroll("to: ", "${getFormattedDate(model.actualTo)}, "),
                       LabeledTextNoScroll("addr: ", "${_trProvider.curAddr}, ", "${getAddrName(_trProvider.curAddr)}"),
-                      LabeledTextNoScroll("direction: ", "${model.direction.toUpperCase()}")
+                      LabeledTextNoScroll("direction: ", model.direction.toUpperCase())
                     ],
                   )),
               Row(children: [
@@ -113,8 +113,8 @@ Widget ResultWidget(AddressesStatsItem? it, String assName) {
               ],
             );
           }),
-      SizedBox(width: 200, child: SelectableText("${it.income.toStringAsFixed(5)} $assName")),
-      SizedBox(width: 250, child: SelectableText("${it.outcome.toStringAsFixed(5)} $assName")),
+      SizedBox(width: 200, child: SelectableText("${it.income.toStringAsFixed(5)} $assName", style: const TextStyle(color: Colors.green),)),
+      SizedBox(width: 250, child: SelectableText("${it.outcome.toStringAsFixed(5)} $assName", style: const TextStyle(color: Colors.redAccent),)),
       SelectableText(getAddrName(val), style: const TextStyle(color: Colors.white60),)
     ],),
   );
