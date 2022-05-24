@@ -59,8 +59,8 @@ class InputWidget extends StatelessWidget {
           onPressed: onSearch,
           tooltip: apploc.search,
           icon: const Icon(Icons.search_rounded)),
-      TextButton(onPressed: loadMore, child: Text(apploc.loadMore)),
-      TextButton(onPressed: loadAll, child: Text(apploc.loadAll))
+      // TextButton(onPressed: loadMore, child: Text(apploc.loadMore)),
+      // TextButton(onPressed: loadAll, child: Text(apploc.loadAll))
 
 
     ],

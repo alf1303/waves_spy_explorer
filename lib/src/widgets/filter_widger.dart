@@ -12,6 +12,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:waves_spy/src/widgets/other/custom_group_radio.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 
+import '../styles.dart';
+
 class FilterWidget extends StatelessWidget {
   FilterWidget({Key? key}) : super(key: key);
   final selectedColor = Colors.cyanAccent;
@@ -122,6 +124,26 @@ class FilterWidget extends StatelessWidget {
                   Expanded(
                     child: Row(
                       children: [
+                        InkWell(
+                          onTap: loadMore,
+                          hoverColor: hoverColor,
+                          child: Container(
+                            margin: const EdgeInsets.only(right: 5),
+                            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
+                            decoration: BoxDecoration(border: Border.all(color: Colors.greenAccent), borderRadius: BorderRadius.circular(8)),
+                          child: const Text("Load More"),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: loadAll,
+                          hoverColor: hoverColor,
+                          child: Container(
+                            margin: const EdgeInsets.only(right: 5),
+                            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
+                            decoration: BoxDecoration(border: Border.all(color: Colors.greenAccent), borderRadius: BorderRadius.circular(8)),
+                            child: const Text("Load All"),
+                          ),
+                        ),
                         Expanded(
                           flex: 1,
                           child: DateTimePicker(
@@ -199,6 +221,14 @@ class FilterWidget extends StatelessWidget {
 
   Future<List<Asset>> getData(String filter) async{
     return assetsGlobal.values.where((ass) => ass.name.toLowerCase().contains(filter.toLowerCase())).toList();
+  }
+
+  loadMore() async {
+    await loadMoreTr();
+  }
+
+  loadAll() async{
+    await loadAllTr();
   }
 
   void onChangedDirection(val) {
