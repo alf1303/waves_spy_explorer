@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:waves_spy/src/providers/data_script_provider.dart';
 import 'package:waves_spy/src/widgets/data/data_view.dart';
+import 'package:waves_spy/src/widgets/filter_widger.dart';
 import 'package:waves_spy/src/widgets/other/progress_bar.dart';
 
 class DataList extends StatelessWidget {
@@ -30,13 +31,10 @@ class DataList extends StatelessWidget {
           Padding(padding: const EdgeInsets.only(left: 6),
             child: Row(
               children: [
-                Expanded(child: TextFormField(
-                  onChanged: filterByText,
-                  controller: _textController,
-                  decoration: const InputDecoration(isDense: false, hintText: "enter text to filter", hintStyle: TextStyle(color: Colors.cyan)),
+                Expanded(
+                    child: InputWidgetFilter(controller: _textController, onchanged: filterByText, hint: "clear", clearFunc: clearText,
+                        label: "enter text to filter, use &&& or ||| for combining text expressions(if needed)")
                 ),
-                ),
-                IconButton(onPressed: clearText, icon: const Icon(Icons.close, color: Colors.cyan,), tooltip: "clear",)
               ],
             )
           ),
