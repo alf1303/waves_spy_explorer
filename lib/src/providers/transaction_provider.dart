@@ -179,7 +179,7 @@ class TransactionProvider extends ChangeNotifier {
       int type = tr["type"];
 
       if (tr.containsKey("sender")) {
-        trAddressesMap['sender'] = getAddrName(tr['sender']);
+        trAddressesMap[tr["sender"]] = getAddrName(tr['sender']);
       }
 
       tr.containsKey("dApp") ?
@@ -194,6 +194,7 @@ class TransactionProvider extends ChangeNotifier {
           outAssetsIds[assetId] = tr["amount"];
         }
         if(type == 4) {
+          trAddressesMap[tr["recipient"]] = getAddrName(tr["recipient"]);
           // curAddr == tr["sender"] ? outAssetsIds[assetId] == tr["amount"] : inAssetsIds[assetId] = tr["amount"];
           if(curAddr == tr["sender"]) {
             outAssetsIds[assetId] = tr["amount"];
@@ -207,6 +208,7 @@ class TransactionProvider extends ChangeNotifier {
           final transfers = tr["transfers"];
           for (var el in transfers) {
             income = true;
+            trAddressesMap[el["recipient"]] = getAddrName(el["recipient"]);
             if(curAddr == tr["sender"]) {
               income = false;
               sum += el["amount"];
@@ -274,6 +276,7 @@ class TransactionProvider extends ChangeNotifier {
       tr["addresses"] = trAddressesMap;
       tr["assetsIds"] = transAssetsMap;
       tr["addressesNames"] = trAddressesMap.values.join(",");
+      tr["addressesIds"] = trAddressesMap.keys.join(",");
 
       tr["inAssetsIds"] = inAssetsIds;
       tr["outAssetsIds"] = outAssetsIds;
@@ -468,6 +471,7 @@ class TransactionProvider extends ChangeNotifier {
       int fromTS = dateToTimestamp(filterProvider.from!);
       datedTransactions = datedTransactions.where((tr) => tr["timestamp"] >= fromTS).toList();
     }
+
     // print("Transactions from: " + datedTransactions.length.toString());
     if (filterProvider.fType.isNotEmpty) {
       filteredTransactions = datedTransactions
@@ -476,14 +480,19 @@ class TransactionProvider extends ChangeNotifier {
     } else {
       filteredTransactions = datedTransactions;
     }
+
+    if(filterProvider.addrName.isNotEmpty) {
+      filteredTransactions = filteredTransactions.where((tr) => tr["addressesIds"].contains(filterProvider.addrName)).toList();
+    }
+
     if(filterProvider.fType.contains(16) && filterProvider.functName.isNotEmpty) {
       List<dynamic> invokeTrs = filteredTransactions.where((tr) => tr["type"] == 16).toList();
       filteredTransactions.removeWhere((tr) => tr["type"] == 16);
       invokeTrs = invokeTrs.where((tr) => tr["call"]["function"].toLowerCase().contains(filterProvider.functName.toLowerCase())).toList();
       filteredTransactions.addAll(invokeTrs);
     }
-    final trToFilter = filterProvider.isFiltered() ? filteredTransactions : datedTransactions;
 
+    final trToFilter = filterProvider.isFiltered() ? filteredTransactions : datedTransactions;
     double minval = double.parse(filterProvider.minValue);
     if(minval > 0) {
       List<dynamic> res = List.empty(growable: true);

@@ -26,6 +26,7 @@ class FilterProvider extends ChangeNotifier{
   DateTime? to;
   List<int> fType = [];
   String functName = "";
+  String addrName = "";
   Asset assetName = Asset.empty();
   String direction = "all";
   bool reverseTransactions = false;
@@ -245,6 +246,18 @@ class FilterProvider extends ChangeNotifier{
         map[addr] = it;
       }
     }
+  }
+
+  void changeAddressName(val) {
+    addrName = val;
+    _transactionProvider.filterTransactions();
+    notifyAll();
+  }
+
+  void clearAddress() {
+    addrName = "";
+    _transactionProvider.filterTransactions();
+    notifyAll();
   }
   
 }

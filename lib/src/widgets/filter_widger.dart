@@ -18,6 +18,7 @@ class FilterWidget extends StatelessWidget {
   final functController = TextEditingController();
   final assetController = TextEditingController();
   final minValueController = TextEditingController();
+  final addressController = TextEditingController();
   String dirValue = "";
 
   final dirs = ["all", "in", "out"];
@@ -55,7 +56,6 @@ class FilterWidget extends StatelessWidget {
   }
 
   void functChanged(val) {
-    print("func: " + val);
     final _filterProvider = FilterProvider();
     _filterProvider.changeFunctionName(val);
   }
@@ -63,6 +63,16 @@ class FilterWidget extends StatelessWidget {
   void clearFunc() {
     final _filterProvider = FilterProvider();
     _filterProvider.clearFunc();
+  }
+
+  void addressChanged(val) {
+    final _filterProvider = FilterProvider();
+    _filterProvider.changeAddressName(val);
+  }
+
+  void clearAddress() {
+    final _filterProvider = FilterProvider();
+    _filterProvider.clearAddress();
   }
 
 void assetChanged(Asset? val) {
@@ -98,13 +108,16 @@ void clearToDate() {
           assetController.text = _filterProvider.assetName.name;
           functController.text = _filterProvider.functName;
           minValueController.text = _filterProvider.minValue.toString();
+          addressController.text = _filterProvider.addrName;
           assetController.selection = TextSelection.fromPosition(TextPosition(offset: assetController.text.length));
           functController.selection = TextSelection.fromPosition(TextPosition(offset: functController.text.length));
           minValueController.selection = TextSelection.fromPosition(TextPosition(offset: minValueController.text.length));
+          addressController.selection = TextSelection.fromPosition(TextPosition(offset: addressController.text.length));
 
           dirValue = _filterProvider.direction;
           bool funcNameVisible = _filterProvider.fType.contains(16);
           return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
@@ -226,23 +239,24 @@ void clearToDate() {
                   ),
                   const SizedBox(width: 8,),
                   Expanded(
-                    flex: 3,
-                    child: Container(
-                      padding: EdgeInsets.all(4),
-                      decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
-                      child: Consumer<TransactionProvider>(
-                        builder: (context, model, child) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              model.filterData
-                            ],
-                          );
-                        },
-                      ),
-                    ),
-                  )
+                      child: InputWidget(controller: addressController, onchanged: addressChanged, clearFunc: clearAddress, label: "address name", hint: apploc.clearAddress)
+                  ),
+
                 ],
+              ),
+              Container(
+                padding: EdgeInsets.all(4),
+                decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
+                child: Consumer<TransactionProvider>(
+                  builder: (context, model, child) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        model.filterData
+                      ],
+                    );
+                  },
+                ),
               )
             ],
           );
