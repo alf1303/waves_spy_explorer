@@ -161,8 +161,8 @@ class FilterProvider extends ChangeNotifier{
     notifyAll();
   }
 
-  void changeAssetName(Asset val) {
-    assetName = val;
+  void changeAssetName(Asset? val) {
+    assetName = val ?? Asset.empty();
     _transactionProvider.filterTransactions();
     notifyAll();
   }

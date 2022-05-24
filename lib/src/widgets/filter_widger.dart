@@ -65,8 +65,7 @@ class FilterWidget extends StatelessWidget {
     _filterProvider.clearFunc();
   }
 
-void assetChanged(Asset val) {
-    print("asset: " + val.name);
+void assetChanged(Asset? val) {
   final _filterProvider = FilterProvider();
   _filterProvider.changeAssetName(val);
 }
@@ -135,11 +134,16 @@ void clearToDate() {
                           Expanded(
                             // child: InputWidget(controller: assetController, onchanged: assetChanged, clearFunc: clearAsset, label: "asset name", hint: apploc.clearAsset),
                             child: DropdownSearch<Asset>(
+                              showClearButton: true,
+
                               popupProps: PopupProps.menu(showSearchBox: true),
-                              dropdownSearchDecoration: InputDecoration(labelText: "asset name"),
+                              dropdownSearchDecoration: InputDecoration(border: const OutlineInputBorder(),
+                                  isDense: true,
+                                  labelText: "asset name",
+                                  suffixIcon: IconButton(onPressed: clearFunc, icon: const Icon(Icons.close,), tooltip: apploc.clearAsset,)),
                               asyncItems: (String filter) => getData(filter),
                               itemAsString: (Asset u) => u.name,
-                              onChanged: (Asset? data) => assetChanged(data!),
+                              onChanged: (Asset? data) => assetChanged(data),
                             )
                           ),
                           Padding(

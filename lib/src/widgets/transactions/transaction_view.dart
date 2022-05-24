@@ -238,8 +238,8 @@ Widget assetBuilderLocal(String id, val, exop, String amountId, String dir, [Str
   //TODO some strange things with null value
   print("3");
   if (exop) {
-    if (res![1] != null) {
-      int exchDecimals = res![1]!.decimals;
+    if (res[1] != null) {
+      int exchDecimals = res[1]!.decimals;
       if (id != amountId) {
         value = value / pow(10, 8);
       }
@@ -249,7 +249,7 @@ Widget assetBuilderLocal(String id, val, exop, String amountId, String dir, [Str
     }
   }
   print("4");
-  Widget widget = value != 0 ?Text("${value.truncat(decimals)} ${res![0]!.name}$rec", style: TextStyle(color: dir == "in" ? inAssetsColor : outAssetsColor),) : Container();
+  Widget widget = value != 0 ?Text("${value.truncat(decimals)} ${res[0]!.name}$rec", style: TextStyle(color: dir == "in" ? inAssetsColor : outAssetsColor),) : Container();
   print("end");
   return widget;
 }
