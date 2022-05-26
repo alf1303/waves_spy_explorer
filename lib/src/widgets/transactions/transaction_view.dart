@@ -1,6 +1,8 @@
 import 'dart:math';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:waves_spy/src/constants.dart';
 import 'package:waves_spy/src/helpers/helpers.dart';
 import 'package:intl/intl.dart';
@@ -332,16 +334,48 @@ class InWidget extends StatelessWidget {
   }
 }
 
-Widget LabeledText([String? label, String? value, String? name, Color? colr]) {
+Widget LabeledText([String? label, String? value, String? name, Color? colr, bool? addrLink]) {
   final labl = label ?? "";
   final val = value ?? "";
   final nam = name ?? "";
   final col = colr ?? Colors.white;
+  final aLink = addrLink ?? false;
   // print("$labl, $val, $nam");
+  _launchURL(url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   return Row(
     mainAxisSize: MainAxisSize.min,
     children: [
-    Text(labl, style: const TextStyle(color: Colors.grey),),
+      !aLink ?
+    Text(labl, style: const TextStyle(color: Colors.grey),) :
+      Tooltip(
+        message: "Go to $val",
+        child: RichText(
+          text: TextSpan(
+              style: const TextStyle(
+                  shadows: [
+                    Shadow(
+                        color: Colors.grey,
+                        offset: Offset(0, -2))
+                  ],
+                  color: Colors.transparent,
+                  decoration: TextDecoration.underline, decorationThickness: 2, decorationColor: Colors.grey),
+              text: label,
+              recognizer: TapGestureRecognizer()..onTap = () async {
+                String baseUri = Uri.base.toString();
+                String uri = baseUri.substring(0, baseUri.length - 2);
+                String link = "$uri?address=$val";
+                await _launchURL(link);
+              }
+          ),
+        ),
+      ),
     Expanded(
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,

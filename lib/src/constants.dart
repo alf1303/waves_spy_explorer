@@ -143,6 +143,7 @@ const dAppsDict = {
 "3P3EgRSuPaavrVx8AavNVrTMLqtyPsNwPiy": "Dima @Kript_on",
   "3PBwHmugtD1QXqGBzgQRnUdpGAUuE3VqTt6": "Waves Ducks Memes?",
   "3PPrR4GNrWdJibYCxezNXxDRkghJV5RVRbW" : "Ckolot",
+  "3P6cgpyoErurDW3EdgUqUKuhFHza4xiFzpD" : "Stalin",
 
   "3PAtzncjJGWRpCtkR55wAzcfZ9fubMeA4JU": "Roma",
   "3PMKAL4cd77onkYuuU35115Wov1sLMEcFsv": "Roma_Puz",

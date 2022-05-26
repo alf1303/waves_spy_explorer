@@ -166,8 +166,8 @@ Widget invokeHeader(Map<String, dynamic> p) {
           ),
         ),
         Expanded(child: p["dApp"] == _trProvider.curAddr ?
-          LabeledText("sender:", p["sender"], getAddrName(p["sender"]), invokeColor) :
-            LabeledText("dApp:", p["dApp"], getAddrName(p["dApp"]), invokeColor)),
+          LabeledText("sender:", p["sender"], getAddrName(p["sender"]), invokeColor, true) :
+            LabeledText("dApp:", p["dApp"], getAddrName(p["dApp"]), invokeColor, true)),
       ],
     ),
   );
@@ -209,7 +209,7 @@ Widget transferHeader(Map<String, dynamic> p) {
     child: Row(
       children: [
         SizedBox(width: 150, child: Container(),),
-        Expanded(child: LabeledText(suffix, p["anotherAddr"], "", transferColor)),
+        Expanded(child: LabeledText(suffix, p["anotherAddr"], "", transferColor, true)),
       ],
     ),
   );
@@ -226,7 +226,7 @@ Widget massTransferHeader(Map<String, dynamic> p) {
     child: Row(
       children: [
         SizedBox(width: 150, child: Container(),),
-        Expanded(child: SizedBox(width: 740, child: LabeledText(lbl, p["anotherAddr"], p["name"], massTransferColor),)),
+        Expanded(child: SizedBox(width: 740, child: LabeledText(lbl, p["anotherAddr"], p["name"], massTransferColor, true),)),
       ],
     ),
   );
