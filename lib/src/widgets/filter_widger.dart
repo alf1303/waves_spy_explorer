@@ -325,7 +325,8 @@ Widget InputWidgetFilter({controller, onchanged, clearFunc, label, hint, bool? i
           children: [
       Expanded(
       child: TextFormField(
-      onChanged: onchanged,
+      // onChanged: onchanged,
+          onFieldSubmitted: onchanged,
           controller: controller,
           keyboardType: isNum ? TextInputType.numberWithOptions(decimal: true) : null,
           inputFormatters: isNum ? [
