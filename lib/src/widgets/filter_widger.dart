@@ -12,6 +12,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:waves_spy/src/widgets/other/custom_group_radio.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 
+import '../styles.dart';
+
 class FilterWidget extends StatelessWidget {
   FilterWidget({Key? key}) : super(key: key);
   final selectedColor = Colors.cyanAccent;
@@ -70,36 +72,10 @@ class FilterWidget extends StatelessWidget {
                   Expanded(
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
-                      // decoration: BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: BorderRadius.all(Radius.circular(5))),
                       child: Row(
                         children: [
                           Expanded(
-                            // child: InputWidgetFilter(controller: assetController, onchanged: assetChanged, clearFunc: clearAsset, label: "asset name", hint: apploc.clearAsset),
-                            child: DropdownSearch<Asset>(
-                              showClearButton: true,
-
-                              popupProps: PopupProps.menu(showSearchBox: true),
-                              dropdownSearchDecoration: InputDecoration(border: const OutlineInputBorder(),
-                                  isDense: true,
-                                  labelText: "asset name",
-                                  suffixIcon: IconButton(onPressed: clearFunc, icon: const Icon(Icons.close,), tooltip: apploc.clearAsset,)),
-                              asyncItems: (String filter) => getData(filter),
-                              itemAsString: (Asset u) => u.name,
-                              onChanged: (Asset? data) => assetChanged(data),
-                            )
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: DropdownButton(
-                                items: dirs.map((String items) {
-                                  return DropdownMenuItem(
-                                    value: items,
-                                    child: Text(items),
-                                  );
-                                }).toList(),
-                                value: dirValue,
-                                isDense: true,
-                                onChanged: onChangedDirection),
+                              child: InputWidgetFilter(controller: addressController, onchanged: addressChanged, clearFunc: clearAddress, label: "address", hint: apploc.clearAddress)
                           ),
                           Expanded(
                               child: InputWidgetFilter(controller: minValueController, onchanged: minValueChanged, clearFunc: minValueClear, label: "min value", hint: apploc.clearMinValue, isNumeric: true)
@@ -117,64 +93,38 @@ class FilterWidget extends StatelessWidget {
               Row(
                 children: [
                   Expanded(
+                    flex: 3,
                     child: Row(
                       children: [
+                        loadButton(loadMore, "Load More"),
+                        loadButton(loadAll, "Load All"),
                         Expanded(
-                          flex: 1,
-                          child: DateTimePicker(
-                            type: DateTimePickerType.dateTime,
-                            firstDate: DateTime(2018),
-                            lastDate: DateTime(2023),
-                            // dateLabelText: "from",
-                            decoration: InputDecoration(
-                              border: const OutlineInputBorder(),
-                              isDense: true,
-                              labelText: "from",
-                              suffixIcon: IconButton(onPressed: clearFromDate, icon: const Icon(Icons.close,), tooltip: "clear from date",)
-                            ),
-                            initialValue: DateTime(2022).toString(),
-                            onChanged: (val) async{
-                              await _filterProvider.changeFromDate(DateTime.parse(val));
-                            },
-                          ),
+                          child: dateTimePicker(_filterProvider.changeFromDate, DateTime(2022).toString(),  "from", "clear from date")
                         ),
                       ],
                     ),
                   ),
                   const SizedBox(width: 15,),
                   Expanded(
+                    flex: 2,
                     child: Row(
                       children: [
                         Expanded(
-                          child: DateTimePicker(
-                            type: DateTimePickerType.dateTime,
-                            firstDate: DateTime(2018),
-                            lastDate: DateTime(2023),
-                            // dateLabelText: "to",
-                            decoration: InputDecoration(
-                              isDense: true,
-                              border: const OutlineInputBorder(),
-                              labelText: "to",
-                              suffixIcon: IconButton(onPressed: clearFunc, icon: const Icon(Icons.close,), tooltip: "clear to date",),
-                            ),
-                            initialValue: DateTime.now().add(const Duration(hours: 1)).toString(),
-                            onChanged: (val) {
-                              _filterProvider.changeToDate(DateTime.parse(val));
-                            },
-                          ),
+                          child: dateTimePicker(_filterProvider.changeToDate, DateTime.now().add(const Duration(hours: 1)).toString(), "to", "clear to date")
                         ),
                       ],
                     ),
                   ),
                   const SizedBox(width: 8,),
                   Expanded(
-                      child: InputWidgetFilter(controller: addressController, onchanged: addressChanged, clearFunc: clearAddress, label: "address", hint: apploc.clearAddress)
+                    flex: 4,
+                      child: assetFilter(context)
                   ),
-
+                  directionSelect(),
                 ],
               ),
               Container(
-                padding: EdgeInsets.all(4),
+                padding: const EdgeInsets.all(4),
                 // decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
                 child: Consumer<TransactionProvider>(
                   builder: (context, model, child) {
@@ -194,8 +144,102 @@ class FilterWidget extends StatelessWidget {
     );
   }
 
+  Widget assetFilter(BuildContext context) {
+    final apploc = AppLocalizations.of(context);
+    return DropdownSearch<Asset>(
+      showClearButton: true,
+      popupProps: const PopupProps.menu(showSearchBox: true),
+      dropdownSearchDecoration: InputDecoration(border: const OutlineInputBorder(),
+          isDense: true,
+          labelText: "asset name or id",
+          suffixIcon: IconButton(onPressed: clearFunc, icon: const Icon(Icons.close,), tooltip: apploc?.clearAsset,)),
+      asyncItems: (String filter) => getData(filter),
+      itemAsString: (Asset u) => "${u.name} - ${u.id}",
+      onChanged: (Asset? data) => assetChanged(data),
+    );
+  }
+
+  Widget directionSelect() {
+    return Tooltip(
+      message: "direction of transfers",
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: DropdownButton(
+            items: dirs.map((String items) {
+              return DropdownMenuItem(
+                value: items,
+                child: Text(items),
+              );
+            }).toList(),
+            value: dirValue,
+            isDense: true,
+            onChanged: onChangedDirection),
+      ),
+    );
+  }
+
+  Widget loadButton(funct, String text) {
+    return InkWell(
+      onTap: funct,
+      hoverColor: hoverColor,
+      child: Container(
+        margin: const EdgeInsets.only(right: 5),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
+        decoration: BoxDecoration(border: Border.all(color: Colors.greenAccent), borderRadius: BorderRadius.circular(8)),
+        child: Text(text),
+      ),
+    );
+  }
+
+  Widget dateTimePicker(funct, String initialValue, String label, String tooltip) {
+    return DateTimePicker(
+      type: DateTimePickerType.dateTime,
+      firstDate: DateTime(2018),
+      lastDate: DateTime(2023),
+      // dateLabelText: "from",
+      decoration: InputDecoration(
+          border: const OutlineInputBorder(),
+          isDense: true,
+          labelText: label,
+          suffixIcon: IconButton(onPressed: clearFromDate, icon: const Icon(Icons.close,), tooltip: tooltip,)
+      ),
+      initialValue: initialValue,
+      onChanged: (val) async{
+        // await _filterProvider.changeFromDate(DateTime.parse(val));
+        await funct(DateTime.parse(val));
+      },
+    );
+  }
+
+  // Widget dfsd() {
+  //   return DateTimePicker(
+  //     type: DateTimePickerType.dateTime,
+  //     firstDate: DateTime(2018),
+  //     lastDate: DateTime(2023),
+  //     // dateLabelText: "to",
+  //     decoration: InputDecoration(
+  //       isDense: true,
+  //       border: const OutlineInputBorder(),
+  //       labelText: "to",
+  //       suffixIcon: IconButton(onPressed: clearFunc, icon: const Icon(Icons.close,), tooltip: "clear to date",),
+  //     ),
+  //     initialValue: DateTime.now().add(const Duration(hours: 1)).toString(),
+  //     onChanged: (val) {
+  //       _filterProvider.changeToDate(DateTime.parse(val));
+  //     },
+  //   );
+  // }
+
   Future<List<Asset>> getData(String filter) async{
     return assetsGlobal.values.where((ass) => ass.name.toLowerCase().contains(filter.toLowerCase())).toList();
+  }
+
+  loadMore() async {
+    await loadMoreTr();
+  }
+
+  loadAll() async{
+    await loadAllTr();
   }
 
   void onChangedDirection(val) {

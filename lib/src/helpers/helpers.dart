@@ -18,6 +18,13 @@ final nftProvider = NftProvider();
 final dataProvider = DataScriptProvider();
 final statsProvider = StatsProvider();
 
+Future<void> loadMoreTr() async {
+    await transactionProvider.getMoreTransactions();
+}
+
+Future<void> loadAllTr() async {
+    await transactionProvider.getllTransactions();
+}
 String getFormattedDate(DateTime? dt) {
     return dt != null ? DateFormat('yyyy-MM-dd kk:mm').format(dt) : "nul";
 }

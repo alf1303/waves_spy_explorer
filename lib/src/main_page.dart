@@ -9,8 +9,8 @@ import 'package:waves_spy/src/widgets/transaction_details.dart';
 import 'package:waves_spy/src/widgets/transactions/transactions_list.dart';
 
 class MainPage extends StatelessWidget {
-  const MainPage({Key? key}) : super(key: key);
-
+  const MainPage({Key? key, this.address}) : super(key: key);
+  final address;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +18,7 @@ class MainPage extends StatelessWidget {
         title: Row(
           children: [
             SelectableText(AppLocalizations.of(context)!.headerTitle + "     "),
-            Expanded(child: InputWidget()),
+            Expanded(child: InputWidget(address: address)),
           ],
         ),
       ),

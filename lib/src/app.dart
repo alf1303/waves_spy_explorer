@@ -17,7 +17,8 @@ import 'main_page.dart';
 
 /// The Widget that configures your application.
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key }) : super(key: key);
+  const MyApp({Key? key, this.address }) : super(key: key);
+  final address;
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +79,7 @@ class MyApp extends StatelessWidget {
               // case SampleItemDetailsView.routeName:
               //   return const SampleItemDetailsView();
                 default:
-                  return const MainPage();
+                  return MainPage(address: address);
               }
             },
           );

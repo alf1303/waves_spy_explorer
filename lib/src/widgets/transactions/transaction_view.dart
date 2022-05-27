@@ -1,6 +1,8 @@
 import 'dart:math';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:waves_spy/src/constants.dart';
 import 'package:waves_spy/src/helpers/helpers.dart';
 import 'package:intl/intl.dart';
@@ -258,6 +260,7 @@ Widget assetBuilder(String id, val, exop, String amountId, String dir, [String? 
   String rec = receiver == null ? "" : " to $receiver";
   String tmpAss = id + ".|." + amountId;
   // print("$id, $val, $exop, $amountId, $dir, $receiver");
+  // return Text("fhefsdk");
   return FutureBuilder<List<Asset?>>(
       future: getAssetInfoLabel(tmpAss),
       builder: (context, snapshot) {
@@ -302,7 +305,7 @@ class OutWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const Text("Out --> ", style: TextStyle(color: outAssetsColor),),
+        payList.isNotEmpty ? const Text("Out --> ", style: TextStyle(color: outAssetsColor),) : Container(),
         Expanded(
           child: ListView(
             shrinkWrap: true,
@@ -321,7 +324,7 @@ class InWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const Text("In <-- ", style: TextStyle(color: inAssetsColor),),
+        income.isNotEmpty ? const Text("In <-- ", style: TextStyle(color: inAssetsColor),) : Container(),
         Expanded(
           child: ListView(
             shrinkWrap: true,
@@ -332,16 +335,47 @@ class InWidget extends StatelessWidget {
   }
 }
 
-Widget LabeledText([String? label, String? value, String? name, Color? colr]) {
+Widget LabeledText([String? label, String? value, String? name, Color? colr, bool? addrLink]) {
   final labl = label ?? "";
   final val = value ?? "";
   final nam = name ?? "";
   final col = colr ?? Colors.white;
+  final aLink = addrLink ?? false;
   // print("$labl, $val, $nam");
+  _launchURL(url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
   return Row(
     mainAxisSize: MainAxisSize.min,
     children: [
-    Text(labl, style: const TextStyle(color: Colors.grey),),
+      !aLink ?
+    Text(labl, style: const TextStyle(color: Colors.grey),) :
+      Tooltip(
+        message: "Go to $val",
+        child: RichText(
+          text: TextSpan(
+              style: const TextStyle(
+                  shadows: [
+                    Shadow(
+                        color: Colors.grey,
+                        offset: Offset(0, -2))
+                  ],
+                  color: Colors.transparent,
+                  decoration: TextDecoration.underline, decorationThickness: 2, decorationColor: Colors.grey),
+              text: label,
+              recognizer: TapGestureRecognizer()..onTap = () async {
+                String baseUri = Uri.base.toString();
+                String uri = baseUri.substring(0, baseUri.length - 2);
+                String link = "$uri?address=$val";
+                await _launchURL(link);
+              }
+          ),
+        ),
+      ),
     Expanded(
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,

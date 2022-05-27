@@ -80,9 +80,6 @@ class _SimpleTransViewState extends State<SimpleTransView> with AutomaticKeepAli
     if (widget.td.containsKey("dApp")) {dApp = widget.td["dApp"];}
     String out = _transactionProvider.curAddr != dApp ? "out" : "in";
     String inn = _transactionProvider.curAddr != dApp ? "in" : "out";
-    // print("PPRR: ${p["exchPriceAsset"]}");
-    // print("Paylist : ${payment}");
-    // print("inList : ${transfers}");
     List<Widget> payList = payment.entries.map((e) => assetBuilder(e.key, e.value, exop, p["exchPriceAsset"], out)).toList();
     List<Widget> inList = transfers.entries.map((e) => assetBuilder(e.key, e.value, exop, p["exchPriceAsset"], inn)).toList();
     return InkWell(
@@ -166,8 +163,8 @@ Widget invokeHeader(Map<String, dynamic> p) {
           ),
         ),
         Expanded(child: p["dApp"] == _trProvider.curAddr ?
-          LabeledText("sender:", p["sender"], getAddrName(p["sender"]), invokeColor) :
-            LabeledText("dApp:", p["dApp"], getAddrName(p["dApp"]), invokeColor)),
+          LabeledText("sender:", p["sender"], getAddrName(p["sender"]), invokeColor, true) :
+            LabeledText("dApp:", p["dApp"], getAddrName(p["dApp"]), invokeColor, true)),
       ],
     ),
   );
@@ -209,7 +206,7 @@ Widget transferHeader(Map<String, dynamic> p) {
     child: Row(
       children: [
         SizedBox(width: 150, child: Container(),),
-        Expanded(child: LabeledText(suffix, p["anotherAddr"], "", transferColor)),
+        Expanded(child: LabeledText(suffix, p["anotherAddr"], "", transferColor, true)),
       ],
     ),
   );
@@ -226,7 +223,7 @@ Widget massTransferHeader(Map<String, dynamic> p) {
     child: Row(
       children: [
         SizedBox(width: 150, child: Container(),),
-        Expanded(child: SizedBox(width: 740, child: LabeledText(lbl, p["anotherAddr"], p["name"], massTransferColor),)),
+        Expanded(child: SizedBox(width: 740, child: LabeledText(lbl, p["anotherAddr"], p["name"], massTransferColor, true),)),
       ],
     ),
   );
