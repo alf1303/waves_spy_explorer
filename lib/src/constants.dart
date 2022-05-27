@@ -134,6 +134,7 @@ const dAppsDict = {
 
   "3P6fAxtw12pjFhayEfpcUWxgu2BHVCeP78A" : "PuzzleMarket",
   "3P3pDosq4GCwfJkvq4yqKvvoTwmoqc9qPmo": "DuckWrapper - PuzzleMarket",
+  "3PDWpgk1ycioUwtzjoXKxUqYTzAgUG2mf8x": "Monster Presale",
 
 "3P9LTA2dBPNZfUhgnE7na9EyDeuqYdRSqTQ": "Dima Ivanov Main",
 "3PMyGoiQZgNQ8jWn4eKR6uZzSkRoWjdBdgW": "Dima Ivanov 2",
