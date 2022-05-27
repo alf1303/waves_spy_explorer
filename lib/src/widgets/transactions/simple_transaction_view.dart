@@ -80,9 +80,6 @@ class _SimpleTransViewState extends State<SimpleTransView> with AutomaticKeepAli
     if (widget.td.containsKey("dApp")) {dApp = widget.td["dApp"];}
     String out = _transactionProvider.curAddr != dApp ? "out" : "in";
     String inn = _transactionProvider.curAddr != dApp ? "in" : "out";
-    // print("PPRR: ${p["exchPriceAsset"]}");
-    // print("Paylist : ${payment}");
-    // print("inList : ${transfers}");
     List<Widget> payList = payment.entries.map((e) => assetBuilder(e.key, e.value, exop, p["exchPriceAsset"], out)).toList();
     List<Widget> inList = transfers.entries.map((e) => assetBuilder(e.key, e.value, exop, p["exchPriceAsset"], inn)).toList();
     return InkWell(

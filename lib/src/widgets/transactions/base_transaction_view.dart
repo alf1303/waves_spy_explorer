@@ -53,7 +53,7 @@ class InvokeView extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(5),
       margin: const EdgeInsets.all(2),
-      decoration: BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: const BorderRadius.all(Radius.circular(5))),
+      decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: const BorderRadius.all(Radius.circular(5))),
       child: Column(children: [
         ListView.builder(
           shrinkWrap: true,
@@ -75,7 +75,7 @@ class InvokeView extends StatelessWidget {
 Widget InvokeItem(dynamic inv) {
   return Container(
     child: Row(children: [
-      SizedBox(width: 150, child: LabeledText("invoke: ", "${inv["call"]["function"]}()", ""),),
+      SizedBox(width: 350, child: LabeledText("invoke: ", "${inv["call"]["function"]}()", ""),),
       SizedBox(width: 400, child: LabeledText("", "${inv["dApp"]}", ""),),
       SizedBox(width: 400, child: Column(
         children: [

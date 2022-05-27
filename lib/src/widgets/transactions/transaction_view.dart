@@ -260,6 +260,7 @@ Widget assetBuilder(String id, val, exop, String amountId, String dir, [String? 
   String rec = receiver == null ? "" : " to $receiver";
   String tmpAss = id + ".|." + amountId;
   // print("$id, $val, $exop, $amountId, $dir, $receiver");
+  // return Text("fhefsdk");
   return FutureBuilder<List<Asset?>>(
       future: getAssetInfoLabel(tmpAss),
       builder: (context, snapshot) {
@@ -304,7 +305,7 @@ class OutWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const Text("Out --> ", style: TextStyle(color: outAssetsColor),),
+        payList.isNotEmpty ? const Text("Out --> ", style: TextStyle(color: outAssetsColor),) : Container(),
         Expanded(
           child: ListView(
             shrinkWrap: true,
@@ -323,7 +324,7 @@ class InWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const Text("In <-- ", style: TextStyle(color: inAssetsColor),),
+        income.isNotEmpty ? const Text("In <-- ", style: TextStyle(color: inAssetsColor),) : Container(),
         Expanded(
           child: ListView(
             shrinkWrap: true,
@@ -348,7 +349,6 @@ Widget LabeledText([String? label, String? value, String? name, Color? colr, boo
       throw 'Could not launch $url';
     }
   }
-
   return Row(
     mainAxisSize: MainAxisSize.min,
     children: [

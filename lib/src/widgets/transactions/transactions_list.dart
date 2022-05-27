@@ -60,9 +60,9 @@ class _TransactionsListState extends State<TransactionsList> {
                     controller: controller,
                     itemBuilder: (context, i) {
                       return BaseTransactionView(td: model.filteredTransactions[i]);
-                      return Card(child: ListTile(
-                        title: Text("${model.filteredTransactions[i]["id"]}"),
-                      ),);
+                      // return Card(child: ListTile(
+                      //   title: Text("${model.filteredTransactions[i]["id"]}"),
+                      // ),);
                     }
                 );
               },
