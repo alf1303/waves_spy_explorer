@@ -24,7 +24,7 @@
     - check if there are fetching operations
     - decrease them byy condition
 ** 2) Finish internal invokes view
-?? 3) increase font size for stats stats list
+?? 3) increase font size for stats stats list //decide for overall font size strategy?
 ?? 4) Zooming options disable //Waiting for fix from flutter
 5) Add price when in and out length are 1 into standart transaction view
 ** 5) Migrate all LabeledText To LabeledTextNew
@@ -35,6 +35,7 @@
 22) Implement changing node_url address in app header
 23) Deploy to Google hosting
 
+8) Move constant data to cloud(Firebase or git file), on starting fetch and put to local maps
 9) Implement indicating number of items in tab names(data entries, nft count, transactions count)
     - for transactions also indicate if all transactions were loaded
 10) Implement button for collapsing/hiding addresses in stats view
@@ -48,7 +49,5 @@
     - extractAssets
     - parseTransactionType
     - look where else
-
-
 
 
