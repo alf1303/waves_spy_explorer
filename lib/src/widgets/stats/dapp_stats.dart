@@ -101,7 +101,7 @@ Widget ResultWidget(AddressesStatsItem? it, String assName) {
             val = hidden ? key.replaceRange(2, key.length - 2, "." * (key.length - 4)) : key;
             return Row(
               children: [
-                SizedBox(width: 350, child: SelectableText(val)),
+                SizedBox(width: 350, child: LinkToAddress(val: val, label: val, color: Colors.white,)),
                 GestureDetector(
                   onTap: () {
                     setStat(() => hidden = !hidden);

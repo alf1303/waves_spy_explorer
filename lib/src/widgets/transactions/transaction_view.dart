@@ -342,40 +342,12 @@ Widget LabeledText([String? label, String? value, String? name, Color? colr, boo
   final col = colr ?? Colors.white;
   final aLink = addrLink ?? false;
   // print("$labl, $val, $nam");
-  _launchURL(url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
   return Row(
     mainAxisSize: MainAxisSize.min,
     children: [
       !aLink ?
     Text(labl, style: const TextStyle(color: Colors.grey),) :
-      Tooltip(
-        message: "Go to $val",
-        child: RichText(
-          text: TextSpan(
-              style: const TextStyle(
-                  shadows: [
-                    Shadow(
-                        color: Colors.grey,
-                        offset: Offset(0, -2))
-                  ],
-                  color: Colors.transparent,
-                  decoration: TextDecoration.underline, decorationThickness: 2, decorationColor: Colors.grey),
-              text: label,
-              recognizer: TapGestureRecognizer()..onTap = () async {
-                String baseUri = Uri.base.toString();
-                String uri = baseUri.substring(0, baseUri.length - 2);
-                String link = "$uri?address=$val";
-                await _launchURL(link);
-              }
-          ),
-        ),
-      ),
+    LinkToAddress(val: val, label: labl,),
     Expanded(
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
@@ -404,3 +376,45 @@ Widget LabeledTextNoScroll([String? label, String? value, String? name, Color? c
       SelectableText(val + " ", style: TextStyle(color: col),),
     ],);
 }
+
+class LinkToAddress extends StatelessWidget {
+  const LinkToAddress({Key? key, required this.val, required this.label, this.color}) : super(key: key);
+  final String val;
+  final String label;
+  final Color? color;
+
+  _launchURL(url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return       Tooltip(
+      message: "Go to $val",
+      child: SelectableText.rich(
+         TextSpan(
+            style: TextStyle(
+                shadows: [
+                  Shadow(
+                      color: color ?? Colors.grey,
+                      offset: Offset(0, -2))
+                ],
+                color: Colors.transparent,
+                decoration: TextDecoration.underline, decorationThickness: 2, decorationColor: Colors.grey),
+            text: label,
+            recognizer: TapGestureRecognizer()..onTap = () async {
+              String baseUri = Uri.base.toString();
+              String uri = baseUri.substring(0, baseUri.length - 2);
+              String link = "$uri?address=$val";
+              await _launchURL(link);
+            }
+        ),
+      ),
+    );
+  }
+}
+
