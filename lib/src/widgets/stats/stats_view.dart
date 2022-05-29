@@ -35,9 +35,16 @@ class _StatsViewState extends State<StatsView> with SingleTickerProviderStateMix
         children: [
           TabBar(
               controller: statsController,
-              tabs: const [
-            Tab(text: "Addresses"),
-            Tab(text: "Stats"),
+              tabs: [
+            Tab(child: Row(children: [
+              const Text("Addresses"),
+              Consumer<FilterProvider>(
+                builder: (context, model, child) {
+                  return model.assetName.id.isEmpty ? const Text("   (Select asset to show addresses info)", style: TextStyle(color: Colors.yellowAccent),) : Container();
+                },
+              )
+            ],)),
+            const Tab(text: "Stats"),
           ]),
           Expanded(
             child: TabBarView(

@@ -35,7 +35,6 @@
 22) Implement changing node_url address in app header
 23) Deploy to Google hosting
 
-8) Move constant data to cloud(Firebase or git file), on starting fetch and put to local maps
 9) Implement indicating number of items in tab names(data entries, nft count, transactions count)
     - for transactions also indicate if all transactions were loaded
 10) Implement button for collapsing/hiding addresses in stats view
@@ -49,5 +48,12 @@
     - extractAssets
     - parseTransactionType
     - look where else
+
+
+TEST PURPOSE:
+
+1) Draw icon and add it to app
+2) Move constant data to cloud(Firebase or git file), on starting fetch and put to local maps
+
 
 

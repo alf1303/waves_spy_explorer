@@ -36,11 +36,11 @@ class AssetsList extends StatelessWidget {
             padding: const EdgeInsets.only(left: 6.0),
             child: Row(
               children: [
-                SizedBox(width: 250, child: Text("Name")),
-                SizedBox(width: 150, child: Text("Wallet")),
-                SizedBox(width: 150, child: Text("Staked")),
-                SizedBox(width: 70, child: Text("Issue")),
-                SizedBox(width: 70, child: Text("Scripted")),
+                const SizedBox(width: 250, child: Text("Name")),
+                const SizedBox(width: 150, child: Text("Wallet")),
+                const SizedBox(width: 150, child: Text("Staked")),
+                const SizedBox(width: 70, child: Text("Issue")),
+                const SizedBox(width: 70, child: Text("Scripted")),
                 Expanded(
                   child: SizedBox(child: Consumer<AssetProvider>(
                     builder: (context, model, child) {
@@ -55,6 +55,10 @@ class AssetsList extends StatelessWidget {
                 )
               ],
             ),
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 3.0),
+            child: Divider(height: 4, color: Colors.blueGrey,),
           ),
           Expanded(
             child: Consumer<AssetProvider>(

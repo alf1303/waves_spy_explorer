@@ -56,6 +56,10 @@ Future<void> _scrollListener() async{
               ],
             ),
           ),
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 3.0),
+            child: Divider(height: 4, color: Colors.blueGrey,),
+          ),
           Expanded(
               child: Consumer<NftProvider>(
                 builder: (context, model, child) {

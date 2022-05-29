@@ -59,6 +59,10 @@ class _DappStatsViewState extends State<DappStatsView> {
                 InkWell(child: const SizedBox(width: 200, child: Center(child: Text("Out")),), onTap: sortByOut,),
                 const SizedBox(width: 150, child: Center(child: Text("Address Name")),),
               ],),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 3.0),
+                child: Divider(height: 4, color: Colors.blueGrey,),
+              ),
               Expanded(
                 child: ListView(
                   primary: false,
