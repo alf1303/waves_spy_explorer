@@ -60,15 +60,7 @@ class TransactionProvider extends ChangeNotifier {
 
   Future<void> setCurrAddr(String address) async {
     curAddr = address;
-    afterGlob = "";
-    allTransactions.clear();
-    stakedDucksLoaded  = false;
-    final filterProvider = FilterProvider();
-    filterProvider.finalList.clear();
-    assetProvider.assets.clear();
-    nftProvider.nfts.clear();
-    dataScriptProvider.data.clear();
-    dataScriptProvider.script = "";
+    clearStateBeforeNewSearch();
     Asset waves = await fetchAssetInfo("WAVES");
     assetsGlobal[waves.id] = waves;
     progressProvider.start();
@@ -81,6 +73,23 @@ class TransactionProvider extends ChangeNotifier {
     await getScript(curAddr); //implement
     progressProvider.stop();
     notifyListeners();
+  }
+
+  clearStateBeforeNewSearch() {
+      //transactions
+    afterGlob = "";
+    allTransactions.clear();
+    stakedDucksLoaded  = false;
+
+      //filter
+    final filterProvider = FilterProvider();
+    filterProvider.finalList.clear();
+
+      //other
+    assetProvider.assets.clear();
+    nftProvider.nfts.clear();
+    dataScriptProvider.data.clear();
+    dataScriptProvider.script = "";
   }
 
   Future<void> getllTransactions() async{

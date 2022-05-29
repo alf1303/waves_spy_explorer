@@ -10,14 +10,14 @@ import 'package:waves_spy/src/providers/filter_provider.dart';
 import 'package:waves_spy/src/providers/transaction_provider.dart';
 import 'package:waves_spy/src/widgets/transactions/transaction_view.dart';
 
-class DappStatsView extends StatefulWidget {
-  const DappStatsView({Key? key}) : super(key: key);
+class AddressesStatsView extends StatefulWidget {
+  const AddressesStatsView({Key? key}) : super(key: key);
 
   @override
-  State<DappStatsView> createState() => _DappStatsViewState();
+  State<AddressesStatsView> createState() => _AddressesStatsViewState();
 }
 
-class _DappStatsViewState extends State<DappStatsView> {
+class _AddressesStatsViewState extends State<AddressesStatsView> {
   bool income = true;
   void sortByIn() {
     final filterProvider = FilterProvider();
@@ -53,6 +53,10 @@ class _DappStatsViewState extends State<DappStatsView> {
                       LabeledTextNoScroll("direction: ", model.direction.toUpperCase())
                     ],
                   )),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 3.0),
+                child: Divider(height: 4, color: Colors.blueGrey,),
+              ),
               Row(children: [
                 const SizedBox(width: 300, child: Center(child: Text("Address")),),
                 InkWell(child: const SizedBox(width: 300, child: Center(child: Text("In")),), onTap: sortByIn),

@@ -324,21 +324,24 @@ Widget InputWidgetFilter({controller, onchanged, clearFunc, label, hint, bool? i
       child: Row(
           children: [
       Expanded(
-      child: TextFormField(
-      // onChanged: onchanged,
-          onFieldSubmitted: onchanged,
-          controller: controller,
-          keyboardType: isNum ? TextInputType.numberWithOptions(decimal: true) : null,
-          inputFormatters: isNum ? [
-          FilteringTextInputFormatter.allow(RegExp(r'[0-9]+[,.]{0,1}[0-9]*')),
-          ] : [],
-      decoration: InputDecoration(
-      border: const OutlineInputBorder(),
-      isDense: true,
-      labelText: label,
-      suffixIcon: IconButton(onPressed: clearFunc, icon: const Icon(Icons.close,), tooltip: hint,)
+      child: Padding(
+        padding: const EdgeInsets.only(left: 20.0, right: 150, bottom: 10),
+        child: TextFormField(
+        // onChanged: onchanged,
+            onFieldSubmitted: onchanged,
+            controller: controller,
+            keyboardType: isNum ? const TextInputType.numberWithOptions(decimal: true) : null,
+            inputFormatters: isNum ? [
+            FilteringTextInputFormatter.allow(RegExp(r'[0-9]+[,.]{0,1}[0-9]*')),
+            ] : [],
+        decoration: InputDecoration(
+        border: const OutlineInputBorder(borderSide: BorderSide(color: Colors.blueGrey)),
+        isDense: true,
+        labelText: label,
+        suffixIcon: IconButton(onPressed: clearFunc, icon: const Icon(Icons.close,), tooltip: hint,)
   ),
   ),
+      ),
   ),
   ],
   ),

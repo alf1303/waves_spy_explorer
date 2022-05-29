@@ -34,25 +34,29 @@
 ** 23) Deploy to Google hosting
 
 0) check if address is alias, then fetch address for this alias and pass it to link
+0) Implement indicating number of items in tab names(data entries, nft count, transactions count)
+    - for transactions also indicate if all transactions were loaded
 1) Test data filtering
 2) Add DuckStats view:
+ //Current data
     - free ducks count
     - staked ducks count
-    - ducks in battle + mantle lvl (check how it change loading speed)
+    - ducks in battle + mantle lvl (check how it change loading speed) Parse artefact dApp data (3PR87TwfWio6HVUScSaHGMnFYkGyaVdFeqT)
     - ducklings count
 
 
-    -
+    // time sensitive data
    Spent:
-    - spent on perches
-    - spent on incubator
+    - buyed perches ( + spent)
+    - hatched ducks ( + spent on incubator)
+    - rebirths ( + spent on rebirths)
+    - mantles count ( + spent on mantles and upgrade)
+    - breeding count
 
-
+3) add icon before app name and link to telegramm group(create it before)
 
 20.1) and data for filtering into address string
 22) Implement changing node_url address in app header
-9) Implement indicating number of items in tab names(data entries, nft count, transactions count)
-    - for transactions also indicate if all transactions were loaded
 10) Implement button for collapsing/hiding addresses in stats view
 19) Implement one row view for transaction and button in app bar to switch views
 24) Implement getting ducks in DuckWars and mantle level

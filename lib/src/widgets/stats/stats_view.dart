@@ -6,8 +6,8 @@ import 'package:waves_spy/src/constants.dart';
 import 'package:waves_spy/src/helpers/helpers.dart';
 import 'package:waves_spy/src/providers/filter_provider.dart';
 import 'package:waves_spy/src/providers/transaction_provider.dart';
-import 'package:waves_spy/src/widgets/stats/dapp_stats.dart';
-import 'package:waves_spy/src/widgets/stats/duck_stats.dart';
+import 'package:waves_spy/src/widgets/stats/addresses_stats_view.dart';
+import 'package:waves_spy/src/widgets/stats/invokes_stats_view.dart';
 import 'package:waves_spy/src/widgets/transactions/transaction_view.dart';
 
 TabController? statsController;
@@ -40,7 +40,7 @@ class _StatsViewState extends State<StatsView> with SingleTickerProviderStateMix
               const Text("Addresses"),
               Consumer<FilterProvider>(
                 builder: (context, model, child) {
-                  return model.assetName.id.isEmpty ? const Text("   (Select asset to show addresses info)", style: TextStyle(color: Colors.yellowAccent),) : Container();
+                  return model.assetName.id.isEmpty ? const Text("   (Select asset in filter to show addresses info)", style: TextStyle(color: Colors.yellowAccent),) : Container();
                 },
               )
             ],)),
@@ -50,8 +50,8 @@ class _StatsViewState extends State<StatsView> with SingleTickerProviderStateMix
             child: TabBarView(
                 controller: statsController,
                 children: const [
-                  DappStatsView(),
-                  DuckStatsView()
+                  AddressesStatsView(),
+                  InvokesStatsView()
             ]),
           )
         ]

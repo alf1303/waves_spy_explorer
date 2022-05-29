@@ -8,8 +8,8 @@ import 'package:waves_spy/src/providers/transaction_provider.dart';
 import 'package:waves_spy/src/widgets/other/custom_widgets.dart';
 import 'package:waves_spy/src/widgets/transactions/transaction_view.dart';
 
-class DuckStatsView extends StatelessWidget {
-  const DuckStatsView({Key? key}) : super(key: key);
+class InvokesStatsView extends StatelessWidget {
+  const InvokesStatsView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
