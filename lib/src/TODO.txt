@@ -30,11 +30,27 @@
 ** 5) Migrate all LabeledText To LabeledTextNew
 
 ** 20) Implement passing address
-20.1) and data for filtering into address string
 ** 21) Implement opening new tab in browser when clicking on address with passing this address as parameter
-22) Implement changing node_url address in app header
-23) Deploy to Google hosting
+** 23) Deploy to Google hosting
 
+0) check if address is alias, then fetch address for this alias and pass it to link
+1) Test data filtering
+2) Add DuckStats view:
+    - free ducks count
+    - staked ducks count
+    - ducks in battle + mantle lvl (check how it change loading speed)
+    - ducklings count
+
+
+    -
+   Spent:
+    - spent on perches
+    - spent on incubator
+
+
+
+20.1) and data for filtering into address string
+22) Implement changing node_url address in app header
 9) Implement indicating number of items in tab names(data entries, nft count, transactions count)
     - for transactions also indicate if all transactions were loaded
 10) Implement button for collapsing/hiding addresses in stats view

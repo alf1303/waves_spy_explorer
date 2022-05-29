@@ -62,6 +62,7 @@ class TransactionProvider extends ChangeNotifier {
     curAddr = address;
     afterGlob = "";
     allTransactions.clear();
+    stakedDucksLoaded  = false;
     final filterProvider = FilterProvider();
     filterProvider.finalList.clear();
     assetProvider.assets.clear();
@@ -538,6 +539,7 @@ class TransactionProvider extends ChangeNotifier {
     } else {
       throw("Cant fetch data from account data storage for staked ducks:" + resp.body);
     }
+    print("staked ducks length: ${res.length}");
     final List<dynamic> filtered = res.where((ele) => ele["key"].contains(address) && ele["key"].contains("_farmingPower") && ele["value"] > 0).toList();
     final Map<String, int> ress = { for (var e in filtered) e["key"].split("_")[3] : e["value"] };
     return ress;
