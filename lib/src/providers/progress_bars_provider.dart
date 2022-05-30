@@ -106,4 +106,12 @@ class ProgressProvider extends ChangeNotifier{
   bool isPresent(String label) {
     return isPresentData(label);
   }
+
+  int getLoadedItemsCountProxy(String label) {
+    return getLoadedItemsCount(label);
+  }
+
+  bool allTransactionsLoadedProxy() {
+    return allTransactionsLoaded();
+  }
 }

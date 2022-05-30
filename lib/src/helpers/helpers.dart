@@ -405,3 +405,28 @@ bool isCurrentAddr(String value) {
     addr = transactionProvider.curAddr == value;
     return alias || addr;
 }
+
+int getLoadedItemsCount(String label) {
+    int result = 0;
+    switch (label) {
+        case "trans":
+            result = transactionProvider.allTransactions.length;
+            break;
+        case "assets":
+            result =  assetProvider.assets.length;
+            break;
+        case "nfts":
+            result = nftProvider.nfts.length;
+            break;
+        case "data":
+            result =  dataProvider.data.length;
+            break;
+        case "script":
+            break;
+    }
+    return result;
+}
+
+bool allTransactionsLoaded() {
+    return transactionProvider.allTransactionsLoaded;
+}

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:waves_spy/src/helpers/helpers.dart';
 import 'package:waves_spy/src/providers/filter_provider.dart';
 import 'package:waves_spy/src/providers/progress_bars_provider.dart';
 import 'package:waves_spy/src/providers/transaction_provider.dart';
@@ -81,7 +82,6 @@ class TabHeaderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final filterProvider = FilterProvider();
     return Consumer<ProgressProvider>(
       builder: (context, model, child) {
         return Tab(
@@ -95,7 +95,18 @@ class TabHeaderWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                 Text(name),
-                label == "none" ? Container() : model.isPresent(label) ? const Icon(Icons.check_rounded, color: Colors.greenAccent) : const Icon(Icons.remove, color: Colors.redAccent,)
+                label == "none" ? Container() : model.isPresent(label) ?
+                label == "Script" ? const Icon(Icons.check_rounded, color: Colors.greenAccent) :
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(" (${model.getLoadedItemsCountProxy(label).toString()})", style: const TextStyle(color: Colors.greenAccent),),
+                    Visibility(
+                        visible: model.allTransactionsLoadedProxy(),
+                        child: const Icon(Icons.check_rounded, color: Colors.greenAccent))
+                  ],
+                ) :
+                const Icon(Icons.remove, color: Colors.redAccent,)
               ],
               ),
             ],

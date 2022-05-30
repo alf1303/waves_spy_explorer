@@ -33,9 +33,9 @@
 ** 21) Implement opening new tab in browser when clicking on address with passing this address as parameter
 ** 23) Deploy to Google hosting
 
-0) check if address is alias, then fetch address for this alias and pass it to link
-0) Implement indicating number of items in tab names(data entries, nft count, transactions count)
-    - for transactions also indicate if all transactions were loaded
+** 0) check if address is alias, then fetch address for this alias and pass it to link
+** 0) Implement indicating number of items in tab names(data entries, nft count, transactions count)
+**     - for transactions also indicate if all transactions were loaded
 1) Test data filtering
 2) Add DuckStats view:
  //Current data
