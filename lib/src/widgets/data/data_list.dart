@@ -33,7 +33,7 @@ class DataList extends StatelessWidget {
               children: [
                 Expanded(
                     child: InputWidgetFilter(controller: _textController, onchanged: filterByText, hint: "clear", clearFunc: clearText,
-                        label: "enter text to filter, use &&& or ||| for combining text expressions(if needed)")
+                        label: "enter text to filter, use &&& or ||| for combining text expressions(if needed)", padded: true)
                 ),
               ],
             )

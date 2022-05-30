@@ -9,7 +9,7 @@
     },
     "search" : "search data",
     "paste" : "paste from clipboard",
-    "addrHint" : "Enter or Paste address",
+    "addrHint" : "Enter or Paste address/alias",
     "clearAsset" : "clear asset name",
     "clearFunction" : "clear function name",
     "clearAddress" : "clear address name",

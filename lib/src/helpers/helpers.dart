@@ -1,8 +1,11 @@
 import 'dart:convert';
 import 'dart:html';
 
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:waves_spy/src/constants.dart';
 import 'package:http/http.dart' as http;
+import 'package:waves_spy/src/main_page.dart';
 import 'package:waves_spy/src/providers/asset_provider.dart';
 import 'package:waves_spy/src/providers/data_script_provider.dart';
 import 'package:waves_spy/src/providers/nft_provider.dart';
@@ -23,7 +26,7 @@ Future<void> loadMoreTr() async {
 }
 
 Future<void> loadAllTr() async {
-    await transactionProvider.getllTransactions();
+    await transactionProvider.getAllTransactions();
 }
 String getFormattedDate(DateTime? dt) {
     return dt != null ? DateFormat('yyyy-MM-dd kk:mm').format(dt) : "nul";
@@ -213,7 +216,7 @@ getTransfers({required bool isDapp, required String sender, required String curA
     for (dynamic el in transfers) {
         double amount = el["amount"] ?? 0;
         // bool condition = isDapp ?
-        if ((isDapp && el["address"] == sender) || (!isDapp && el["address"] == curAddr)) {
+        if ((isDapp && el["address"] == sender) || (!isDapp && isCurrentAddr(el["address"]))) {
             final assetId = el["asset"] ?? "WAVES";
             if (resDict.containsKey(assetId)) {
                 double prevAm = resDict[assetId] ?? 0;
@@ -246,16 +249,16 @@ parseTransactionType(Map<String, dynamic> td)  {
 
             for (var element in td["payment"]) {
                 final assetId = element["assetId"] ?? "WAVES";
-                if (td["sender"] == _transactionProvider.curAddr || td["dApp"] == _transactionProvider.curAddr) {
+                if (isCurrentAddr(td["sender"]) ||  isCurrentAddr(td["dApp"])) {
                   payment[assetId] = element["amount"];
                 }
             }
-            getTransfers(isDapp: td["dApp"] == _transactionProvider.curAddr, sender: td["sender"], curAddr: _transactionProvider.curAddr, data: td, resDict: transfers);
+            getTransfers(isDapp: isCurrentAddr(td["dApp"]), sender: td["sender"], curAddr: _transactionProvider.curAddr, data: td, resDict: transfers);
             p["header"] = "invoke";
             break;
         case 4:
             final assetId = td["assetId"] ?? "WAVES";
-            if (td["recipient"] == _transactionProvider.curAddr) {
+            if (isCurrentAddr(td["recipient"])) {
                 p["anotherAddr"] = td["sender"];
                 p["name"] = getAddrName(p["anotherAddr"]);
                 p["direction"] = "IN";
@@ -273,7 +276,7 @@ parseTransactionType(Map<String, dynamic> td)  {
             p["name"] = getAddrName(p["anotherAddr"]);
             List<dynamic> trtr = td["transfers"];
             trtr.forEach((el) {
-                if(el["recipient"] == _transactionProvider.curAddr) {
+                if(isCurrentAddr(el["recipient"])) {
                     if(transfers.containsKey(td["assetId"])) {
                         transfers[assetId] = transfers[assetId]! + el["amount"];
                     } else {
@@ -281,7 +284,7 @@ parseTransactionType(Map<String, dynamic> td)  {
                     }
                 }
             });
-            if(td["sender"] == _transactionProvider.curAddr) {
+            if(isCurrentAddr(td["sender"])) {
                 payment[assetId] = td["totalAmount"];
             }
             p["header"] = "massTransfer";
@@ -306,17 +309,17 @@ parseTransactionType(Map<String, dynamic> td)  {
             p['buyer'] = buy['sender'];
             double amount = sell['amount'] < buy['amount'] ? sell['amount'] : buy['amount'];
             String orderDirection = sell['amount'] < buy['amount'] ? "sell" : "buy";
-            if(buy["sender"] == _transactionProvider.curAddr) {
+            if(isCurrentAddr(buy["sender"])) {
                 transfers[amountAsset] = amount;
                 double val = amount*buy["price"];
                 payment[priceAsset] = val;
             }
-            if(sell["sender"] == _transactionProvider.curAddr) {
+            if(isCurrentAddr(sell["sender"])) {
                 double val = amount*sell["price"];
                 transfers[priceAsset] = val;
                 payment[amountAsset] = amount;
             }
-            if(td["sender"] == _transactionProvider.curAddr) {
+            if(isCurrentAddr(td["sender"])) {
                 if(orderDirection == "sell") {
                     payment[amountAsset] = amount;
                     transfers[priceAsset] = amount*sell["price"];
@@ -361,4 +364,44 @@ int getDucksCount() {
 void setDucksStatsData() {
     statsProvider.freeDucksCount = nftProvider.nfts.where((nft) => nft.isDuck && !nft.isFarming).toList().length;
     statsProvider.stakedDucksCount = nftProvider.nfts.where((nft) => nft.isDuck && nft.isFarming).toList().length;
+}
+
+Future<String> fetchAddrByAlias(String alias) async{
+    String result = "";
+    final String ali = alias.substring(8);
+    // print("Alias: $ali");
+    var resp = await http.get(Uri.parse("$nodeUrl/alias/by-alias/$ali"));
+    if (resp.statusCode == 200) {
+        result = jsonDecode(resp.body)["address"];
+    } else {
+        showSnackError("Cannot fetch address by alias: ${resp.body}");
+        print("Cannot fetch address by alias: ${resp.body}");
+    }
+    return result;
+
+}
+
+showSnackError(String msg) {
+    messengerKey.currentState?.showSnackBar(SnackBar(
+        backgroundColor: Colors.red.shade200,
+        content: Text(msg),
+        duration: const Duration(seconds: 7),
+        action: SnackBarAction(
+            textColor: Colors.black,
+            label: 'CLOSE',
+            onPressed: () {
+
+            },
+        ),
+    ));
+}
+
+bool isCurrentAddr(String value) {
+    bool alias = false;
+    bool addr = false;
+    if(transactionProvider.aliases.isNotEmpty) {
+        alias = transactionProvider.aliases.contains(value);
+    }
+    addr = transactionProvider.curAddr == value;
+    return alias || addr;
 }

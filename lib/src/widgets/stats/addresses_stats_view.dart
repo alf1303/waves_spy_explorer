@@ -99,6 +99,7 @@ Widget ResultWidget(AddressesStatsItem? it, String assName) {
   String key = it!.address;
   String val = it.address;
   bool hidden = false;
+  // print(val.length);
   return Container(
     padding: const EdgeInsets.all(5),
     margin: const EdgeInsets.all(2),
@@ -109,7 +110,8 @@ Widget ResultWidget(AddressesStatsItem? it, String assName) {
             val = hidden ? key.replaceRange(2, key.length - 2, "." * (key.length - 4)) : key;
             return Row(
               children: [
-                SizedBox(width: 350, child: LinkToAddress(val: val, label: val, color: Colors.white,)),
+                // SizedBox(width: 350, child: LinkToAddress(val: val, label: val, color: Colors.white,)),
+                SizedBox(width: 350, child: LabeledText(label: "view: ", value: val, addrLink: true)),
                 GestureDetector(
                   onTap: () {
                     setStat(() => hidden = !hidden);

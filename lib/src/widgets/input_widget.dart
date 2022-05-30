@@ -32,7 +32,7 @@ class _InputWidgetState extends State<InputWidget> {
   }
 
   onSearch() async{
-    await _transactionProvider.setCurrAddr(_inputController.text);
+    await _transactionProvider.setCurrAddr(_inputController.text.trim());
   }
 
   loadMore() async {
@@ -40,7 +40,7 @@ class _InputWidgetState extends State<InputWidget> {
   }
 
   loadAll() async {
-    await _transactionProvider.getllTransactions();
+    await _transactionProvider.getAllTransactions();
   }
 
   pasteFromClipboard() async{
@@ -65,14 +65,14 @@ class _InputWidgetState extends State<InputWidget> {
           _inputController.text = _transactionProvider.curAddr.isEmpty ? "3PAtzncjJGWRpCtkR55wAzcfZ9fubMeA4JU" : _transactionProvider.curAddr;
           return SizedBox(
             width: 500,
-            child: TextField(
+            child: TextFormField(
               textInputAction: TextInputAction.go,
               controller: _inputController,
               decoration: InputDecoration(
                 isDense: true,
                 label: Text(apploc!.addrHint),
               ),
-              onSubmitted: (val) {
+              onFieldSubmitted: (val) {
                 onSearch();
               },
             ),

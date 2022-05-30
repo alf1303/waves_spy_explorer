@@ -134,8 +134,8 @@ class Details extends StatelessWidget {
     }
     String dApp = "";
     if (td.containsKey("dApp")) {dApp = td["dApp"];}
-    String out = _transactionProvider.curAddr != dApp ? "out" : "in";
-    String inn = _transactionProvider.curAddr != dApp ? "in" : "out";
+    String out = !isCurrentAddr(dApp) ? "out" : "in";
+    String inn = !isCurrentAddr(dApp) ? "in" : "out";
         List<Widget> payList = payment.entries.map((e) => assetBuilder(e.key, e.value, exop, p["exchPriceAsset"], out)).toList();
         List<Widget> inList = transfers.entries.map((e) => assetBuilder(e.key, e.value, exop, p["exchPriceAsset"], inn)).toList();
         // print(td["id"] + ": ");
@@ -144,7 +144,7 @@ class Details extends StatelessWidget {
       children: [
         header,
         Divider(),
-        _transactionProvider.curAddr != dApp ?
+        !isCurrentAddr(dApp) ?
         Row(
           children: [
             payList.isNotEmpty ? Expanded(child: OutWidget(payList: payList,)) : Container(),
@@ -341,19 +341,44 @@ Widget LabeledText({String? label, String? value, String? name, Color? colr, boo
   final nam = name ?? "";
   final col = colr ?? Colors.white;
   final aLink = addrLink ?? false;
+  final alias = aLink && val.isNotEmpty && val.length != 35;
+
+  return !alias ? LabeledTextLocal(labl: labl, val: val, nam: nam, col: col, aLink: aLink) :
+      FutureBuilder<String>(
+        future: fetchAddrByAlias(val),
+        builder: (context, snapshot) {
+          Widget widget = Text("");
+          if(snapshot.hasData) {
+            String addr = snapshot.data ?? val;
+            widget = LabeledTextLocal(labl: labl, val: "$val->$addr", nam: nam, col: col, aLink: aLink, alias: alias);
+          } else if(snapshot.hasError) {
+            print("Err: fetching address by aias: $val");
+            widget = LabeledTextLocal(labl: labl, val: val, nam: nam, col: col, aLink: aLink);
+          } else {
+            widget = const Text("Loading...");
+          }
+          return widget;
+        },
+      );
+}
+
+
+
+Widget LabeledTextLocal({required String labl, required String val, required String nam, required Color col, required bool aLink, bool? alias}) {
+final bool ali = alias ?? false;
   // print("$labl, $val, $nam");
   return Row(
     mainAxisSize: MainAxisSize.min,
     children: [
       !aLink ?
     Text(labl, style: const TextStyle(color: Colors.grey),) :
-    LinkToAddress(val: val, label: labl,),
+    LinkToAddress(val: val, label: labl, alias: ali,),
     Expanded(
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
           children: [
-            nam == "" ? Text("") : SelectableText("($name)", style: TextStyle(color: col)),
+            nam == "" ? Text("") : SelectableText("($nam)", style: TextStyle(color: col)),
             SelectableText(val + " ", style: TextStyle(color: col),),
           ],
         ),
@@ -378,10 +403,11 @@ Widget LabeledTextNoScroll([String? label, String? value, String? name, Color? c
 }
 
 class LinkToAddress extends StatelessWidget {
-  const LinkToAddress({Key? key, required this.val, required this.label, this.color}) : super(key: key);
+  const LinkToAddress({Key? key, required this.val, required this.label, this.color, required this.alias}) : super(key: key);
   final String val;
   final String label;
   final Color? color;
+  final bool alias;
 
   _launchURL(url) async {
     if (await canLaunch(url)) {
@@ -401,7 +427,7 @@ class LinkToAddress extends StatelessWidget {
                 shadows: [
                   Shadow(
                       color: color ?? Colors.grey,
-                      offset: Offset(0, -2))
+                      offset: const Offset(0, -2))
                 ],
                 color: Colors.transparent,
                 decoration: TextDecoration.underline, decorationThickness: 2, decorationColor: Colors.grey),
@@ -409,7 +435,13 @@ class LinkToAddress extends StatelessWidget {
             recognizer: TapGestureRecognizer()..onTap = () async {
               String baseUri = Uri.base.toString();
               String uri = baseUri.substring(0, baseUri.length - 2);
-              String link = "$uri?address=$val";
+              String addr = "";
+              if (alias) {
+                addr = val.split("->")[1];
+              } else {
+                addr = val;
+              }
+              String link = "$uri?address=$addr";
               await _launchURL(link);
             }
         ),

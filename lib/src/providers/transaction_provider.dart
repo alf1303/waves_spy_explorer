@@ -17,6 +17,7 @@ import 'package:waves_spy/src/widgets/transactions/transaction_view.dart';
 
 import '../models/asset.dart';
 
+
 class TransactionProvider extends ChangeNotifier {
   static final TransactionProvider _instance = TransactionProvider._internal();
 
@@ -32,6 +33,7 @@ class TransactionProvider extends ChangeNotifier {
   final dataScriptProvider = DataScriptProvider();
   final statsProvider = StatsProvider();
   String curAddr = "";
+  List<String> aliases = List.empty(growable: true);
   String afterGlob = "";
   String afterGlobNft = "";
   int limit = 1000;
@@ -53,6 +55,17 @@ class TransactionProvider extends ChangeNotifier {
     "available": 0,
     "effective": 0};
 
+  Future<List<String>> fetchAliases(String addr) async{
+    List<dynamic> result = List.empty(growable: false);
+    var resp = await http.get(Uri.parse("$nodeUrl/alias/by-address/$addr"));
+    if(resp.statusCode == 200) {
+      result = jsonDecode(resp.body);
+    } else {
+      print("Cant fetch aliases by address: ${resp.body}");
+    }
+    return result.map((e) => e.toString()).toList();
+  }
+
   void createInfo() {
     final _filterProvider = FilterProvider();
     filterData = _filterProvider.createFilterDataString(allTransactions.length, filteredTransactions.length);
@@ -60,13 +73,21 @@ class TransactionProvider extends ChangeNotifier {
 
   Future<void> setCurrAddr(String address) async {
     curAddr = address;
+    final aliasReg =  RegExp(r'^[a-z0-9._\-@]+$');
+    if(address.isNotEmpty && aliasReg.hasMatch(address)) {
+      String adr = await fetchAddrByAlias("alias:W:" + address);
+      curAddr = adr;
+    }
     clearStateBeforeNewSearch();
     Asset waves = await fetchAssetInfo("WAVES");
     assetsGlobal[waves.id] = waves;
     progressProvider.start();
+    aliases = await fetchAliases(curAddr);
+    // print("Aliases: ");
+    // print(aliases);
     await getTransactions(address: curAddr);
     await getAssets(curAddr);
-    await getNft(address: address);
+    await getNft(address: curAddr);
     setDucksStatsData();
     // await getNft(curAddr); //implement
     await getData(curAddr); //implement
@@ -79,6 +100,7 @@ class TransactionProvider extends ChangeNotifier {
       //transactions
     afterGlob = "";
     allTransactions.clear();
+    aliases.clear();
     stakedDucksLoaded  = false;
 
       //filter
@@ -92,7 +114,7 @@ class TransactionProvider extends ChangeNotifier {
     dataScriptProvider.script = "";
   }
 
-  Future<void> getllTransactions() async{
+  Future<void> getAllTransactions() async{
     final filterProvider = FilterProvider();
     filterProvider.from = DateTime(2017);
     await getTransactions(address: curAddr, after: true);
@@ -102,7 +124,7 @@ class TransactionProvider extends ChangeNotifier {
     await getTransactions(address: curAddr, after: true);
   }
 
-  Future<void> getTransactions({required String address, bool? after}) async {
+  Future<void> getTransactions({required String address, bool? after, BuildContext? context}) async {
     if (curAddr.isNotEmpty) {
       progressProvider.startTransactions();
       final filterProvider = FilterProvider();
@@ -131,6 +153,8 @@ class TransactionProvider extends ChangeNotifier {
 
         } else {
           progressProvider.stopTransactions();
+          progressProvider.stop();
+          showSnackError(resp.body);
           throw("Failed to load transactions list\n" + resp.body);
         }
       
@@ -206,7 +230,7 @@ class TransactionProvider extends ChangeNotifier {
         if(type == 4) {
           trAddressesMap[tr["recipient"]] = getAddrName(tr["recipient"]);
           // curAddr == tr["sender"] ? outAssetsIds[assetId] == tr["amount"] : inAssetsIds[assetId] = tr["amount"];
-          if(curAddr == tr["sender"]) {
+          if(isCurrentAddr(tr["sender"])) {
             outAssetsIds[assetId] = tr["amount"];
           } else {
             inAssetsIds[assetId] = tr["amount"];
@@ -219,11 +243,11 @@ class TransactionProvider extends ChangeNotifier {
           for (var el in transfers) {
             income = true;
             trAddressesMap[el["recipient"]] = getAddrName(el["recipient"]);
-            if(curAddr == tr["sender"]) {
+            if(isCurrentAddr(tr["sender"])) {
               income = false;
               sum += el["amount"];
             } else {
-              if(el["recipient"] == curAddr) {
+              if(isCurrentAddr(el["recipient"])) {
                 sum += el["amount"];
               }
             }
@@ -239,10 +263,10 @@ class TransactionProvider extends ChangeNotifier {
         for (var pay in payment) {
           String assetId = pay["assetId"] ?? "WAVES";
           transAssetsMap[assetId] = assetId == "WAVES" ? "WAVES" : "";
-          if(curAddr == tr["dApp"]) {
+          if(isCurrentAddr(tr["dApp"])) {
             inAssetsIds[assetId] = pay["amount"];
           } else {
-            if (curAddr == tr["sender"]) {
+            if (isCurrentAddr(tr["sender"])) {
               outAssetsIds[assetId] = pay["amount"];
             }
           }
@@ -252,14 +276,14 @@ class TransactionProvider extends ChangeNotifier {
 
       //invokeScript
       if (type == 16) {
-        final isDapp = tr["dApp"] == curAddr;
+        final isDapp = isCurrentAddr(tr["dApp"]);
         List<dynamic> transfers = tr["stateChanges"]["transfers"];
         for (var pay in transfers) {
-          if (isDapp && (pay["address"] == tr["sender"]) || (!isDapp && pay["address"] == curAddr)) {
+          if (isDapp && (pay["address"] == tr["sender"]) || (!isDapp && isCurrentAddr(pay["address"]))) {
             String asset = pay["asset"] ?? "WAVES";
             transAssetsMap[asset] = asset == "WAVES" ? "WAVES" : "";
             trAddressesMap[pay["address"]] = getAddrName(pay["address"]);
-            if(curAddr == tr["dApp"]) {
+            if(isCurrentAddr(tr["dApp"])) {
               outAssetsIds[asset] = pay["amount"];
             } else {
               inAssetsIds[asset] = pay["amount"];

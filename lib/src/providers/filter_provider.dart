@@ -61,7 +61,7 @@ class FilterProvider extends ChangeNotifier{
           int decimals = assetsGlobal[assId] == null ? 1 : assetsGlobal[assId]!.decimals;
           double val = tr["inAssetsIds"][assId]/pow(10, decimals);
           sumacum_in += tr["inAssetsIds"][assId]/pow(10, decimals);
-          if(type == 16 && tr["dApp"] == _transactionProvider.curAddr) {
+          if(type == 16 && isCurrentAddr(tr["dApp"])) {
             addNewEntryOrCombine(finalList, val, tr["sender"], "in");
           } else if(type == 16) {
             addNewEntryOrCombine(finalList, val, tr["dApp"], "in");
@@ -74,7 +74,7 @@ class FilterProvider extends ChangeNotifier{
           int decimals = assetsGlobal[assId] == null ? 1 : assetsGlobal[assId]!.decimals;
           double val = tr["outAssetsIds"][assId]/pow(10, decimals);
           sumacum_out += val;
-          if (type == 16 && tr["dApp"] == _transactionProvider.curAddr) {
+          if (type == 16 && isCurrentAddr(tr["dApp"])) {
             addNewEntryOrCombine(finalList, val, tr["sender"], "out");
           } else if(type == 16) {
             addNewEntryOrCombine(finalList, val, tr["dApp"], "out");

@@ -316,8 +316,9 @@ class FilterWidget extends StatelessWidget {
 
 }
 
-Widget InputWidgetFilter({controller, onchanged, clearFunc, label, hint, bool? isNumeric}) {
+Widget InputWidgetFilter({controller, onchanged, clearFunc, label, hint, bool? isNumeric, bool? padded}) {
   bool isNum = isNumeric ?? false;
+  final bool padde = padded ?? false;
   return Container(
       padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
       // decoration: BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: BorderRadius.all(Radius.circular(5))),
@@ -325,10 +326,10 @@ Widget InputWidgetFilter({controller, onchanged, clearFunc, label, hint, bool? i
           children: [
       Expanded(
       child: Padding(
-        padding: const EdgeInsets.only(left: 20.0, right: 150, bottom: 10),
+        padding: padde ? const EdgeInsets.only(left: 20.0, right: 150, bottom: 10) : const EdgeInsets.all(4),
         child: TextFormField(
-        // onChanged: onchanged,
-            onFieldSubmitted: onchanged,
+        onChanged: onchanged,
+            // onFieldSubmitted: onchanged,
             controller: controller,
             keyboardType: isNum ? const TextInputType.numberWithOptions(decimal: true) : null,
             inputFormatters: isNum ? [

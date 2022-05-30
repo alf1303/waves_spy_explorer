@@ -78,8 +78,8 @@ class _SimpleTransViewState extends State<SimpleTransView> with AutomaticKeepAli
     }
     String dApp = "";
     if (widget.td.containsKey("dApp")) {dApp = widget.td["dApp"];}
-    String out = _transactionProvider.curAddr != dApp ? "out" : "in";
-    String inn = _transactionProvider.curAddr != dApp ? "in" : "out";
+    String out = !isCurrentAddr(dApp) ? "out" : "in";
+    String inn = !isCurrentAddr(dApp) ? "in" : "out";
     List<Widget> payList = payment.entries.map((e) => assetBuilder(e.key, e.value, exop, p["exchPriceAsset"], out)).toList();
     List<Widget> inList = transfers.entries.map((e) => assetBuilder(e.key, e.value, exop, p["exchPriceAsset"], inn)).toList();
     return InkWell(
@@ -108,7 +108,7 @@ class _SimpleTransViewState extends State<SimpleTransView> with AutomaticKeepAli
               ),
               Expanded(
                 child: SizedBox(child:
-                _transactionProvider.curAddr != dApp ?
+                !isCurrentAddr(dApp) ?
                 Row(
                   children: [
                     payList.isNotEmpty ? Expanded(child: OutWidget(payList: payList,)) : Container(),
@@ -162,7 +162,7 @@ Widget invokeHeader(Map<String, dynamic> p) {
             child: SizedBox(width: 100, child: LabeledText(label: "", value: p["function"], name: "", colr: invokeColor)),
           ),
         ),
-        Expanded(child: p["dApp"] == _trProvider.curAddr ?
+        Expanded(child: isCurrentAddr(p["dApp"]) ?
           LabeledText(label: "sender:", value: p["sender"], name: getAddrName(p["sender"]), colr: invokeColor, addrLink: true) :
             LabeledText(label: "dApp:", value: p["dApp"], name: getAddrName(p["dApp"]), colr: invokeColor, addrLink: true)),
       ],
@@ -215,7 +215,7 @@ Widget transferHeader(Map<String, dynamic> p) {
 Widget massTransferHeader(Map<String, dynamic> p) {
   final _transactionProvider = TransactionProvider();
   String lbl = "from";
-  if(p["sender"] == _transactionProvider.curAddr) {
+  if(isCurrentAddr(p["sender"])) {
     lbl = "sender";
   }
   return Padding(
