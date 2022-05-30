@@ -46,10 +46,10 @@ class _TransViewState extends State<TransView> with AutomaticKeepAliveClientMixi
           children: [
           Row(
             children: [
-            SizedBox(width: 240, child: LabeledText("type: ", getTypeName(widget.td["type"]), "${widget.td["type"]}", color), ),
-            SizedBox(width: 300, child: LabeledText("date: ", formattedDate, "", color)),
-            SizedBox(width: 200, child: LabeledText("height: ", widget.td["height"].toString(), "", color)),
-            LabeledText("id: ", widget.td["id"], "", color),
+            SizedBox(width: 240, child: LabeledText(label: "type: ", value: getTypeName(widget.td["type"]), name: "${widget.td["type"]}", colr: color), ),
+            SizedBox(width: 300, child: LabeledText(label: "date: ", value: formattedDate, name: "", colr: color)),
+            SizedBox(width: 200, child: LabeledText(label: "height: ", value: widget.td["height"].toString(), name: "", colr: color)),
+            LabeledText(label: "id: ", value: widget.td["id"], name: "", colr: color),
           ],),
             const Divider(),
             Details(td: widget.td)
@@ -165,9 +165,9 @@ class Details extends StatelessWidget {
 Widget invokeHeader(Map<String, dynamic> p) {
   return Row(
     children: [
-      SizedBox(width: 240, child: LabeledText("function:", p["function"], "", invokeColor)),
-      SizedBox(width: 500, child: SingleChildScrollView(scrollDirection: Axis.horizontal, child: LabeledText("dApp:", p["dApp"], p["dAppName"], invokeColor)),),
-      SizedBox(child: LabeledText("Sender:", p["sender"], "", invokeColor),),
+      SizedBox(width: 240, child: LabeledText(label: "function:", value: p["function"], name: "", colr: invokeColor)),
+      SizedBox(width: 500, child: SingleChildScrollView(scrollDirection: Axis.horizontal, child: LabeledText(label: "dApp:", value: p["dApp"], name: p["dAppName"], colr: invokeColor)),),
+      SizedBox(child: LabeledText(label: "Sender:", value: p["sender"], name: "", colr: invokeColor),),
     ],
   );
 }
@@ -178,7 +178,7 @@ Widget exchangeHeader(Map<String, dynamic> p) {
       SizedBox(width: 600,
           child: Row(
             children: [
-              LabeledText("sellOrder:", "", "", exchangeColor),
+              LabeledText(label: "sellOrder:", value: "", name: "", colr: exchangeColor),
               Expanded(child: assetBuilder(p['amountAsset'], p['sellOrder'], false, p['amountAsset'], "out"))
             ],
           )
@@ -186,7 +186,7 @@ Widget exchangeHeader(Map<String, dynamic> p) {
       SizedBox(width: 300,
           child: Row(
             children: [
-              LabeledText("buyOrder:", "", "", exchangeColor),
+              LabeledText(label: "buyOrder:", value: "", name: "", colr: exchangeColor),
               Expanded(child: assetBuilder(p['amountAsset'], p['buyOrder'], false, p['amountAsset'], "in"))
             ],
           )
@@ -205,7 +205,7 @@ Widget transferHeader(Map<String, dynamic> p) {
   }
   return Row(
     children: [
-      SizedBox(child: LabeledText(suffix, p["anotherAddr"], p["name"], transferColor),),
+      SizedBox(child: LabeledText(label: suffix, value: p["anotherAddr"], name: p["name"], colr: transferColor),),
       // SizedBox(width: 800, child: LabeledText("dApp:", "${p["dApp"]} (${p["dAppName"]})"),),
     ],
   );
@@ -215,8 +215,8 @@ Widget massTransferHeader(Map<String, dynamic> p) {
   final _transactionProvider = TransactionProvider();
   return Row(
     children: [
-      SizedBox(width: 740, child: LabeledText("From", p["anotherAddr"], p["name"], massTransferColor),),
-      SizedBox(child: LabeledText("Receiver", _transactionProvider.curAddr, "", massTransferColor),),
+      SizedBox(width: 740, child: LabeledText(label: "From", value: p["anotherAddr"], name: p["name"], colr: massTransferColor),),
+      SizedBox(child: LabeledText(label: "Receiver", value: _transactionProvider.curAddr, name: "", colr: massTransferColor),),
       // SizedBox(width: 800, child: LabeledText("dApp:", "${p["dApp"]} (${p["dAppName"]})"),),
     ],
   );
@@ -335,7 +335,7 @@ class InWidget extends StatelessWidget {
   }
 }
 
-Widget LabeledText([String? label, String? value, String? name, Color? colr, bool? addrLink]) {
+Widget LabeledText({String? label, String? value, String? name, Color? colr, bool? addrLink}) {
   final labl = label ?? "";
   final val = value ?? "";
   final nam = name ?? "";

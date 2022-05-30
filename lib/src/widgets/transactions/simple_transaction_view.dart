@@ -91,11 +91,11 @@ class _SimpleTransViewState extends State<SimpleTransView> with AutomaticKeepAli
           decoration: BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: const BorderRadius.all(Radius.circular(5))),
           child: Row(
             children: [
-              SizedBox(width: 150, child: LabeledText("", formattedDate, "", color)),
-              SizedBox(width: 150, child: LabeledText("", getTypeName(widget.td["type"]), "${widget.td["type"]}", color), ),
+              SizedBox(width: 150, child: LabeledText(label: "", value: formattedDate, name: "", colr: color)),
+              SizedBox(width: 150, child: LabeledText(label: "", value: getTypeName(widget.td["type"]), name: "${widget.td["type"]}", colr: color), ),
               Padding(
                 padding: const EdgeInsets.only(right: 8.0),
-                child: SizedBox(width: 100, child: LabeledText("", widget.td["id"], "", Colors.grey)),
+                child: SizedBox(width: 100, child: LabeledText(label: "", value: widget.td["id"], name: "", colr: Colors.grey)),
               ),
 
               Expanded(
@@ -159,12 +159,12 @@ Widget invokeHeader(Map<String, dynamic> p) {
         Expanded(
           child: Padding(
             padding: const EdgeInsets.only(right: 8.0),
-            child: SizedBox(width: 100, child: LabeledText("", p["function"], "", invokeColor)),
+            child: SizedBox(width: 100, child: LabeledText(label: "", value: p["function"], name: "", colr: invokeColor)),
           ),
         ),
         Expanded(child: p["dApp"] == _trProvider.curAddr ?
-          LabeledText("sender:", p["sender"], getAddrName(p["sender"]), invokeColor, true) :
-            LabeledText("dApp:", p["dApp"], getAddrName(p["dApp"]), invokeColor, true)),
+          LabeledText(label: "sender:", value: p["sender"], name: getAddrName(p["sender"]), colr: invokeColor, addrLink: true) :
+            LabeledText(label: "dApp:", value: p["dApp"], name: getAddrName(p["dApp"]), colr: invokeColor, addrLink: true)),
       ],
     ),
   );
@@ -176,7 +176,7 @@ Widget exchangeHeader(Map<String, dynamic> p) {
       SizedBox(width: 600,
           child: Row(
             children: [
-              LabeledText("sellOrder:", "", "", exchangeColor),
+              LabeledText(label: "sellOrder:", value: "", name: "", colr: exchangeColor),
               Expanded(child: assetBuilder(p['amountAsset'], p['sellOrder'], false, p['amountAsset'], "out"))
             ],
           )
@@ -184,7 +184,7 @@ Widget exchangeHeader(Map<String, dynamic> p) {
       SizedBox(width: 300,
           child: Row(
             children: [
-              LabeledText("buyOrder:", "", "", exchangeColor),
+              LabeledText(label: "buyOrder:", value: "", name: "", colr: exchangeColor),
               Expanded(child: assetBuilder(p['amountAsset'], p['buyOrder'], false, p['amountAsset'], "in"))
             ],
           )
@@ -206,7 +206,7 @@ Widget transferHeader(Map<String, dynamic> p) {
     child: Row(
       children: [
         SizedBox(width: 150, child: Container(),),
-        Expanded(child: LabeledText(suffix, p["anotherAddr"], "", transferColor, true)),
+        Expanded(child: LabeledText(label: suffix, value: p["anotherAddr"], name: "", colr: transferColor, addrLink: true)),
       ],
     ),
   );
@@ -223,7 +223,7 @@ Widget massTransferHeader(Map<String, dynamic> p) {
     child: Row(
       children: [
         SizedBox(width: 150, child: Container(),),
-        Expanded(child: SizedBox(width: 740, child: LabeledText(lbl, p["anotherAddr"], p["name"], massTransferColor, true),)),
+        Expanded(child: SizedBox(width: 740, child: LabeledText(label: lbl, value: p["anotherAddr"], name: p["name"], colr: massTransferColor, addrLink: true),)),
       ],
     ),
   );

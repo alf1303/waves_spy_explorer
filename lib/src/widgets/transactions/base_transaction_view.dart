@@ -75,8 +75,8 @@ class InvokeView extends StatelessWidget {
 Widget InvokeItem(dynamic inv) {
   return Container(
     child: Row(children: [
-      SizedBox(width: 350, child: LabeledText("invoke: ", "${inv["call"]["function"]}()", ""),),
-      SizedBox(width: 400, child: LabeledText("", "${inv["dApp"]}", ""),),
+      SizedBox(width: 350, child: LabeledText(label: "invoke: ", value: "${inv["call"]["function"]}()", name: ""),),
+      SizedBox(width: 400, child: LabeledText(label: "", value: "${inv["dApp"]}", name: ""),),
       SizedBox(width: 400, child: Column(
         children: [
           Transfers(inv),
