@@ -9,6 +9,7 @@ import 'package:waves_spy/src/widgets/other/progress_bar.dart';
 import 'package:waves_spy/src/widgets/transaction_details.dart';
 import 'package:waves_spy/src/widgets/transactions/transactions_list.dart';
 
+const String version = "v_1.0.0     ";
 final GlobalKey<ScaffoldMessengerState> messengerKey = GlobalKey<ScaffoldMessengerState>();
 
 class MainPage extends StatelessWidget {
@@ -21,9 +22,18 @@ class MainPage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SelectableText(AppLocalizations.of(context)!.headerTitle + "     "),
-              Expanded(child: InputWidget(address: address)),
+              Expanded(
+                child: Row(
+                  children: [
+                    SizedBox(height: 45, child: Image.asset('assets/images/logo.png', fit: BoxFit.scaleDown,)),
+                    SelectableText(AppLocalizations.of(context)!.headerTitle + "     "),
+                    Expanded(child: InputWidget(address: address)),
+                  ],
+                ),
+              ),
+              Text(version)
             ],
           ),
 
