@@ -180,6 +180,7 @@ class TransactionProvider extends ChangeNotifier {
         createInfo();
         filterProvider.notifyAll();
         statsProvider.notifyAll();
+        progressProvider.notify();
       }
 
       progressProvider.stopTransactions();

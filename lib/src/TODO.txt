@@ -26,7 +26,6 @@
 ** 2) Finish internal invokes view
 ?? 3) increase font size for stats stats list //decide for overall font size strategy?
 ?? 4) Zooming options disable //Waiting for fix from flutter
-5) Add price when in and out length are 1 into standart transaction view
 ** 5) Migrate all LabeledText To LabeledTextNew
 
 ** 20) Implement passing address
@@ -63,6 +62,7 @@
 25) Implement toolbar for nft tab with filtering nfts/ducks
 25.2) Implement indicating Puzzle Eagle an Bored Ania nfts(staked/unstaked)
 25.1) Implement showing staked amount for tokens (Farm Tokens, Puzzle, )
+5) Add displaying(calculating) price when in and out length are 1 into standart transaction view
 26) Add processing of Lease and LeaseCancel transactions to:
     - createFilterDataString
     - extractAssets
