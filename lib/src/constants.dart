@@ -128,6 +128,7 @@ const dAppsDict = {
 "3PMVZ6LtKhvcwnYB5p1e7JmhUKLUcNbdKFg": "Neutrino - GBPN Collateral",
 "3PPsoLQYRjvhQTfLYnaEm6BVeJLznBFrwZK": "Neutrino - JPYN Collateral",
 "3P4PCxsJqMzQBALo8zANHtBDZRRquobHQp7": "Neutrino - Liquidation",
+  "3P3hCvE9ZfeMnZE6kXzR6YBzxhxM8J6PE7K": "Lambo Invest",
 
   "3PDEEMRU3tBJffag7sRPnjwEQ8GZGikUWBi" : "Deem Pichulin",
   "3P5svutcwqdyivdjwfbapuehkxfnqsaquyf" : "Deem Pichulin 2?",
@@ -146,6 +147,7 @@ const dAppsDict = {
   "3PPrR4GNrWdJibYCxezNXxDRkghJV5RVRbW" : "Ckolot",
   "3P6cgpyoErurDW3EdgUqUKuhFHza4xiFzpD" : "Stalin",
   "3PLUS2LnNbseGKcsQ68UVNSf1WxomDwpTAD": "Brox",
+  "3PEbL2T4FZSqHJJ67P41zW92E52K2t9GBAv": "@Steph091655 duckl_abu",
 
   "3PAtzncjJGWRpCtkR55wAzcfZ9fubMeA4JU": "Roma",
   "3PMKAL4cd77onkYuuU35115Wov1sLMEcFsv": "Roma_Puz",

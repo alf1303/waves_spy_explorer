@@ -36,7 +36,7 @@ class TransactionProvider extends ChangeNotifier {
   List<String> aliases = List.empty(growable: true);
   String afterGlob = "";
   String afterGlobNft = "";
-  int limit = 20;
+  int limit = 1000;
   int limitNft = 1000;
 
   bool stakedDucksLoaded = false;

@@ -27,13 +27,13 @@ class MainPage extends StatelessWidget {
               Expanded(
                 child: Row(
                   children: [
-                    SizedBox(height: 45, child: Image.asset('assets/images/logo.png', fit: BoxFit.scaleDown,)),
+                    SizedBox(height: 35, child: Image.asset('assets/images/logo.png', fit: BoxFit.scaleDown,)),
                     SelectableText(AppLocalizations.of(context)!.headerTitle + "     "),
                     Expanded(child: InputWidget(address: address)),
                   ],
                 ),
               ),
-              Text(version)
+              Text(version, style: TextStyle(fontSize: 10),)
             ],
           ),
 
