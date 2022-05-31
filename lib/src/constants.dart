@@ -9,6 +9,8 @@ const publicNode = 'https://nodes.wavesnodes.com';
 const localNode = 'http://127.0.0.1:6869';
 const nodeUrl = publicNode;
 
+const eggId = "C1iWsKGqLwjHUndiQ7iXpdmPum9PeCDFfyXBdJJosDRS";
+
 const dAppsDict = {
 "3P5UKXpQbom7GB2WGdPG5yGQPeQQuM3hFmw": "Keeper Aggregator",
   "3PKUxbZaSYfsR7wu2HaAgiirHYwAMupDrYW" : "Puzzle Eagles",

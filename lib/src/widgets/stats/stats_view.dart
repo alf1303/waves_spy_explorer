@@ -10,6 +10,8 @@ import 'package:waves_spy/src/widgets/stats/addresses_stats_view.dart';
 import 'package:waves_spy/src/widgets/stats/invokes_stats_view.dart';
 import 'package:waves_spy/src/widgets/transactions/transaction_view.dart';
 
+import 'ducks_stats_view.dart';
+
 TabController? statsController;
 
 class StatsView extends StatefulWidget {
@@ -23,17 +25,22 @@ class _StatsViewState extends State<StatsView> with SingleTickerProviderStateMix
 
   @override
   void initState() {
-    statsController = TabController(length: 2, vsync: this);
+    statsController = TabController(length: 3, vsync: this);
   }
 
   @override
   Widget build(BuildContext context) {
     final _trProvider = TransactionProvider();
+    var radius = Radius.circular(10);
     return Container(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           TabBar(
+            // indicator: ShapeDecoration(
+            //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topRight: radius, topLeft: radius)),
+            //     color: Colors.white10
+            // ),
               controller: statsController,
               tabs: [
             Tab(child: Row(children: [
@@ -44,6 +51,7 @@ class _StatsViewState extends State<StatsView> with SingleTickerProviderStateMix
                 },
               )
             ],)),
+            const Tab(text: "Ducks stats"),
             const Tab(text: "Stats"),
           ]),
           Expanded(
@@ -51,6 +59,7 @@ class _StatsViewState extends State<StatsView> with SingleTickerProviderStateMix
                 controller: statsController,
                 children: const [
                   AddressesStatsView(),
+                  DucksStatsView(),
                   InvokesStatsView()
             ]),
           )

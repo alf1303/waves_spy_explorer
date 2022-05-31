@@ -7,7 +7,7 @@ TextSpan  LblGroup({required String label, required String val, String? tab, boo
       children: [
         TextSpan(
             style: const TextStyle(color: Colors.grey),
-            text: "$t$label :"
+            text: "$t$label: "
         ),
         TextSpan(
             style: const TextStyle(color: Colors.white),

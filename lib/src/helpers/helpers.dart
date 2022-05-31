@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:waves_spy/src/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:waves_spy/src/main_page.dart';
+import 'package:waves_spy/src/models/stats_item.dart';
 import 'package:waves_spy/src/providers/asset_provider.dart';
 import 'package:waves_spy/src/providers/data_script_provider.dart';
 import 'package:waves_spy/src/providers/nft_provider.dart';
@@ -430,3 +431,76 @@ int getLoadedItemsCount(String label) {
 bool allTransactionsLoaded() {
     return transactionProvider.allTransactionsLoaded;
 }
+
+void collectDucksStats(Map<String, dynamic> tr) {
+    final function = tr["call"]["function"];
+    switch (function) {
+        case "startDuckHatching":
+            processDuckHatch(tr);
+            break;
+        case "startDuckBreeding":
+            processDuckBreed(tr);
+            break;
+        case "initRebirth":
+            processRebirth(tr);
+            break;
+        case "buyPerch":
+            processBuyPerch(tr);
+            break;
+        case "finishRebirth":
+            calculateRebirthResults(tr);
+            break;
+    }
+}
+
+void processDuckHatch(Map<String, dynamic> tr) {
+    const String label = "Ducks hatched";
+    const int count = 1;
+    double amount = tr["payment"][0]["amount"];
+    statsProvider.updateDuckStats(label, count, amount);
+}
+
+void processDuckBreed(Map<String, dynamic> tr) {
+    const String label = "Ducks breeded";
+    const int count = 1;
+    double amount = 0;
+    statsProvider.updateDuckStats(label, count, amount);
+}
+
+void processRebirth(Map<String, dynamic> tr) {
+    const String label = "Ducks reborned";
+    const int count = 1;
+    double amount = 0;
+    final payment = tr["payment"];
+    for(var el in payment) {
+        if(el["assetId"] == "C1iWsKGqLwjHUndiQ7iXpdmPum9PeCDFfyXBdJJosDRS") {
+            amount = el["amount"];
+        }
+    }
+    statsProvider.updateDuckStats(label, count, amount);
+}
+
+void processBuyPerch(Map<String, dynamic> tr) {
+    const String label = "Perches purchased";
+    const int count = 1;
+    double amount = tr["payment"][0]["amount"];
+    statsProvider.updateDuckStats(label, count, amount);
+}
+
+void calculateRebirthResults(Map<String, dynamic> tr) {
+    final invokes = tr["stateChanges"]["invokes"];
+    if (invokes.isNotEmpty) {
+        if(invokes[0]["call"]["function"] == "addFreePerch") {
+            statsProvider.updateRebirthResults("perches");
+        }
+        if(invokes[0]["call"]["function"] == "issueFreeDuckling") {
+            statsProvider.updateRebirthResults("ducklings");
+        }
+        if(invokes[0]["call"]["function"] == "issueFreeDuck") {
+            statsProvider.updateRebirthResults("Genesis ducks");
+        }
+    } else {
+        statsProvider.updateRebirthResults("ZerO");
+    }
+}
+

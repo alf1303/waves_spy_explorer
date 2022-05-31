@@ -33,9 +33,14 @@ class _MainAreaState extends State<MainArea>  with SingleTickerProviderStateMixi
   @override
   Widget build(BuildContext context) {
     final _transactionProvider = TransactionProvider();
+    final radius = Radius.circular(16);
     return Scaffold(
       appBar: AppBar(
         title: TabBar(
+            // indicator: ShapeDecoration(
+            //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topRight: radius, topLeft: radius)),
+            //     color: Colors.white10
+            // ),
           controller: tabController,
             tabs: const [
           // const Tab(text: "Transactions", icon: const MyProgressBar(label: "trans"),),
@@ -96,7 +101,7 @@ class TabHeaderWidget extends StatelessWidget {
                 children: [
                 Text(name),
                 label == "none" ? Container() : model.isPresent(label) ?
-                label == "Script" ? const Icon(Icons.check_rounded, color: Colors.greenAccent) :
+                label == "script" ? const Icon(Icons.check_rounded, color: Colors.greenAccent) :
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [

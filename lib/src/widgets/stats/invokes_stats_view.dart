@@ -34,12 +34,11 @@ class InvokesStatsView extends StatelessWidget {
               Expanded(
                 child: SingleChildScrollView(
                   scrollDirection: Axis.vertical,
-                  child: RichText(text: TextSpan(
+                  child: RichText(
+                    text: TextSpan(
+                      style: const TextStyle(fontSize: 16),
                       children:[
-                    LblGroup(label: "address", val: _trProvider.curAddr, newLine: true),
-                    LblGroup(label: "freeDucks", val: model.freeDucksCount.toString(), newLine: true),
-                    LblGroup(label: "stakedDucks", val: model.stakedDucksCount.toString(), newLine: true),
-                    const TextSpan(text: "Calls:\n", style: TextStyle(color: Colors.white, fontSize: 12)),
+                    const TextSpan(text: "Calls:\n", style: TextStyle(color: Colors.white, fontSize: 16)),
                     TextSpan(children: getCallsList(model.calls))
                   ]),),
                 )

@@ -41,8 +41,7 @@
     - free ducks count
     - staked ducks count
     - ducks in battle + mantle lvl (check how it change loading speed) Parse artefact dApp data (3PR87TwfWio6HVUScSaHGMnFYkGyaVdFeqT)
-    - ducklings count
-
+    - ducklings count ?
 
     // time sensitive data
    Spent:

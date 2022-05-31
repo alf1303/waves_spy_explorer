@@ -90,6 +90,7 @@ class TransactionProvider extends ChangeNotifier {
     await getAssets(curAddr);
     await getNft(address: curAddr);
     setDucksStatsData();
+    statsProvider.notifyAll();
     // await getNft(curAddr); //implement
     await getData(curAddr); //implement
     await getScript(curAddr); //implement
@@ -104,6 +105,7 @@ class TransactionProvider extends ChangeNotifier {
     aliases.clear();
     stakedDucksLoaded  = false;
     allTransactionsLoaded = false;
+
       //filter
     final filterProvider = FilterProvider();
     filterProvider.finalList.clear();
@@ -113,6 +115,9 @@ class TransactionProvider extends ChangeNotifier {
     nftProvider.nfts.clear();
     dataScriptProvider.data.clear();
     dataScriptProvider.script = "";
+
+    //stats
+    statsProvider.clearState();
   }
 
   Future<void> getAllTransactions() async{
@@ -216,12 +221,8 @@ class TransactionProvider extends ChangeNotifier {
       final Map<String, double> outAssetsIds = {};
       int type = tr["type"];
 
-      if (tr.containsKey("sender")) {
-        trAddressesMap[tr["sender"]] = getAddrName(tr['sender']);
-      }
-
-      tr.containsKey("dApp") ?
-      trAddressesMap[tr["dApp"]] = getAddrName(tr["dApp"]) : {};
+      tr.containsKey("sender") ? trAddressesMap[tr["sender"]] = getAddrName(tr['sender']) : {};
+      tr.containsKey("dApp") ? trAddressesMap[tr["dApp"]] = getAddrName(tr["dApp"]) : {};
 
       // transfer, massTransfer, burn
       if (type == 4 || type == 11 || type == 6) {
@@ -258,7 +259,6 @@ class TransactionProvider extends ChangeNotifier {
           }
           income ? inAssetsIds[assetId] = sum : outAssetsIds[assetId] = sum;
         }
-
       }
 
       // invokeScript
@@ -294,6 +294,7 @@ class TransactionProvider extends ChangeNotifier {
             }
           }
         }
+        collectDucksStats(tr);
       }
 
       // exchange
