@@ -261,6 +261,14 @@ class TransactionProvider extends ChangeNotifier {
         }
       }
 
+      // issue / reissue
+      if(type == 3 || type == 5) {
+        final String assetId = tr["assetId"] ?? "WAVES";
+        final double quantity = tr["quantity"];
+        transAssetsMap[assetId] = assetId == "WAVES" ? "WAVES" : "";
+        inAssetsIds[assetId] = quantity;
+      }
+
       // invokeScript
       if (type == 16) {
         List<dynamic> payment = tr["payment"];
@@ -468,7 +476,7 @@ class TransactionProvider extends ChangeNotifier {
       for (String e in assets.keys) {
         assets[e] = assetsGlobal.containsKey(e) ? assetsGlobal[e]!.name : "";
       }
-      tr["assetsNames"] = assets.values.join(",");
+      tr["assetsNames"] = assets.values.toList();
 
       //create in/out assets names strings
       final List<String> inNames = List.empty(growable: true);
@@ -479,8 +487,8 @@ class TransactionProvider extends ChangeNotifier {
       for(String el in tr["outAssetsIds"].keys) {
         outNames.add(assetsGlobal.containsKey(el) ? assetsGlobal[el]!.name : "");
       }
-      tr["inAssetsNames"] = inNames.join(",");
-      tr["outAssetsNames"] = outNames.join(",");
+      tr["inAssetsNames"] = inNames;
+      tr["outAssetsNames"] = outNames;
 
       //correcting decimals for price asset for exchange transactions
       if(tr["type"] == 7) {
@@ -552,14 +560,26 @@ class TransactionProvider extends ChangeNotifier {
       trToFilter.addAll(res);
     }
 
-    if(filterProvider.direction == "all") {
-      filteredTransactions = trToFilter.where((tr) => tr["assetsNames"].toLowerCase().contains(filterProvider.assetName.name.toLowerCase())).toList();
-    }
-    if(filterProvider.direction == "in") {
-      filteredTransactions = trToFilter.where((tr) => tr["inAssetsNames"].toLowerCase().contains(filterProvider.assetName.name.toLowerCase())).toList();
-    }
-    if(filterProvider.direction == "out") {
-      filteredTransactions = trToFilter.where((tr) => tr["outAssetsNames"].toLowerCase().contains(filterProvider.assetName.name.toLowerCase())).toList();
+    // if(filterProvider.direction == "all") {
+    //   filteredTransactions = trToFilter.where((tr) => tr["assetsNames"].toLowerCase().contains(filterProvider.assetName.name.toLowerCase())).toList();
+    // }
+    // if(filterProvider.direction == "in") {
+    //   filteredTransactions = trToFilter.where((tr) => tr["inAssetsNames"].toLowerCase().contains(filterProvider.assetName.name.toLowerCase())).toList();
+    // }
+    // if(filterProvider.direction == "out") {
+    //   filteredTransactions = trToFilter.where((tr) => tr["outAssetsNames"].toLowerCase().contains(filterProvider.assetName.name.toLowerCase())).toList();
+    // }
+
+    if (filterProvider.assetName.name.isNotEmpty) {
+      if(filterProvider.direction == "all") {
+        filteredTransactions = trToFilter.where((tr) => isInListOfStrings(tr["assetsIds"].keys.toList(), filterProvider.assetName.id)).toList();
+      }
+      if(filterProvider.direction == "in") {
+        filteredTransactions = trToFilter.where((tr) => isInListOfStrings(tr["inAssetsIds"].keys.toList(), filterProvider.assetName.id)).toList();
+      }
+      if(filterProvider.direction == "out") {
+        filteredTransactions = trToFilter.where((tr) => isInListOfStrings(tr["outAssetsIds"].keys.toList(), filterProvider.assetName.id)).toList();
+      }
     }
     filteredTransactions = filteredTransactions.toSet().toList();
     createInfo();
@@ -581,6 +601,15 @@ class TransactionProvider extends ChangeNotifier {
     final List<dynamic> filtered = res.where((ele) => ele["key"].contains(address) && ele["key"].contains("_farmingPower") && ele["value"] > 0).toList();
     final Map<String, int> ress = { for (var e in filtered) e["key"].split("_")[3] : e["value"] };
     return ress;
+  }
+
+  bool isInListOfStrings(List<String> list, String item) {
+    for (String el in list) {
+      if (el == item) {
+        return true;
+      }
+    }
+    return false;
   }
 }
 

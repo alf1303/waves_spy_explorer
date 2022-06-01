@@ -87,7 +87,7 @@ class FilterProvider extends ChangeNotifier{
           } else if(type == 7) {
             addNewEntryOrCombine(finalList, val, tr["sender"], "out");
           } else if(type == 6) {
-            addNewEntryOrCombine(finalList, val, "Burn, baby, burn", "out");
+            addNewEntryOrCombine(finalList, val, "${tr["sender"]}", "out");
           }
         }
       }
@@ -135,10 +135,20 @@ class FilterProvider extends ChangeNotifier{
   }
 
   void changeType(int val) {
-    if(fType.contains(val)) {
-      fType.remove(val);
+    if(val != 3) {
+      if(fType.contains(val)) {
+        fType.remove(val);
+      } else {
+        fType.add(val);
+      }
     } else {
-      fType.add(val);
+      if(fType.contains(val)) {
+        fType.remove(val); //3 - issue remove
+        fType.remove(5); // 5 - reissue remove
+      } else {
+        fType.add(val); // 3 - issue add
+        fType.add(5); // 5 - reissue add
+      }
     }
     notifyAll();
     _transactionProvider.filterTransactions();

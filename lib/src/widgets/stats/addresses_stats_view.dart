@@ -42,16 +42,19 @@ class _AddressesStatsViewState extends State<AddressesStatsView> {
             children: [
               Padding(
                   padding: const EdgeInsets.all(8),
-                  child: Row(
-                    children: [
-                      LabeledTextNoScroll("income: ", "${model.sumacum_in.toStringAsFixed(5)}, "),
-                      LabeledTextNoScroll("outcome: ", "${model.sumacum_out.toStringAsFixed(5)}, "),
-                      LabeledTextNoScroll("asset: ", "${model.assetName}, "),
-                      LabeledTextNoScroll("from: ", "${getFormattedDate(model.actualFrom)}, "),
-                      LabeledTextNoScroll("to: ", "${getFormattedDate(model.actualTo)}, "),
-                      LabeledTextNoScroll("addr: ", "${_trProvider.curAddr}, ", "${getAddrName(_trProvider.curAddr)}"),
-                      LabeledTextNoScroll("direction: ", model.direction.toUpperCase())
-                    ],
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        LabeledTextNoScroll("income: ", "${model.sumacum_in.toStringAsFixed(5)}, "),
+                        LabeledTextNoScroll("outcome: ", "${model.sumacum_out.toStringAsFixed(5)}, "),
+                        LabeledTextNoScroll("asset: ", "${model.assetName}, "),
+                        LabeledTextNoScroll("from: ", "${getFormattedDate(model.actualFrom)}, "),
+                        LabeledTextNoScroll("to: ", "${getFormattedDate(model.actualTo)}, "),
+                        LabeledTextNoScroll("addr: ", "${_trProvider.curAddr}, ", "${getAddrName(_trProvider.curAddr)}"),
+                        LabeledTextNoScroll("direction: ", model.direction.toUpperCase())
+                      ],
+                    ),
                   )),
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 3.0),

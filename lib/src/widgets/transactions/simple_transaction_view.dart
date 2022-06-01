@@ -62,8 +62,10 @@ class _SimpleTransViewState extends State<SimpleTransView> with AutomaticKeepAli
       case "alias":
         break;
       case "issue":
+        header = issueHeader(p);
         break;
       case "reissue":
+        header = issueHeader(p);
         break;
       case "setAssetScript":
         break;
@@ -99,14 +101,13 @@ class _SimpleTransViewState extends State<SimpleTransView> with AutomaticKeepAli
               ),
 
               Expanded(
-                child: SizedBox(width: 350, child:
-                widget.td["type"] == 16 ? invokeHeader(p) :
-                  widget.td["type"] == 4 ? transferHeader(p) :
-                      widget.td["type"] == 11 ? massTransferHeader(p) :
-                          Container(),
-                ),
+                child: widget.td["type"] == 16 ? SizedBox(width: 350, child: invokeHeader(p)) :
+                  widget.td["type"] == 4 ? SizedBox(width: 350, child: transferHeader(p)) :
+                      widget.td["type"] == 11 ? SizedBox(width: 350, child: massTransferHeader(p)) :
+                          widget.td["type"] == 3 || widget.td["type"] == 5 ? issueHeader(p) :
+                            Container(),
               ),
-              Expanded(
+              widget.td["type"] == 3 || widget.td["type"] == 5 ? Container() : Expanded(
                 child: SizedBox(child:
                 !isCurrentAddr(dApp) ?
                 Row(
@@ -224,6 +225,28 @@ Widget massTransferHeader(Map<String, dynamic> p) {
       children: [
         SizedBox(width: 150, child: Container(),),
         Expanded(child: SizedBox(width: 740, child: LabeledText(label: lbl, value: p["anotherAddr"], name: p["name"], colr: massTransferColor, addrLink: true),)),
+      ],
+    ),
+  );
+}
+
+Widget issueHeader(Map<String, dynamic> p) {
+  String lbl = "quantity: ";
+  Asset? ass = getAssetFromLoaded(p["assetId"]);
+  int decimals = 0;
+  String name = "";
+
+  if(ass != null) {
+    decimals = ass.decimals;
+    name = ass.name;
+  }
+  double quantity = p["quantity"]/pow(10, decimals);
+  return Padding(
+    padding: const EdgeInsets.only(right: 8.0),
+    child: Row(
+      children: [
+        // SizedBox(width: 150, child: Container(),),
+        Expanded(child: SizedBox(child: LabeledText(label: lbl, value: "${quantity.toString()} $name (${p["assetId"]})", colr: Colors.white),)),
       ],
     ),
   );

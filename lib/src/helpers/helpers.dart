@@ -290,6 +290,16 @@ parseTransactionType(Map<String, dynamic> td)  {
             }
             p["header"] = "massTransfer";
             break;
+        case 3:
+            p["header"] = "issue";
+            p["quantity"] = td["quantity"];
+            p["assetId"] = td["assetId"];
+            break;
+        case 5:
+            p["header"] = "reissue";
+            p["quantity"] = td["quantity"];
+            p["assetId"] = td["assetId"];
+            break;
         case 6:
             final assetId = td["assetId"] ?? "WAVES";
             payment[assetId] = td["amount"];
@@ -375,7 +385,8 @@ Future<String> fetchAddrByAlias(String alias) async{
     if (resp.statusCode == 200) {
         result = jsonDecode(resp.body)["address"];
     } else {
-        showSnackError("Cannot fetch address by alias: ${resp.body}");
+
+        showSnackError("Cannot fetch address by alias: ${resp.body}, $alias");
         print("Cannot fetch address by alias: ${resp.body}");
     }
     return result;

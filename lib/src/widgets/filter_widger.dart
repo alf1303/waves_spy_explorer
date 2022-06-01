@@ -62,6 +62,8 @@ class FilterWidget extends StatelessWidget {
                         CustomGroupRadio(label: "Mass Payment", value: 11, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor),
                         CustomGroupRadio(label: "Invoke", value: 16, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor),
                         CustomGroupRadio(label: "Exchange", value: 7, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor),
+                        CustomGroupRadio(label: "Issue", value: 3, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor),
+                        CustomGroupRadio(label: "Burn", value: 6, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor),
                         IconButton(onPressed: clearType, icon: const Icon(Icons.close,), tooltip: "clear type",)
                       ],
                     ),
