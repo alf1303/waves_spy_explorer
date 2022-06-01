@@ -67,7 +67,12 @@ const dAppsDict = {
 "3PKmLiGEfqLWMC1H9xhzqvAZKUXfFm8uoeg": "WD - Baby Duckling",
 "3PEktVux2RhchSN63DsDo4b4mz4QqzKSeDv": "WD - Incubator",
   "3PCC6fVHNa6289DTDmcUo3RuLaFmteZZsmQ" : "WD - Rebirth",
-  "3PR87TwfWio6HVUScSaHGMnFYkGyaVdFeqT": "WD - Artifacts",
+  "3PR87TwfWio6HVUScSaHGMnFYkGyaVdFeqT": "WD - Game DAPP",
+  "3P8ejTkfRpz9WqCwCuihesNXU5k3zmFFfVe": "WD - Referal",
+  "3P5E9xamcWoymiqLx8ZdmR7o4fJSRMGp1WR": "WD - Lootbox",
+  "3PPRqZYVaBUgTN4zGUFyYEcKLbqjVuoDZFP": "WD - Community dapp",
+
+  "3P4QfR6fewW85epUg68fjgeFt3XBVpgLxmd": "MetaRace",
 "3PEjHv3JGjcWNpYEEkif2w8NXV4kbhnoGgu": "WEX Matcher",
 "3PGFHzVGT4NTigwCKP1NcwoXkodVZwvBuuU": "Puzzle Aggregator",
 "3PPG6zVNrMKnkqMthk5i2oHWQ5SHs9ertBM": "Team Rewards",
@@ -159,6 +164,18 @@ const dAppsDict = {
 
   "3PPAAPAcT3rUV6LXfxj4e3MJ5wgxi37pDAM" : "abuser_Puz_1"
 };
+
+// "INCUBATOR_DAPP_ADDRESS": "3PEktVux2RhchSN63DsDo4b4mz4QqzKSeDv",
+// "AUCTION_DAPP_ADDRESS": "3PEBtiSVLrqyYxGd76vXKu8FFWWsD1c5uYG",
+// "BREEDER_DAPP_ADDRESS": "3PDVuU45H7Eh5dmtNbnRNRStGwULA7NY6Hb",
+// "FARMING_DAPP_ADDRESS": "3PAETTtuW7aSiyKtn9GuML3RgtV1xdq1mQW",
+// "REFERRAL_DAPP_ADDRESS": "3P8ejTkfRpz9WqCwCuihesNXU5k3zmFFfVe",
+// "REBIRTH_DAPP_ADDRESS": "3PCC6fVHNa6289DTDmcUo3RuLaFmteZZsmQ",
+// "BABY_DUCKS_DAPP_ADDRESS": "3PKmLiGEfqLWMC1H9xhzqvAZKUXfFm8uoeg",
+// "METARACE_DAPP_ADDRESS": "3P4QfR6fewW85epUg68fjgeFt3XBVpgLxmd",
+// "LOOT_BOXES_DAPP_ADDRESS": "3P5E9xamcWoymiqLx8ZdmR7o4fJSRMGp1WR",
+// "COMMUNITY_DUCK_DAPP_ADDRESS": "3PPRqZYVaBUgTN4zGUFyYEcKLbqjVuoDZFP",
+// "GAME_DAPP_ADDRESS": "3PR87TwfWio6HVUScSaHGMnFYkGyaVdFeqT"
 
 const typeDict = {
   3: "Issue",

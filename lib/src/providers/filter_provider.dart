@@ -54,11 +54,12 @@ class FilterProvider extends ChangeNotifier{
       sumacum_in = 0;
       sumacum_out = 0;
       String assId = assetName.id;
+      print("CreateFilterDAtaStrings decimals: ${assetName.decimals}");
       for (var tr in _transactionProvider.filteredTransactions) {
         int type = tr["type"];
         if(tr["inAssetsIds"].containsKey(assetName.id)) {
           // assId = tr["inAssetsIds"].keys.toList()[0];
-          int decimals = assetsGlobal[assId] == null ? 1 : assetsGlobal[assId]!.decimals;
+          int decimals = assetName.decimals;
           double val = tr["inAssetsIds"][assId]/pow(10, decimals);
           sumacum_in += tr["inAssetsIds"][assId]/pow(10, decimals);
           if(type == 16 && isCurrentAddr(tr["dApp"])) {
@@ -82,7 +83,7 @@ class FilterProvider extends ChangeNotifier{
             addNewEntryOrCombine(finalList, val, tr["recipient"], "out");
           } else if(type == 11) {
             for(var transfer in tr["transfers"]) {
-              addNewEntryOrCombine(finalList, transfer["amount"], transfer["recipient"], "out");
+              addNewEntryOrCombine(finalList, transfer["amount"]/pow(10, decimals), transfer["recipient"], "out");
             }
           } else if(type == 7) {
             addNewEntryOrCombine(finalList, val, tr["sender"], "out");
