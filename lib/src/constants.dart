@@ -26,6 +26,7 @@ const dAppsDict = {
 "3PAviuHPCX8fD7M5fGpFTQZb4HchWCJb3ct": "PUZZLE WWW_POOL",
 "3PLiXyywNThdvf3vVEUxwc7TJTucjZvuegh": "PUZZLE BTC_ETH_POOL",
 "3PEStCRPQuW3phthTtQ5upGeb4WZ47kssyM": "PUZZLE SNSBT_POOL",
+  "3PQnzp5YogBvJmwPnvSWoargPMcd1R4GLa8": "PUZZLE FORBES POOL",
   "3P4v7QaMk6us7PdxSuoR5LmZmemv5ruD6oj": "SWOP.FI Router",
 "3P3Z8Gn665CJr14bTLv4d5USDBUQCTeeCaT": "SWOP.FI RACE/EGG",
 "3PHTDdjz8Kb5JcAkhzfR57MCUYoe73pyxxK": "SWOP.FI WEST/EAST",
@@ -71,6 +72,7 @@ const dAppsDict = {
   "3P8ejTkfRpz9WqCwCuihesNXU5k3zmFFfVe": "WD - Referal",
   "3P5E9xamcWoymiqLx8ZdmR7o4fJSRMGp1WR": "WD - Lootbox",
   "3PPRqZYVaBUgTN4zGUFyYEcKLbqjVuoDZFP": "WD - Community dapp",
+  "3PLkyPruTTLt2JfeHekaz7vHG2CWyBnwXDM": "Egg Treasury"
 
   "3P4QfR6fewW85epUg68fjgeFt3XBVpgLxmd": "MetaRace",
 "3PEjHv3JGjcWNpYEEkif2w8NXV4kbhnoGgu": "WEX Matcher",
@@ -162,7 +164,11 @@ const dAppsDict = {
 
   "3P8JkeL2hVmp957Se45kaxXqXkggZ1SDNZd" : "seller1",
 
-  "3PPAAPAcT3rUV6LXfxj4e3MJ5wgxi37pDAM" : "abuser_Puz_1"
+  "3PPAAPAcT3rUV6LXfxj4e3MJ5wgxi37pDAM" : "abuser_Puz_1",
+
+  "3PMcMiMEs6w56NRGacksXtFG5zS7doE9fpL": "Forbes owner(Vova)",
+  "3PF8pKC8CdmW9sEJUxQVSfezYRSJeThoNR3": "Pluto issuer",
+  "3P9VVzzkP1Cfsk3LtTeuUaQqUt5D7sLthLe": "Pluto dApp"
 };
 
 // "INCUBATOR_DAPP_ADDRESS": "3PEktVux2RhchSN63DsDo4b4mz4QqzKSeDv",
