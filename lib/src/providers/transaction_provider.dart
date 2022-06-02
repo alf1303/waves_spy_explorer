@@ -73,6 +73,9 @@ class TransactionProvider extends ChangeNotifier {
   }
 
   Future<void> setCurrAddr(String address) async {
+    if(dAppsDict.isEmpty) {
+      dAppsDict.addAll(publicAddr);
+    }
     curAddr = address;
     final aliasReg =  RegExp(r'^[a-z0-9._\-@]+$');
     if(address.isNotEmpty && aliasReg.hasMatch(address)) {

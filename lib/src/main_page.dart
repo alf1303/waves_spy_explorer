@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:waves_spy/src/constants.dart';
 import 'package:waves_spy/src/providers/transaction_provider.dart';
 import 'package:waves_spy/src/widgets/filter_widger.dart';
 import 'package:waves_spy/src/widgets/input_widget.dart';
@@ -33,7 +34,9 @@ class MainPage extends StatelessWidget {
                   ],
                 ),
               ),
-              Text(version, style: TextStyle(fontSize: 10),)
+              GestureDetector(
+                  onLongPress: addPrvtAddr,
+                  child: Text(version, style: TextStyle(fontSize: 10),))
             ],
           ),
 

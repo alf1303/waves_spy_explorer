@@ -408,6 +408,21 @@ showSnackError(String msg) {
     ));
 }
 
+showSnackMsg(String msg) {
+    messengerKey.currentState?.showSnackBar(SnackBar(
+        // backgroundColor: Colors.red.shade200,
+        content: Text(msg),
+        duration: const Duration(seconds: 7),
+        action: SnackBarAction(
+            textColor: Colors.black,
+            label: 'CLOSE',
+            onPressed: () {
+
+            },
+        ),
+    ));
+}
+
 bool isCurrentAddr(String value) {
     bool alias = false;
     bool addr = false;
