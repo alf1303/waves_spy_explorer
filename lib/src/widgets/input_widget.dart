@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:waves_spy/src/helpers/helpers.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/services.dart';
@@ -32,6 +36,21 @@ class _InputWidgetState extends State<InputWidget> {
   }
 
   onSearch() async{
+    https://drive.google.com/uc?id=1CeaTZm40SEk_jpFooVLRLmYTrqAwV715&export=download
+    // var resp = await http.get(Uri.parse("https://gist.githubusercontent.com/alf1303/79ee7fe6a760dad82c9049a351d1cbab/raw/da3f52844c7003f22a4f340926f2197ec4108d9d/gistfile1.txt"));
+    // Map<String, String> requestHeaders = {
+    //   'Content-type': 'application/json',
+    //   'Accept': 'application/json'
+    // };
+    // var resp = await http.get(Uri.parse("https://gist.githubusercontent.com/alf1303/79ee7fe6a760dad82c9049a351d1cbab/raw/"));
+    // String res = resp.body;
+    // List<String> eles = res.split(",\n");
+    // for(String el in eles) {
+    //   if(!el.startsWith(" ")) {
+    //     showSnackError(el);
+    //     break;
+    //   }
+    // }
     await _transactionProvider.setCurrAddr(_inputController.text.trim());
   }
 

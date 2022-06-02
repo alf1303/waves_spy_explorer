@@ -11,7 +11,9 @@ const nodeUrl = publicNode;
 
 const eggId = "C1iWsKGqLwjHUndiQ7iXpdmPum9PeCDFfyXBdJJosDRS";
 
-const dAppsDict = {
+Map<String, String> dAppsDict = {};
+
+const dAppsDictLocal = {
 "3P5UKXpQbom7GB2WGdPG5yGQPeQQuM3hFmw": "Keeper Aggregator",
   "3PKUxbZaSYfsR7wu2HaAgiirHYwAMupDrYW" : "Puzzle Eagles",
 "3PEZe3Z2FqaVbMTjWJUpnQGxhWh2JRptujM": "PUZZLE WW_POOL",
@@ -72,7 +74,7 @@ const dAppsDict = {
   "3P8ejTkfRpz9WqCwCuihesNXU5k3zmFFfVe": "WD - Referal",
   "3P5E9xamcWoymiqLx8ZdmR7o4fJSRMGp1WR": "WD - Lootbox",
   "3PPRqZYVaBUgTN4zGUFyYEcKLbqjVuoDZFP": "WD - Community dapp",
-  "3PLkyPruTTLt2JfeHekaz7vHG2CWyBnwXDM": "Egg Treasury"
+  "3PLkyPruTTLt2JfeHekaz7vHG2CWyBnwXDM": "Egg Treasury",
 
   "3P4QfR6fewW85epUg68fjgeFt3XBVpgLxmd": "MetaRace",
 "3PEjHv3JGjcWNpYEEkif2w8NXV4kbhnoGgu": "WEX Matcher",
@@ -148,23 +150,23 @@ const dAppsDict = {
 
 "3P9LTA2dBPNZfUhgnE7na9EyDeuqYdRSqTQ": "Dima Ivanov Main",
 "3PMyGoiQZgNQ8jWn4eKR6uZzSkRoWjdBdgW": "Dima Ivanov 2",
-  "3PPiRS1NfxRAdagsc2gS6F6GZeWadf8Ez1p ": "Dima Ivanov 3",
+"3PPiRS1NfxRAdagsc2gS6F6GZeWadf8Ez1p ": "Dima Ivanov 3",
 "3P3188GUzTypcP2hKNe7Ys5X1S9yoNYjCU3": "Dasha Rewards",
 "3PD8eT53J3LcUM5HLnHMcYNAuLEKrQgC4bR": "Buy the Dip PUZzle",
 "3P3EgRSuPaavrVx8AavNVrTMLqtyPsNwPiy": "Dima @Kript_on",
-  "3PBwHmugtD1QXqGBzgQRnUdpGAUuE3VqTt6": "Waves Ducks Memes?",
-  "3PPrR4GNrWdJibYCxezNXxDRkghJV5RVRbW" : "Ckolot",
-  "3P6cgpyoErurDW3EdgUqUKuhFHza4xiFzpD" : "Stalin",
-  "3PLUS2LnNbseGKcsQ68UVNSf1WxomDwpTAD": "Brox",
-  "3PEbL2T4FZSqHJJ67P41zW92E52K2t9GBAv": "@Steph091655 duckl_abu",
+"3PBwHmugtD1QXqGBzgQRnUdpGAUuE3VqTt6": "Waves Ducks Memes?",
+"3PPrR4GNrWdJibYCxezNXxDRkghJV5RVRbW" : "Ckolot",
+"3P6cgpyoErurDW3EdgUqUKuhFHza4xiFzpD" : "Stalin",
+"3PLUS2LnNbseGKcsQ68UVNSf1WxomDwpTAD": "Brox",
+"3PEbL2T4FZSqHJJ67P41zW92E52K2t9GBAv": "@Steph091655 duckl_abu",
 
-  "3PAtzncjJGWRpCtkR55wAzcfZ9fubMeA4JU": "Roma",
-  "3PMKAL4cd77onkYuuU35115Wov1sLMEcFsv": "Roma_Puz",
-  "3P55AbxhmLtLztfPjLzGKd2TL3tfqCTHQdF": "Roma_WaveSeed",
+"3PAtzncjJGWRpCtkR55wAzcfZ9fubMeA4JU": "Roma",
+"3PMKAL4cd77onkYuuU35115Wov1sLMEcFsv": "Roma_Puz",
+"3P55AbxhmLtLztfPjLzGKd2TL3tfqCTHQdF": "Roma_WaveSeed",
 
-  "3P8JkeL2hVmp957Se45kaxXqXkggZ1SDNZd" : "seller1",
+"3P8JkeL2hVmp957Se45kaxXqXkggZ1SDNZd" : "seller1",
 
-  "3PPAAPAcT3rUV6LXfxj4e3MJ5wgxi37pDAM" : "abuser_Puz_1",
+"3PPAAPAcT3rUV6LXfxj4e3MJ5wgxi37pDAM" : "abuser_Puz_1",
 
   "3PMcMiMEs6w56NRGacksXtFG5zS7doE9fpL": "Forbes owner(Vova)",
   "3PF8pKC8CdmW9sEJUxQVSfezYRSJeThoNR3": "Pluto issuer",
