@@ -114,7 +114,7 @@ Widget ResultWidget(AddressesStatsItem? it, String assName) {
             return Row(
               children: [
                 // SizedBox(width: 350, child: LinkToAddress(val: val, label: val, color: Colors.white,)),
-                SizedBox(width: 350, child: LabeledText(label: "view: ", value: val, addrLink: true)),
+                SizedBox(width: 350, child: LabeledText(label: "view: ", value: val, addrLink: true, colr: it.tradeAddrCount >= 1 ? Colors.yellow : null)),
                 GestureDetector(
                   onTap: () {
                     setStat(() => hidden = !hidden);

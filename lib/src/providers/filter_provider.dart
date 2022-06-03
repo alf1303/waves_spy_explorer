@@ -57,6 +57,7 @@ class FilterProvider extends ChangeNotifier{
       String assId = assetName.id;
       print("CreateFilterDAtaStrings decimals: ${assetName.decimals}");
       for (var tr in _transactionProvider.filteredTransactions) {
+        var additional = tr["additional"];
         int type = tr["type"];
         if(tr["inAssetsIds"].containsKey(assetName.id)) {
           // assId = tr["inAssetsIds"].keys.toList()[0];
@@ -64,11 +65,11 @@ class FilterProvider extends ChangeNotifier{
           double val = tr["inAssetsIds"][assId]/pow(10, decimals);
           sumacum_in += tr["inAssetsIds"][assId]/pow(10, decimals);
           if(type == 16 && isCurrentAddr(tr["dApp"])) {
-            addNewEntryOrCombine(finalList, val, tr["sender"], "in");
+            addNewEntryOrCombine(finalList, val, tr["sender"], "in", additional["tradeAddrCount"]);
           } else if(type == 16) {
-            addNewEntryOrCombine(finalList, val, tr["dApp"], "in");
+            addNewEntryOrCombine(finalList, val, tr["dApp"], "in", additional["tradeAddrCount"]);
           } else {
-            addNewEntryOrCombine(finalList, val, tr["sender"], "in");
+            addNewEntryOrCombine(finalList, val, tr["sender"], "in", additional["tradeAddrCount"]);
           }
         }
         if(tr["outAssetsIds"].containsKey(assetName.id)) {
@@ -77,19 +78,19 @@ class FilterProvider extends ChangeNotifier{
           double val = tr["outAssetsIds"][assId]/pow(10, decimals);
           sumacum_out += val;
           if (type == 16 && isCurrentAddr(tr["dApp"])) {
-            addNewEntryOrCombine(finalList, val, tr["sender"], "out");
+            addNewEntryOrCombine(finalList, val, tr["sender"], "out", additional["tradeAddrCount"]);
           } else if(type == 16) {
-            addNewEntryOrCombine(finalList, val, tr["dApp"], "out");
+            addNewEntryOrCombine(finalList, val, tr["dApp"], "out", additional["tradeAddrCount"]);
           } else if(type == 4) {
-            addNewEntryOrCombine(finalList, val, tr["recipient"], "out");
+            addNewEntryOrCombine(finalList, val, tr["recipient"], "out", additional["tradeAddrCount"]);
           } else if(type == 11) {
             for(var transfer in tr["transfers"]) {
-              addNewEntryOrCombine(finalList, transfer["amount"]/pow(10, decimals), transfer["recipient"], "out");
+              addNewEntryOrCombine(finalList, transfer["amount"]/pow(10, decimals), transfer["recipient"], "out", additional["tradeAddrCount"]);
             }
           } else if(type == 7) {
-            addNewEntryOrCombine(finalList, val, tr["sender"], "out");
+            addNewEntryOrCombine(finalList, val, tr["sender"], "out", additional["tradeAddrCount"]);
           } else if(type == 6) {
-            addNewEntryOrCombine(finalList, val, "${tr["sender"]}", "out");
+            addNewEntryOrCombine(finalList, val, "${tr["sender"]}", "out", additional["tradeAddrCount"]);
           }
         }
       }
@@ -242,7 +243,7 @@ class FilterProvider extends ChangeNotifier{
     notifyAll();
   }
 
-  void addNewEntryOrCombine(Map<String, AddressesStatsItem> map, double val, String addr, String dir) {
+  void addNewEntryOrCombine(Map<String, AddressesStatsItem> map, double val, String addr, String dir, int tradeAddrCount) {
     // print(map);
     // print(val);
     // print(addr);
@@ -256,11 +257,11 @@ class FilterProvider extends ChangeNotifier{
       }
     } else {
       if (dir == "in") {
-        AddressesStatsItem it = AddressesStatsItem.income(addr, val, getAddrName(addr));
+        AddressesStatsItem it = AddressesStatsItem.income(addr, val, getAddrName(addr), tradeAddrCount);
         map[addr] = it;
       }
       if (dir == "out") {
-        AddressesStatsItem it = AddressesStatsItem.outcome(addr, val, getAddrName(addr));
+        AddressesStatsItem it = AddressesStatsItem.outcome(addr, val, getAddrName(addr), tradeAddrCount);
         map[addr] = it;
       }
     }
