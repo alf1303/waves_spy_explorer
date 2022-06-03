@@ -162,7 +162,11 @@ const publicAddr = {
   "3PDWpgk1ycioUwtzjoXKxUqYTzAgUG2mf8x": "Monster Presale",
   "3PMcMiMEs6w56NRGacksXtFG5zS7doE9fpL": "Forbes owner(Vova)",
   "3PF8pKC8CdmW9sEJUxQVSfezYRSJeThoNR3": "Pluto issuer",
-  "3P9VVzzkP1Cfsk3LtTeuUaQqUt5D7sLthLe": "Pluto dApp"
+  "3P9VVzzkP1Cfsk3LtTeuUaQqUt5D7sLthLe": "Pluto dApp",
+
+  //// Duck Whales
+  "3PJkFJFVZ31WAbbdDPnazhwzjZ4zMKWfNPc": "Big Duck 1",
+  "3PLi9Ppb1CTU2xrHiFS1NsRkgiCwPLM8dXf": "Big Duck 2",
 };
 
 const privateAddr = {
@@ -200,9 +204,6 @@ const privateAddr = {
 // "COMMUNITY_DUCK_DAPP_ADDRESS": "3PPRqZYVaBUgTN4zGUFyYEcKLbqjVuoDZFP",
 // "GAME_DAPP_ADDRESS": "3PR87TwfWio6HVUScSaHGMnFYkGyaVdFeqT"
 
-final traders = [
-  "3P4WeEzocs8YyRsnuNbfPRL8FjA25g56NaJ", "3P64JH6YarF1xuuCiTG9qhv6AsjZo8bJ8sn", "3P7NRvEYRQWmD7fXwzERBVZhUw34NBTBcbs", "3P3qivFhJ5tJsDW2pHSDscub9qM6g9K8ZoR", "3PEYUFu1w599DTLe94Ckc2L94ZGzuAD2Gk7", "3PFXo72SnyjVrtHfFA1CgvfwEwrMB4K3DuH", "3PDpM2XtHswyZjQV3XKGtc1xJY1dDkRuJN6", "3PJqQqjkwJm2DnYdFq6vfaC5ckaZfrMN2dj", "3PEmLd8DcCGBR6hj7p5HgkgXHzE6T3KekDz", "3PPg7FVbdq7QDCf5d8R3kJYznf7Mg5CPCPG", "3P8K3jvL9UhRSHNdT39UkgyiW69D7z3jxa9", "3PMWYHburotvwg4hibKjjziRoN8x1Xe8v5Q", "3P6yomFfeVLjcFd9ooQLNi82FtFuTTvTntM", "3PGQxg2RwyeLg42qqoEw6SToeQhPU2unXTp", "3P9jjcb6y5DNqRdieVF4rHYzAg1rrC1SAtG", "3P2mjM2k8awB3azoTiwDrkBoYbyr63Jrn4m", "3PAhTrTrBvtGE9RbRfc3Na4USfLGouYtUSv", "3P8YEQdQ86zdrfmn8zzooBprFcMHWCrLfPv", "3PF6VUvCQKrKM2SXSFXYW7DQ2ZFJyr6EPiV", "3PFt8vi8QgYq5oYgnMHwfdzTTtWLf4UuN8P", "3PFh4rYBXsiQ5GuuaiBKTiJkuG9rRgciENu", "3PHdV8gHyYhFU76NvSjk7aH1PbQ7MWs7nSn", "3PKBMZFrAtVxtm3jxDjvEcJjTRcySTsiFyX", "3P7DsecXBFUjp6TKjDzL51rtDQa14o8AoCF", "3PB9o66btpXwrcfJdMuVsYUuQS4y1xCGMyH", "3PHT5P8pyyMPB3EaLYC1wHXhXjGibZmk1B9", "3PGggyGkBEPLBuNzMBfVDeokPzFBGdSTgxz", "3P2UEFxJ7Xu7161CfL5mLWDZ29rfbcpLK1b", "3P89ChbLG8N8DRsipEf8VpaH3rDDmQhDqnN", "3PL2RiNXUuS4qxnHzKZSCqBJH7Eoo5YogHn", "3P9AGn6rzZv9UdxAY7ctfaCLCB8kTfVNhZ4", "3PA7FiHr9X4xaymgzn6g8C2ZzgtfFxNapgg", "3P1x13avy8wTzgkiMxLNHqYWDZyM3xGSMgW", "3P9VUztP6gQWyaxegxeCMdvUki1muaDtRft", "3PCtBcYgCcYLpNrZ2jsZyZdTod9HvxzgVLk", "3PQhNv5efxiVXR3YWcD8vaAyCMXXiHdhb6N", "3PHNmArcPqAAxMTRu5vEJarbz6xtMDq79TW", "3PKe8pT2ADGsweA5XrHRM2RvwD9pnSBxbLb", "3PQPa9JTStxp1CoUVBhFd21Je6jPWW5BA61", "3PLR2Y35DYLo6zfU4J1i1RGL1xukR7XUhvM", "3PNx49DYvoQimpc7dFpiofg2cg3sn1eB31y", "3PDJXBRcDW5TmkPp1pHSdDSt1VadiUZsDVP", "3P5xcvB4E6ukGE9WJksWhxf3eNFSXduAL8W", "3PCVGXmZFbhwsZVsUSysN7dwfn6SLG2uuTt", "3PP7KDyg5rBgVvapWEQzdt4HJqNWh6wTQYy", "3PCURzB9LoJQQt1his2x1d2UL5sQKzyER8m", "3P2qLDBHBGwyRmhogxHJbJ49gUmy8SBNrfn", "3P421F48cWYtr1m9VcM8ZMzkiVRawPm7Ecz", "3P7Dfa9Si15mW913WhhNs3KumwZywqNeJwD", "3P4xbcuC9CeK3YHbxzh6AEpBDfKEunHuzis", "3P6UXXKf6cZiiNHyaMoowgo7wDbmwT432e6", "3PNQJg6r8caKeeQGfxCD4czWmsykeEoqAK3", "3P81ruZWwpt7vNRmoDQEUQmVMwKJEXZjUo6", "3P9qNR31N7pPCqbxHgNqNGe9fCdtF5u6h7u", "3PH2Agc6NbLs3nekeUDtvHrMiSAnyC9H2t9", "3P82NnsN3sVUBy6oDChSFgTRDPRMgHYH7Pb", "3P9eYoKGtrUQUWbymVeuebGFiRHUEdraxxy", "3PGiFjDyDFX3FLyTPYSCARgaKu7S4j1Nw6m", "3PNng5hjYMTBHJxPR8ERL3rwqx9LCCyocNb", "3P3aENGZPFNqyAz9n5n8L8Hvt1Ev9aTwTBG"
-];
 
 const typeDict = {
   3: "Issue",
@@ -225,3 +226,74 @@ const typeDict = {
 const priorityThree = ["WAVES", "USDT", "USD-N", "USDC", "Puzzle", "Duck Egg"];
 const priorityTwo = ["TEAM DUXPLORER", "TEAM EGGPOINT", "TEAM EGGSEGGS", "TEAM FOMO", "TEAM LATAM", "TEAM MATH", "TEAM MUNDOCRYPTO", "TEAM TURTLE", "TEM CGU", "TEAM ENDO", "TEAM FORK", "TEAM IDO", "TEAM KOLKHOZ", "TEAM MARVIN", "TEAM STREET"];
 const priorityOne = ["VIRES", "Waves.Exchange", "WBTC", "WETH", "SWOP", "NSBT", "sNSBT"];
+
+final traders = [
+  "3PCVGXmZFbhwsZVsUSysN7dwfn6SLG2uuTt",
+  "3PDJXBRcDW5TmkPp1pHSdDSt1VadiUZsDVP",
+  "3PBfLGtkwhiKvYYoGohD8UAkZew7VMrfjKU",
+  "3PA7FiHr9X4xaymgzn6g8C2ZzgtfFxNapgg",
+  "3PNng5hjYMTBHJxPR8ERL3rwqx9LCCyocNb",
+  "3PL2RiNXUuS4qxnHzKZSCqBJH7Eoo5YogHn",
+  "3PMDzy3JvqQ7WJjL4yhDf7L4aAjWPkYmucb",
+  "3P3qivFhJ5tJsDW2pHSDscub9qM6g9K8ZoR",
+  "3PCidnSnVeUHgquem8LdLm9rPLMQiba3h6f",
+  "3PLR2Y35DYLo6zfU4J1i1RGL1xukR7XUhvM",
+  "3P9jjcb6y5DNqRdieVF4rHYzAg1rrC1SAtG",
+  "3PHNmArcPqAAxMTRu5vEJarbz6xtMDq79TW",
+  "3P2qLDBHBGwyRmhogxHJbJ49gUmy8SBNrfn",
+  "3PNQJg6r8caKeeQGfxCD4czWmsykeEoqAK3",
+  "3PCtBcYgCcYLpNrZ2jsZyZdTod9HvxzgVLk",
+  "3PHdV8gHyYhFU76NvSjk7aH1PbQ7MWs7nSn",
+  "3P82NnsN3sVUBy6oDChSFgTRDPRMgHYH7Pb",
+  "3PJRWBS2qXLe5Lm8CrFHh6F1nKJazFgyD6S",
+  "3PQPa9JTStxp1CoUVBhFd21Je6jPWW5BA61",
+  "3PPg7FVbdq7QDCf5d8R3kJYznf7Mg5CPCPG",
+  "3P6yomFfeVLjcFd9ooQLNi82FtFuTTvTntM",
+  "3P6UXXKf6cZiiNHyaMoowgo7wDbmwT432e6",
+  "3PGggyGkBEPLBuNzMBfVDeokPzFBGdSTgxz",
+  "3PDpM2XtHswyZjQV3XKGtc1xJY1dDkRuJN6",
+  "3P2UEFxJ7Xu7161CfL5mLWDZ29rfbcpLK1b",
+  "3PEYUFu1w599DTLe94Ckc2L94ZGzuAD2Gk7",
+  "3P4WeEzocs8YyRsnuNbfPRL8FjA25g56NaJ",
+  "3P9qNR31N7pPCqbxHgNqNGe9fCdtF5u6h7u",
+  "3PH2Agc6NbLs3nekeUDtvHrMiSAnyC9H2t9",
+  "3PF6VUvCQKrKM2SXSFXYW7DQ2ZFJyr6EPiV",
+  "3P5xcvB4E6ukGE9WJksWhxf3eNFSXduAL8W",
+  "3PKBMZFrAtVxtm3jxDjvEcJjTRcySTsiFyX",
+  "3P4xbcuC9CeK3YHbxzh6AEpBDfKEunHuzis",
+  "3P1x13avy8wTzgkiMxLNHqYWDZyM3xGSMgW",
+  "3P421F48cWYtr1m9VcM8ZMzkiVRawPm7Ecz",
+  "3PCURzB9LoJQQt1his2x1d2UL5sQKzyER8m",
+  "3PMWYHburotvwg4hibKjjziRoN8x1Xe8v5Q",
+  "3PNx49DYvoQimpc7dFpiofg2cg3sn1eB31y",
+  "3P9AGn6rzZv9UdxAY7ctfaCLCB8kTfVNhZ4",
+  "3P9VUztP6gQWyaxegxeCMdvUki1muaDtRft",
+  "3P81ruZWwpt7vNRmoDQEUQmVMwKJEXZjUo6",
+  "3P89ChbLG8N8DRsipEf8VpaH3rDDmQhDqnN",
+  "3PGQxg2RwyeLg42qqoEw6SToeQhPU2unXTp",
+  "3PP7KDyg5rBgVvapWEQzdt4HJqNWh6wTQYy",
+  "3PDf4Q2DMDDtEbedGaW2LLAToTdzRZ5DN9P",
+  "3PQhNv5efxiVXR3YWcD8vaAyCMXXiHdhb6N",
+  "3P7NRvEYRQWmD7fXwzERBVZhUw34NBTBcbs",
+  "3PAhTrTrBvtGE9RbRfc3Na4USfLGouYtUSv",
+  "3P5B12ghzVLpyC4Ya5GAsa2WeNzGCoVEzKM",
+  "3P9SPKWWZH2b14CDjEuZDW393qHqCc4Roxi",
+  "3PFh4rYBXsiQ5GuuaiBKTiJkuG9rRgciENu",
+  "3PB9o66btpXwrcfJdMuVsYUuQS4y1xCGMyH",
+  "3P9eYoKGtrUQUWbymVeuebGFiRHUEdraxxy",
+  "3PGiFjDyDFX3FLyTPYSCARgaKu7S4j1Nw6m",
+  "3PFt8vi8QgYq5oYgnMHwfdzTTtWLf4UuN8P",
+  "3PJqQqjkwJm2DnYdFq6vfaC5ckaZfrMN2dj",
+  "3P3aENGZPFNqyAz9n5n8L8Hvt1Ev9aTwTBG",
+  "3PFXo72SnyjVrtHfFA1CgvfwEwrMB4K3DuH",
+  "3P2mjM2k8awB3azoTiwDrkBoYbyr63Jrn4m",
+  "3P7DsecXBFUjp6TKjDzL51rtDQa14o8AoCF",
+  "3PKe8pT2ADGsweA5XrHRM2RvwD9pnSBxbLb",
+  "3P8K3jvL9UhRSHNdT39UkgyiW69D7z3jxa9",
+  "3P8YEQdQ86zdrfmn8zzooBprFcMHWCrLfPv",
+  "3P7Dfa9Si15mW913WhhNs3KumwZywqNeJwD",
+  "3PEmLd8DcCGBR6hj7p5HgkgXHzE6T3KekDz",
+  "3P64JH6YarF1xuuCiTG9qhv6AsjZo8bJ8sn",
+  "3PFnkiip91rzyFSa71XeTB8K16xQ8n86ef3",
+  "3PHT5P8pyyMPB3EaLYC1wHXhXjGibZmk1B9"
+];
