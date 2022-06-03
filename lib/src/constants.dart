@@ -184,6 +184,8 @@ const privateAddr = {
   "3PMKAL4cd77onkYuuU35115Wov1sLMEcFsv": "Ro**uz",
   "3P55AbxhmLtLztfPjLzGKd2TL3tfqCTHQdF": "Rom**eed",
   "3PPAAPAcT3rUV6LXfxj4e3MJ5wgxi37pDAM": "a***er_Puz_1",
+  ///// Duck Whales
+  "3PKgDvqufeSQDcbsP8VrCvZXcA4GVviLPCY": "Whale1"
 };
 
 // "INCUBATOR_DAPP_ADDRESS": "3PEktVux2RhchSN63DsDo4b4mz4QqzKSeDv",
