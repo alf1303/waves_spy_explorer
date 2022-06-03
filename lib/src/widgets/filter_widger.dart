@@ -71,6 +71,9 @@ class FilterWidget extends StatelessWidget {
                   IconButton(onPressed: onReverseChange,
                     icon: Icon(model.reverseTransactions ? Icons.arrow_upward_outlined : Icons.arrow_downward_rounded),
                     tooltip: model.reverseTransactions ? apploc!.newFirst : apploc!.oldFirst,),
+                  Tooltip(
+                      message: "Show only strange accounts, \n yellow - trades between strange acc",
+                      child: Checkbox(value: _filterProvider.onlyTraders, onChanged: changeOnlyTraders)),
                   Expanded(
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
@@ -248,6 +251,11 @@ class FilterWidget extends StatelessWidget {
     print("new direction: $val");
     final _filterProvider = FilterProvider();
     _filterProvider.changeDirection(val);
+  }
+
+  void changeOnlyTraders(val) {
+    final _filterProvider = FilterProvider();
+    _filterProvider.changeOnlyTraders();
   }
 
   void onReverseChange() {

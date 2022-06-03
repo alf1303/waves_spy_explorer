@@ -84,13 +84,15 @@ class _SimpleTransViewState extends State<SimpleTransView> with AutomaticKeepAli
     String inn = !isCurrentAddr(dApp) ? "in" : "out";
     List<Widget> payList = payment.entries.map((e) => assetBuilder(e.key, e.value, exop, p["exchPriceAsset"], out)).toList();
     List<Widget> inList = transfers.entries.map((e) => assetBuilder(e.key, e.value, exop, p["exchPriceAsset"], inn)).toList();
+    final count = widget.td["additional"]["tradeAddrCount"];
     return InkWell(
       hoverColor: hoverColor,
       onTap: showDetails,
       child: Container(
           padding: const EdgeInsets.all(5),
           margin: const EdgeInsets.all(2),
-          decoration: BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: const BorderRadius.all(Radius.circular(5))),
+          decoration: BoxDecoration(
+              border: Border.all(color: count == 2 ? Colors.yellow : count == 1 ? Colors.deepOrange : Colors.grey), borderRadius: const BorderRadius.all(Radius.circular(5))),
           child: Row(
             children: [
               SizedBox(width: 150, child: LabeledText(label: "", value: formattedDate, name: "", colr: color)),

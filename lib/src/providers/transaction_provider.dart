@@ -166,7 +166,8 @@ class TransactionProvider extends ChangeNotifier {
           progressProvider.stopTransactions();
           progressProvider.stop();
           showSnackError(resp.body);
-          throw("Failed to load transactions list\n" + resp.body);
+          print("Failed to load transactions list\n" + resp.body);
+          throw("Transactions not loaded");
         }
       
         if (after == "") {
@@ -218,6 +219,7 @@ class TransactionProvider extends ChangeNotifier {
   Future<Map<String, String>> extractAssets(List<dynamic> transactions) async {
     final assetsLocalIds = <String, String>{};
     for (var tr in transactions) {
+      tr["additional"] = <String, dynamic>{};
       final transAssetsMap = <String, String>{};
       final trAddressesMap = <String, String>{};
       final Map<String, double> inAssetsIds = {};
@@ -306,6 +308,7 @@ class TransactionProvider extends ChangeNotifier {
           }
         }
         collectDucksStats(tr);
+        tr["additional"]["tradeAddrCount"] = collectTradeAccsData(tr);
       }
 
       // exchange
@@ -371,7 +374,9 @@ class TransactionProvider extends ChangeNotifier {
         }
         assetProvider.assets.add(AccAsset(assetsGlobal[key], value["balance"], priority, value));
       } else {
-        throw("Assets id $key is not preset in assetsGlobal");
+        print("Assets id $key is not preset in assetsGlobal");
+        showSnackError("Assets id $key is not preset in assetsGlobal");
+        // throw("Assets id $key is not preset in assetsGlobal");
       }
     });
     // print("3");
@@ -395,7 +400,9 @@ class TransactionProvider extends ChangeNotifier {
         res = json;
       } else {
         progressProvider.stopNfts();
-        throw("Cant fetch NFTs list: " + resp.body);
+        print("Cant fetch NFTs list: " + resp.body);
+        showSnackError("Cant fetch NFTs list: " + resp.body);
+        // throw("Cant fetch NFTs list: " + resp.body);
       }
       List<Nft> nftList = res.map((e) => Nft(
           data: e,
@@ -437,7 +444,9 @@ class TransactionProvider extends ChangeNotifier {
       res = json;
     } else {
       progressProvider.stopData();
-      throw("Cant fetch data from account data storage :" + resp.body);
+      print("Cant fetch data from account data storage :" + resp.body);
+      showSnackError("Cant fetch data from account data storage :" + resp.body);
+      // throw("Cant fetch data from account data storage :" + resp.body);
     }
     dataScriptProvider.data = res;
     dataScriptProvider.filterData();
@@ -542,6 +551,10 @@ class TransactionProvider extends ChangeNotifier {
       filteredTransactions.addAll(invokeTrs);
     }
 
+    if(filterProvider.onlyTraders) {
+      filteredTransactions = filteredTransactions.where((tr) => tr["additional"] != null && tr["additional"]["tradeAddrCount"] != null && tr["additional"]["tradeAddrCount"] >= 1).toList();
+    }
+
     final trToFilter = filterProvider.isFiltered() ? filteredTransactions : datedTransactions;
     double minval = double.parse(filterProvider.minValue);
     if(minval > 0) {
@@ -613,6 +626,19 @@ class TransactionProvider extends ChangeNotifier {
       }
     }
     return false;
+  }
+
+  int collectTradeAccsData(tr) {
+    int count = 0;
+    if(tr.containsKey("stateChanges")) {
+      final trsf = tr["stateChanges"]["transfers"];
+      for(var el in trsf) {
+        if (traders.contains(el["address"])) {
+          count ++;
+        }
+      }
+    }
+    return count;
   }
 }
 

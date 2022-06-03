@@ -30,6 +30,7 @@ class FilterProvider extends ChangeNotifier{
   Asset assetName = Asset.empty();
   String direction = "all";
   bool reverseTransactions = false;
+  bool onlyTraders = false; // addresses, created for trading activity
   String minValue = "0";
 
   Map<String, AddressesStatsItem> finalList = {};
@@ -127,6 +128,12 @@ class FilterProvider extends ChangeNotifier{
 
   notifyAll() {
     notifyListeners();
+  }
+
+  void changeOnlyTraders() {
+    onlyTraders = !onlyTraders;
+    notifyAll();
+    _transactionProvider.filterTransactions();
   }
 
   void changeDirection(String val) {
