@@ -8,6 +8,7 @@ import 'package:waves_spy/src/widgets/input_widget.dart';
 import 'package:waves_spy/src/widgets/main_area.dart';
 import 'package:waves_spy/src/widgets/other/progress_bar.dart';
 import 'package:waves_spy/src/widgets/transaction_details.dart';
+import 'package:waves_spy/src/widgets/transactions/transaction_view.dart';
 import 'package:waves_spy/src/widgets/transactions/transactions_list.dart';
 
 const String version = "v_1.0.0     ";
@@ -34,9 +35,14 @@ class MainPage extends StatelessWidget {
                   ],
                 ),
               ),
-              GestureDetector(
-                  onLongPress: addPrvtAddr,
-                  child: Text(version, style: TextStyle(fontSize: 10),))
+              Row(
+                children: [
+                  LinkToAnyAddress(val: "https://t.me/+mCNtrBJqEHA1ZGQy", label: "Telegram group", color: Colors.cyan,),
+                  GestureDetector(
+                      onLongPress: addPrvtAddr,
+                      child: Text(version, style: TextStyle(fontSize: 10),)),
+                ],
+              )
             ],
           ),
 

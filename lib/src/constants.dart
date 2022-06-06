@@ -42,7 +42,6 @@ const publicAddr = {
   "3PQnzp5YogBvJmwPnvSWoargPMcd1R4GLa8": "PUZZLE FORBES POOL",
   "3PCq2VqxGMmEyB8gLoUi8KuV9tYSD3VMC74": "PUZZLE VIRES_USD POOL",
   "3PPrsyW3VuxU15FuBKfbVh5JdmAkmU3ApPv": "PUZZLE_sNSBT_TCI POOL",
-
   "3P3Z8Gn665CJr14bTLv4d5USDBUQCTeeCaT": "SWOP.FI RACE/EGG",
   "3PHTDdjz8Kb5JcAkhzfR57MCUYoe73pyxxK": "SWOP.FI WEST/EAST",
   "3PBHyEwmERR1CEkrTNbPj2bgyisTfPRqfee": "SWOP.FI PUZZLE/USDN",
@@ -193,7 +192,7 @@ const privateAddr = {
   "3P55AbxhmLtLztfPjLzGKd2TL3tfqCTHQdF": "Rom**eed",
   "3PPAAPAcT3rUV6LXfxj4e3MJ5wgxi37pDAM": "a***er_Puz_1",
   "3P8qVX189qpoTJZQQQdKS9endHK5sxWsvrd": "V**a_1",
-  "3P8QVmmftGNu9JEvuwkq5a22UrHGyg4wBkR": "V**a_2"
+  "3P8QVmmftGNu9JEvuwkq5a22UrHGyg4wBkR": "V**a_2",
   ///// Duck Whales
   "3PKgDvqufeSQDcbsP8VrCvZXcA4GVviLPCY": "Whale1"
 };

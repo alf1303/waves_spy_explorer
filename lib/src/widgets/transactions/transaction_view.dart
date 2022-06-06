@@ -450,3 +450,35 @@ class LinkToAddress extends StatelessWidget {
   }
 }
 
+class LinkToAnyAddress extends StatelessWidget {
+  const LinkToAnyAddress({Key? key, required this.val, required this.label, this.color}) : super(key: key);
+  final String val;
+  final String label;
+  final Color? color;
+
+  _launchURL(url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return       Tooltip(
+      message: "Go to $label",
+      child: IconButton(
+        color: Colors.white,
+        icon: Icon(Icons.telegram_sharp),
+        onPressed: () async {
+          String baseUri = Uri.base.toString();
+          String uri = baseUri.substring(0, baseUri.length - 2);
+          String addr = "";
+          String link = val;
+          await _launchURL(link);
+        },
+      )
+    );
+  }
+}
