@@ -91,12 +91,12 @@ class TransactionProvider extends ChangeNotifier {
     // print(aliases);
     await getTransactions(address: curAddr);
     await getAssets(curAddr);
-    await getNft(address: curAddr);
-    setDucksStatsData();
-    statsProvider.notifyAll();
     // await getNft(curAddr); //implement
     await getData(curAddr); //implement
     await getScript(curAddr); //implement
+    await getNft(address: curAddr);
+    setDucksStatsData();
+    statsProvider.notifyAll();
     progressProvider.stop();
     notifyListeners();
   }

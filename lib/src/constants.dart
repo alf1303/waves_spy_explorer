@@ -37,9 +37,12 @@ const publicAddr = {
   "3PNK5ypnPJioLmLUzfK6ezpaePHLxZd6QLj": "PUZZLE RACE_POOL",
   "3PMHkdVCzeLAYuCh92FPtusuxdLk5xMB51y": "PUZZLE EGG_POOL",
   "3PAviuHPCX8fD7M5fGpFTQZb4HchWCJb3ct": "PUZZLE WWW_POOL",
-  "3PLiXyywNThdvf3vVEUxwc7TJTucjZvuegh": "PUZZLE BTC_ETH_POOL",
+  "3PLiXyywNThdvf3vVEUxwc7TJTucjZvuegh": "PUZZLE BTC_ETH_POOL 10",
   "3PEStCRPQuW3phthTtQ5upGeb4WZ47kssyM": "PUZZLE SNSBT_POOL",
   "3PQnzp5YogBvJmwPnvSWoargPMcd1R4GLa8": "PUZZLE FORBES POOL",
+  "3PCq2VqxGMmEyB8gLoUi8KuV9tYSD3VMC74": "PUZZLE VIRES_USD POOL",
+  "3PPrsyW3VuxU15FuBKfbVh5JdmAkmU3ApPv": "PUZZLE_sNSBT_TCI POOL",
+
   "3P3Z8Gn665CJr14bTLv4d5USDBUQCTeeCaT": "SWOP.FI RACE/EGG",
   "3PHTDdjz8Kb5JcAkhzfR57MCUYoe73pyxxK": "SWOP.FI WEST/EAST",
   "3PBHyEwmERR1CEkrTNbPj2bgyisTfPRqfee": "SWOP.FI PUZZLE/USDN",
@@ -88,6 +91,7 @@ const publicAddr = {
   "3P5E9xamcWoymiqLx8ZdmR7o4fJSRMGp1WR": "WD - Lootbox",
   "3PPRqZYVaBUgTN4zGUFyYEcKLbqjVuoDZFP": "WD - Community dapp",
   "3PPG6zVNrMKnkqMthk5i2oHWQ5SHs9ertBM": "Team Rewards",
+  "3PJgZ6AK1WVCpdCmEZpesHmaKvrQDdXG5og": "WD - static Oracle",
   "3PLkyPruTTLt2JfeHekaz7vHG2CWyBnwXDM": "Egg Treasury",
   "3P4QfR6fewW85epUg68fjgeFt3XBVpgLxmd": "MetaRace",
   "3P8JkeL2hVmp957Se45kaxXqXkggZ1SDNZd": "WD - Marketing",
@@ -188,6 +192,8 @@ const privateAddr = {
   "3PMKAL4cd77onkYuuU35115Wov1sLMEcFsv": "Ro**uz",
   "3P55AbxhmLtLztfPjLzGKd2TL3tfqCTHQdF": "Rom**eed",
   "3PPAAPAcT3rUV6LXfxj4e3MJ5wgxi37pDAM": "a***er_Puz_1",
+  "3P8qVX189qpoTJZQQQdKS9endHK5sxWsvrd": "V**a_1",
+  "3P8QVmmftGNu9JEvuwkq5a22UrHGyg4wBkR": "V**a_2"
   ///// Duck Whales
   "3PKgDvqufeSQDcbsP8VrCvZXcA4GVviLPCY": "Whale1"
 };

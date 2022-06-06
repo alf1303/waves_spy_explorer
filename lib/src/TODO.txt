@@ -37,6 +37,11 @@
 **     - for transactions also indicate if all transactions were loaded
 ** 1) Test date filtering
 
+1) place NFT loading as last item
+2) place telegram group link
+3) find bug with transactions order when multiple filtering
+
+
 0) show all transfers in outs(MarketPlace as example)
 2) Add DuckStats view:
     - ducks in battle + mantle lvl (check how it change loading speed) Parse artefact dApp data (3PR87TwfWio6HVUScSaHGMnFYkGyaVdFeqT)
