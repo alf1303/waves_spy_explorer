@@ -13,7 +13,7 @@ import 'package:waves_spy/src/widgets/transaction_details.dart';
 import 'package:waves_spy/src/widgets/transactions/transaction_view.dart';
 import 'package:waves_spy/src/widgets/transactions/transactions_list.dart';
 
-const String version = "v_1.0.0     ";
+const String version = "v_1.0.1     ";
 final GlobalKey<ScaffoldMessengerState> messengerKey = GlobalKey<ScaffoldMessengerState>();
 
 class MainPage extends StatelessWidget {
