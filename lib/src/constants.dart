@@ -228,6 +228,27 @@ const typeDict = {
   14: "Set sponsorship"
 };
 
+//TODO not implemented fully
+String getNftType(dynamic nft) {
+  String result = "";
+  switch (nft["issuer"]) {
+    case "3PEktVux2RhchSN63DsDo4b4mz4QqzKSeDv":
+    case "3PDVuU45H7Eh5dmtNbnRNRStGwULA7NY6Hb":
+    case "3PKmLiGEfqLWMC1H9xhzqvAZKUXfFm8uoeg":
+      if(nft["name"].contains("DUCK")) {
+        result = "duck";
+      } else if(nft["name"].contains("BABY")) {
+        result = "duckling";
+      }
+      break;
+    case "3PDBLdsUrcsiPxNbt8g2gQVoefKgzt3kJzV":
+    case "3PFQjjDMiZKQZdu5JqTHD7HwgSXyp9Rw9By":
+      result = "puzzle_aggregator";
+      break;
+  }
+  return result;
+}
+
 const priorityThree = ["WAVES", "USDT", "USD-N", "USDC", "Puzzle", "Duck Egg"];
 const priorityTwo = ["TEAM DUXPLORER", "TEAM EGGPOINT", "TEAM EGGSEGGS", "TEAM FOMO", "TEAM LATAM", "TEAM MATH", "TEAM MUNDOCRYPTO", "TEAM TURTLE", "TEM CGU", "TEAM ENDO", "TEAM FORK", "TEAM IDO", "TEAM KOLKHOZ", "TEAM MARVIN", "TEAM STREET"];
 const priorityOne = ["VIRES", "Waves.Exchange", "WBTC", "WETH", "SWOP", "NSBT", "sNSBT"];

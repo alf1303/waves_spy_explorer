@@ -29,7 +29,7 @@ class AssetView extends StatelessWidget {
           children: [
             SizedBox(width: 250, child: Text(asset.asset!.name)),
             SizedBox(width: 150, child: SelectableText("${asset.amount/pow(10, asset.asset!.decimals)}")),
-            SizedBox(width: 150, child: SelectableText("${asset.staked/pow(10, asset.asset!.decimals)}")),
+            SizedBox(width: 150, child: Container()), //SelectableText("${asset.staked/pow(10, asset.asset!.decimals)}")),
             SizedBox(width: 70, child: Text(asset.asset!.reissuable ? "reissuable" : ""),),
             SizedBox(width: 70, child: Text(asset.asset!.scripted ? "scripted" : ""),),
             SizedBox(child: SelectableText(asset.asset!.id)),

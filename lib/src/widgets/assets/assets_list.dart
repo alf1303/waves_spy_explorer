@@ -38,7 +38,7 @@ class AssetsList extends StatelessWidget {
               children: [
                 const SizedBox(width: 250, child: Text("Name")),
                 const SizedBox(width: 150, child: Text("Wallet")),
-                const SizedBox(width: 150, child: Text("Staked")),
+                SizedBox(width: 150, child: Container()), //Text("Staked")),
                 const SizedBox(width: 70, child: Text("Issue")),
                 const SizedBox(width: 70, child: Text("Scripted")),
                 Expanded(
