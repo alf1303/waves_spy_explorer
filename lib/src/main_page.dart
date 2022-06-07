@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
 import 'package:waves_spy/src/constants.dart';
+import 'package:waves_spy/src/providers/label_provider.dart';
 import 'package:waves_spy/src/providers/transaction_provider.dart';
 import 'package:waves_spy/src/widgets/filter_widger.dart';
 import 'package:waves_spy/src/widgets/input_widget.dart';
@@ -19,6 +21,7 @@ class MainPage extends StatelessWidget {
   final address;
   @override
   Widget build(BuildContext context) {
+    final transactionProvider = TransactionProvider();
     return ScaffoldMessenger(
       key: messengerKey,
       child: Scaffold(
@@ -31,16 +34,22 @@ class MainPage extends StatelessWidget {
                   children: [
                     SizedBox(height: 35, child: Image.asset('assets/images/logo.png', fit: BoxFit.scaleDown,)),
                     SelectableText(AppLocalizations.of(context)!.headerTitle + "     "),
-                    Expanded(child: InputWidget(address: address)),
+                    InputWidget(address: address),
+                    Expanded(
+                      child: Consumer<LabelProvider>(
+                          builder: (context, model, child) {
+                            return model.isAddressPresent ? Text(getAddrName(transactionProvider.curAddr), style: TextStyle(fontSize: 16),) : Container();
+                          }),
+                    )
                   ],
                 ),
               ),
               Row(
                 children: [
-                  LinkToAnyAddress(val: "https://t.me/+mCNtrBJqEHA1ZGQy", label: "Telegram group", color: Colors.cyan,),
+                  const LinkToAnyAddress(val: "https://t.me/+mCNtrBJqEHA1ZGQy", label: "Telegram group", color: Colors.cyan,),
                   GestureDetector(
                       onLongPress: addPrvtAddr,
-                      child: Text(version, style: TextStyle(fontSize: 10),)),
+                      child: const Text(version, style: TextStyle(fontSize: 10),)),
                 ],
               )
             ],

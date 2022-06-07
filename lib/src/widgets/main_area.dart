@@ -4,6 +4,7 @@ import 'package:waves_spy/src/helpers/helpers.dart';
 import 'package:waves_spy/src/providers/filter_provider.dart';
 import 'package:waves_spy/src/providers/progress_bars_provider.dart';
 import 'package:waves_spy/src/providers/transaction_provider.dart';
+import 'package:waves_spy/src/styles.dart';
 import 'package:waves_spy/src/widgets/data/data_list.dart';
 import 'package:waves_spy/src/widgets/filter_widger.dart';
 import 'package:waves_spy/src/widgets/nfts/nfts_list.dart';
@@ -91,30 +92,33 @@ class TabHeaderWidget extends StatelessWidget {
       builder: (context, model, child) {
         return Tab(
           // icon: MyProgressBar(label: label),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              MyProgressBar(label: label),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                Text(name),
-                label == "none" ? Container() : model.isPresent(label) ?
-                label == "script" ? const Icon(Icons.check_rounded, color: Colors.greenAccent) :
+          child: Container(
+            color: null,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                MyProgressBar(label: label),
                 Row(
-                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(" (${model.getLoadedItemsCountProxy(label).toString()})", style: const TextStyle(color: Colors.greenAccent),),
-                    Visibility(
-                        visible: model.allTransactionsLoadedProxy(),
-                        child: const Icon(Icons.check_rounded, color: Colors.greenAccent))
-                  ],
-                ) :
-                const Icon(Icons.remove, color: Colors.redAccent,)
+                  Text(name),
+                  label == "none" ? Container() : model.isPresent(label) ?
+                  label == "script" ? const Icon(Icons.check_rounded, color: Colors.greenAccent) :
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(" (${model.getLoadedItemsCountProxy(label).toString()})", style: const TextStyle(color: Colors.greenAccent),),
+                      Visibility(
+                          visible: model.allTransactionsLoadedProxy(),
+                          child: const Icon(Icons.check_rounded, color: Colors.greenAccent))
+                    ],
+                  ) :
+                  const Icon(Icons.remove, color: Colors.redAccent,)
+                ],
+                ),
               ],
-              ),
-            ],
+            ),
           ),
         );
       }

@@ -5,6 +5,7 @@ const transferColor = Colors.yellow;
 const massTransferColor = Colors.deepOrangeAccent;
 const exchangeColor = Colors.deepPurpleAccent;
 const burnColor = Colors.red;
+const tabHeaderColor = Colors.black12;
 
 const hoverColor = Colors.white12;
 

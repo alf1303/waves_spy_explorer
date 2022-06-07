@@ -10,6 +10,7 @@ import 'package:waves_spy/src/widgets/stats/addresses_stats_view.dart';
 import 'package:waves_spy/src/widgets/stats/invokes_stats_view.dart';
 import 'package:waves_spy/src/widgets/transactions/transaction_view.dart';
 
+import '../../styles.dart';
 import 'ducks_stats_view.dart';
 
 TabController? statsController;
@@ -42,17 +43,10 @@ class _StatsViewState extends State<StatsView> with SingleTickerProviderStateMix
             //     color: Colors.white10
             // ),
               controller: statsController,
-              tabs: [
-            Tab(child: Row(children: [
-              const Text("Addresses"),
-              Consumer<FilterProvider>(
-                builder: (context, model, child) {
-                  return model.assetName.id.isEmpty ? const Text("   (Select asset in filter to show addresses info)", style: TextStyle(color: Colors.yellowAccent),) : Container();
-                },
-              )
-            ],)),
-            const Tab(text: "Ducks stats"),
-            const Tab(text: "Stats"),
+              tabs: const[
+            Tab(child: Text("Addresses stats")),
+            Tab(child: Text("Ducks stats"),),
+            Tab(child: Text("Call Stats"),),
           ]),
           Expanded(
             child: TabBarView(

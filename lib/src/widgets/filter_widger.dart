@@ -11,6 +11,7 @@ import 'package:waves_spy/src/widgets/main_area.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:waves_spy/src/widgets/other/custom_group_radio.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:waves_spy/src/widgets/other/custom_widgets.dart';
 
 import '../styles.dart';
 
@@ -58,20 +59,24 @@ class FilterWidget extends StatelessWidget {
                     // decoration: BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: BorderRadius.all(Radius.circular(5))),
                     child: Row(
                       children: [
-                        CustomGroupRadio(label: "Asset transfer", value: 4, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor,),
-                        CustomGroupRadio(label: "Mass Payment", value: 11, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor),
-                        CustomGroupRadio(label: "Invoke", value: 16, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor),
-                        CustomGroupRadio(label: "Exchange", value: 7, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor),
-                        CustomGroupRadio(label: "Issue", value: 3, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor),
-                        CustomGroupRadio(label: "Burn", value: 6, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor),
-                        IconButton(onPressed: clearType, icon: const Icon(Icons.close,), tooltip: "clear type",)
+                        CustomGroupRadio(label: "Asset transfers", value: 4, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor,),
+                        CustomGroupRadio(label: "Mass Payments", value: 11, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor),
+                        CustomGroupRadio(label: "Invokes", value: 16, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor),
+                        CustomGroupRadio(label: "Exchanges", value: 7, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor),
+                        CustomGroupRadio(label: "Issues", value: 3, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor),
+                        CustomGroupRadio(label: "Burns", value: 6, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor),
+                        MyToolTip(
+                            message: "clear type",
+                            child: IconButton(onPressed: clearType, icon: const Icon(Icons.close,)))
                       ],
                     ),
                   ),
-                  IconButton(onPressed: onReverseChange,
-                    icon: Icon(model.reverseTransactions ? Icons.arrow_upward_outlined : Icons.arrow_downward_rounded),
-                    tooltip: model.reverseTransactions ? apploc!.newFirst : apploc!.oldFirst,),
-                  Tooltip(
+                  MyToolTip(
+                    message: model.reverseTransactions ? apploc!.newFirst : apploc!.oldFirst,
+                    child: IconButton(onPressed: onReverseChange,
+                      icon: Icon(model.reverseTransactions ? Icons.arrow_upward_outlined : Icons.arrow_downward_rounded)),
+                  ),
+                  MyToolTip(
                       message: "Show only strange accounts, \n yellow - trades between strange acc",
                       child: Checkbox(value: _filterProvider.onlyTraders, onChanged: changeOnlyTraders)),
                   Expanded(
@@ -101,8 +106,12 @@ class FilterWidget extends StatelessWidget {
                     flex: 3,
                     child: Row(
                       children: [
-                        loadButton(loadMore, "Load More"),
-                        loadButton(loadAll, "Load All"),
+                        MyToolTip(
+                            message: "Load more transactions",
+                            child: loadButton(loadMore, "Load More")),
+                        MyToolTip(
+                            message: "Load all transactions",
+                            child: loadButton(loadAll, "Load All")),
                         Expanded(
                           child: dateTimePicker(_filterProvider.changeFromDate, DateTime(2022).toString(),  "from", "clear from date")
                         ),
@@ -165,8 +174,8 @@ class FilterWidget extends StatelessWidget {
   }
 
   Widget directionSelect() {
-    return Tooltip(
-      message: "direction of transfers",
+    return MyToolTip(
+      message: "direction of transactions",
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: DropdownButton(

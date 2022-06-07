@@ -77,6 +77,7 @@ class TransactionProvider extends ChangeNotifier {
       dAppsDict.addAll(publicAddr);
     }
     curAddr = address;
+    setLabelAddr();
     final aliasReg =  RegExp(r'^[a-z0-9._\-@]+$');
     if(address.isNotEmpty && aliasReg.hasMatch(address)) {
       String adr = await fetchAddrByAlias("alias:W:" + address);

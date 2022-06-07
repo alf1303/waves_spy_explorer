@@ -38,7 +38,7 @@
 ** 1) Test date filtering
 
 ** 1) place NFT loading as last item
-2) place telegram group link
+** 2) place telegram group link
 3) find bug with transactions order when multiple filtering
 
 

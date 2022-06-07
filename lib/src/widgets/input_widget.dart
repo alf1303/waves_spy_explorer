@@ -9,6 +9,7 @@ import 'package:waves_spy/src/helpers/helpers.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/services.dart';
 import 'package:waves_spy/src/providers/transaction_provider.dart';
+import 'package:waves_spy/src/widgets/other/custom_widgets.dart';
 
 class InputWidget extends StatefulWidget {
   InputWidget({Key? key, this.address}) : super(key: key);
@@ -75,10 +76,12 @@ class _InputWidgetState extends State<InputWidget> {
   Widget build(BuildContext context) {
     final apploc = AppLocalizations.of(context);
     return Row(children: [
-      IconButton(
-          onPressed: pasteFromClipboard,
-          tooltip: apploc?.paste,
-          icon: const Icon(Icons.paste)),
+      MyToolTip(
+        message: apploc?.paste,
+        child: IconButton(
+            onPressed: pasteFromClipboard,
+            icon: const Icon(Icons.paste)),
+      ),
       Consumer<TransactionProvider>(
         builder: (context, model, child) {
           _inputController.text = _transactionProvider.curAddr.isEmpty ? "3PAtzncjJGWRpCtkR55wAzcfZ9fubMeA4JU" : _transactionProvider.curAddr;
@@ -98,10 +101,12 @@ class _InputWidgetState extends State<InputWidget> {
           );
         },
       ),
-      IconButton(
-          onPressed: onSearch,
-          tooltip: apploc!.search,
-          icon: const Icon(Icons.search_rounded)),
+      MyToolTip(
+        message: apploc!.search,
+        child: IconButton(
+            onPressed: onSearch,
+            icon: const Icon(Icons.search_rounded)),
+      ),
       // TextButton(onPressed: loadMore, child: Text(apploc.loadMore)),
       // TextButton(onPressed: loadAll, child: Text(apploc.loadAll))
 

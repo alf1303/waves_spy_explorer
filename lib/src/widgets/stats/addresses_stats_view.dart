@@ -36,7 +36,9 @@ class _AddressesStatsViewState extends State<AddressesStatsView> {
     return Container(
       child: Consumer<FilterProvider>(
         builder: (context, model, child) {
-          return Column(
+          return model.assetName.id.isEmpty ?
+          const Center(child: Text("   Need to select asset in filters to show addresses info", style: TextStyle(color: Colors.yellowAccent),)) :
+          Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
