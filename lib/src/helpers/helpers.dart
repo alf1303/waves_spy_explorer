@@ -12,6 +12,7 @@ import 'package:waves_spy/src/providers/data_script_provider.dart';
 import 'package:waves_spy/src/providers/label_provider.dart';
 import 'package:waves_spy/src/providers/nft_provider.dart';
 import 'package:waves_spy/src/providers/stats_provider.dart';
+import 'package:waves_spy/src/providers/transaction_details_provider.dart';
 
 import '../models/asset.dart';
 import '../providers/transaction_provider.dart';
@@ -23,6 +24,8 @@ final nftProvider = NftProvider();
 final dataProvider = DataScriptProvider();
 final statsProvider = StatsProvider();
 final labelProvideer = LabelProvider();
+final transactionDetailsProvider = TransactionDetailsProvider();
+
 
 Future<void> loadMoreTr() async {
     await transactionProvider.getMoreTransactions();
@@ -535,5 +538,9 @@ void calculateRebirthResults(Map<String, dynamic> tr) {
 void setLabelAddr() {
     labelProvideer.isAddressPresent = true;
     labelProvideer.notify();
+}
+
+void addAdditionalToTransactionDetails() {
+    transactionDetailsProvider.setFullTransaction();
 }
 
