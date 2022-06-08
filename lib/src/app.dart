@@ -11,10 +11,12 @@ import 'package:waves_spy/src/providers/progress_bars_provider.dart';
 import 'package:waves_spy/src/providers/stats_provider.dart';
 import 'package:waves_spy/src/providers/transaction_details_provider.dart';
 import 'package:waves_spy/src/providers/transaction_provider.dart';
+import 'package:get_it/get_it.dart';
 
+import 'helpers/firebase_analytics_service.dart';
 import 'main_page.dart';
 
-
+GetIt getIt = GetIt.instance;
 
 /// The Widget that configures your application.
 class MyApp extends StatelessWidget {
@@ -40,6 +42,9 @@ class MyApp extends StatelessWidget {
         // returns to the app after it has been killed while running in the
         // background.
         restorationScopeId: 'app',
+        navigatorObservers: [
+          getIt<FirebaseAnalyticsService>().appAnalyticsObserver(),
+        ],
 
         // Provide the generated AppLocalizations to the MaterialApp. This
         // allows descendant Widgets to display the correct translations

@@ -108,6 +108,7 @@ class TransactionProvider extends ChangeNotifier {
     allTransactions.clear();
     aliases.clear();
     stakedDucksLoaded  = false;
+    jediDucksLoaded = false;
     allTransactionsLoaded = false;
 
       //filter
@@ -417,7 +418,7 @@ class TransactionProvider extends ChangeNotifier {
         nftProvider.nfts.addAll(nftList);
       }
       // print("Loaded Nfts: " + nftProvider.nfts.length.toString());
-      if(!stakedDucksLoaded) {
+      if(!stakedDucksLoaded || !jediDucksLoaded) {
         Map<String, int> stakedDucks = await getStakedDucks(address);
         List<dynamic> stakedDucksData = await getMassAssets(stakedDucks);
         List<Nft> stakedDucksNft = stakedDucksData.map((el) => Nft(
@@ -426,8 +427,18 @@ class TransactionProvider extends ChangeNotifier {
           isFarming: true,
           farmingPower: stakedDucks[el["assetId"]] ?? 0
         )).toList();
+        Map<String, JediItem> jediDucks = await getJediDucks(address);
+        List<dynamic> jediDucksData = await getMassAssets(jediDucks);
+        List<Nft> jediDucksNfts = jediDucksData.map((el) => Nft.jedi(
+          data: el,
+          isDuck: true,
+          isDjedi: true,
+          mantleLvl: jediDucks[el["assetId"]]!.mantlelvl
+        )).toList();
         stakedDucksLoaded = true;
+        jediDucksLoaded = true;
         nftProvider.nfts.addAll(stakedDucksNft);
+        nftProvider.nfts.addAll(jediDucksNfts);
       }
       
       nftProvider.filterNfts();
@@ -620,6 +631,25 @@ class TransactionProvider extends ChangeNotifier {
     return ress;
   }
 
+  Future<Map<String, JediItem>> getJediDucks(String address) async{
+    List<dynamic> res = List.empty(growable: true);
+    String gameAddress = "3PR87TwfWio6HVUScSaHGMnFYkGyaVdFeqT";
+    var resp = await http.get(Uri.parse("$nodeUrl/addresses/data/$gameAddress"));
+    if(resp.statusCode == 200) {
+      final json = jsonDecode(resp.body);
+      // print(json);
+      res = json;
+    } else {
+      throw("Cant fetch data from account data storage for staked ducks:" + resp.body);
+    }
+    // print("staked ducks length: ${res.length}");
+    final List<dynamic> filtered = res.where((ele) => ele["key"].contains(address) && ele["key"].contains("_artefact_mantle_artefactId_") && ele["key"].contains("_duck_")  && ele["key"].contains("status") && ele["value"]).toList();
+    final List<dynamic> mantles = res.where((ele) => ele["key"].contains(address) && ele["key"].contains("level")).toList();
+    final Map<String, int> mantlelevels = {for (var el in mantles) el["key"].split("_")[5]: el["value"]};
+    final Map<String, JediItem> ress = { for (var e in filtered) e["key"].split("_")[3] : JediItem(e["key"].split("_")[1], e["key"].split("_")[3], e["key"].split("_")[7], mantlelevels[e["key"].split("_")[7]]!) };
+    return ress;
+  }
+
   bool isInListOfStrings(List<String> list, String item) {
     for (String el in list) {
       if (el == item) {
@@ -641,6 +671,15 @@ class TransactionProvider extends ChangeNotifier {
     }
     return count;
   }
+}
+
+class JediItem {
+  String address;
+  String duck;
+  String mantleId;
+  int mantlelvl;
+
+  JediItem(this.address, this.duck, this.mantleId, this.mantlelvl);
 }
 
 
