@@ -59,11 +59,11 @@ class FilterProvider extends ChangeNotifier{
       for (var tr in _transactionProvider.filteredTransactions) {
         var additional = tr["additional"];
         int type = tr["type"];
-        if(tr["inAssetsIds"].containsKey(assetName.id)) {
-          // assId = tr["inAssetsIds"].keys.toList()[0];
+        if(tr["additional"]["inAssetsIds"].containsKey(assetName.id)) {
+          // assId = tr["additional"]["inAssetsIds"].keys.toList()[0];
           int decimals = assetName.decimals;
-          double val = tr["inAssetsIds"][assId]/pow(10, decimals);
-          sumacum_in += tr["inAssetsIds"][assId]/pow(10, decimals);
+          double val = tr["additional"]["inAssetsIds"][assId]/pow(10, decimals);
+          sumacum_in += tr["additional"]["inAssetsIds"][assId]/pow(10, decimals);
           if(type == 16 && isCurrentAddr(tr["dApp"])) {
             addNewEntryOrCombine(finalList, val, tr["sender"], "in", additional["tradeAddrCount"]);
           } else if(type == 16) {
@@ -72,10 +72,10 @@ class FilterProvider extends ChangeNotifier{
             addNewEntryOrCombine(finalList, val, tr["sender"], "in", additional["tradeAddrCount"]);
           }
         }
-        if(tr["outAssetsIds"].containsKey(assetName.id)) {
-          // assId = tr["outAssetsIds"].keys.toList()[0];
+        if(tr["additional"]["outAssetsIds"].containsKey(assetName.id)) {
+          // assId = tr["additional"]["outAssetsIds"].keys.toList()[0];
           int decimals = assetsGlobal[assId] == null ? 1 : assetsGlobal[assId]!.decimals;
-          double val = tr["outAssetsIds"][assId]/pow(10, decimals);
+          double val = tr["additional"]["outAssetsIds"][assId]/pow(10, decimals);
           sumacum_out += val;
           if (type == 16 && isCurrentAddr(tr["dApp"])) {
             addNewEntryOrCombine(finalList, val, tr["sender"], "out", additional["tradeAddrCount"]);

@@ -328,13 +328,13 @@ class TransactionProvider extends ChangeNotifier {
           inAssetsIds.addAll(p["transfers"]);
       }
 
-      tr["addresses"] = trAddressesMap;
-      tr["assetsIds"] = transAssetsMap;
-      tr["addressesNames"] = trAddressesMap.values.join(",");
-      tr["addressesIds"] = trAddressesMap.keys.join(",");
+      tr["additional"]["addresses"] = trAddressesMap;
+      tr["additional"]["assetsIds"] = transAssetsMap;
+      tr["additional"]["addressesNames"] = trAddressesMap.values.join(",");
+      tr["additional"]["addressesIds"] = trAddressesMap.keys.join(",");
 
-      tr["inAssetsIds"] = inAssetsIds;
-      tr["outAssetsIds"] = outAssetsIds;
+      tr["additional"]["inAssetsIds"] = inAssetsIds;
+      tr["additional"]["outAssetsIds"] = outAssetsIds;
       assetsLocalIds.addAll(transAssetsMap);
     }
     return assetsLocalIds;
@@ -496,34 +496,34 @@ class TransactionProvider extends ChangeNotifier {
   void fillTransactionsWithAssetsNames(List<dynamic> res) {
     for (var tr in res) {
       // print(tr);
-      Map<String, String> assets = tr["assetsIds"];
+      Map<String, String> assets = tr["additional"]["assetsIds"];
       for (String e in assets.keys) {
         assets[e] = assetsGlobal.containsKey(e) ? assetsGlobal[e]!.name : "";
       }
-      tr["assetsNames"] = assets.values.toList();
+      tr["additional"]["assetsNames"] = assets.values.toList();
 
       //create in/out assets names strings
       final List<String> inNames = List.empty(growable: true);
       final List<String> outNames = List.empty(growable: true);
-      for(String el in tr["inAssetsIds"].keys) {
+      for(String el in tr["additional"]["inAssetsIds"].keys) {
         inNames.add(assetsGlobal.containsKey(el) ? assetsGlobal[el]!.name : "");
       }
-      for(String el in tr["outAssetsIds"].keys) {
+      for(String el in tr["additional"]["outAssetsIds"].keys) {
         outNames.add(assetsGlobal.containsKey(el) ? assetsGlobal[el]!.name : "");
       }
-      tr["inAssetsNames"] = inNames;
-      tr["outAssetsNames"] = outNames;
+      tr["additional"]["inAssetsNames"] = inNames;
+      tr["additional"]["outAssetsNames"] = outNames;
 
       //correcting decimals for price asset for exchange transactions
       if(tr["type"] == 7) {
         final priceAsset = tr["order1"]["assetPair"]["priceAsset"] ?? "WAVES";
         final amountAsset = tr["order1"]["assetPair"]["amountAsset"] ?? "WAVES";
         final amountDecimals = assetsGlobal[amountAsset]!.decimals;
-        if(tr["inAssetsIds"].containsKey(priceAsset)) {
-          tr["inAssetsIds"][priceAsset] = tr["inAssetsIds"][priceAsset]/pow(10, amountDecimals);
+        if(tr["additional"]["inAssetsIds"].containsKey(priceAsset)) {
+          tr["additional"]["inAssetsIds"][priceAsset] = tr["additional"]["inAssetsIds"][priceAsset]/pow(10, amountDecimals);
         }
-        if(tr["outAssetsIds"].containsKey(priceAsset)) {
-          tr["outAssetsIds"][priceAsset] = tr["outAssetsIds"][priceAsset]/pow(10, amountDecimals);
+        if(tr["additional"]["outAssetsIds"].containsKey(priceAsset)) {
+          tr["additional"]["outAssetsIds"][priceAsset] = tr["additional"]["outAssetsIds"][priceAsset]/pow(10, amountDecimals);
         }
       }
     }
@@ -553,7 +553,7 @@ class TransactionProvider extends ChangeNotifier {
     }
 
     if(filterProvider.addrName.isNotEmpty) {
-      filteredTransactions = filteredTransactions.where((tr) => tr["addressesIds"].contains(filterProvider.addrName)).toList();
+      filteredTransactions = filteredTransactions.where((tr) => tr["additional"]["addressesIds"].contains(filterProvider.addrName)).toList();
     }
 
     if(filterProvider.fType.contains(16) && filterProvider.functName.isNotEmpty) {
@@ -574,11 +574,11 @@ class TransactionProvider extends ChangeNotifier {
       for(var tr in trToFilter) {
         bool inHaveBigger = false;
         bool outHaveBigger = false;
-        for(var p in tr["inAssetsIds"].keys) {
-          inHaveBigger = tr["inAssetsIds"][p]/pow(10, assetsGlobal[p]!.decimals) > minval;
+        for(var p in tr["additional"]["inAssetsIds"].keys) {
+          inHaveBigger = tr["additional"]["inAssetsIds"][p]/pow(10, assetsGlobal[p]!.decimals) > minval;
         }
-        for(var p in tr["outAssetsIds"].keys) {
-          outHaveBigger = tr["outAssetsIds"][p]/pow(10, assetsGlobal[p]!.decimals) > minval;
+        for(var p in tr["additional"]["outAssetsIds"].keys) {
+          outHaveBigger = tr["additional"]["outAssetsIds"][p]/pow(10, assetsGlobal[p]!.decimals) > minval;
         }
         if (inHaveBigger || outHaveBigger) {
           res.add(tr);
@@ -589,24 +589,24 @@ class TransactionProvider extends ChangeNotifier {
     }
 
     // if(filterProvider.direction == "all") {
-    //   filteredTransactions = trToFilter.where((tr) => tr["assetsNames"].toLowerCase().contains(filterProvider.assetName.name.toLowerCase())).toList();
+    //   filteredTransactions = trToFilter.where((tr) => tr["additional"]["assetsNames"].toLowerCase().contains(filterProvider.assetName.name.toLowerCase())).toList();
     // }
     // if(filterProvider.direction == "in") {
-    //   filteredTransactions = trToFilter.where((tr) => tr["inAssetsNames"].toLowerCase().contains(filterProvider.assetName.name.toLowerCase())).toList();
+    //   filteredTransactions = trToFilter.where((tr) => tr["additional"]["inAssetsNames"].toLowerCase().contains(filterProvider.assetName.name.toLowerCase())).toList();
     // }
     // if(filterProvider.direction == "out") {
-    //   filteredTransactions = trToFilter.where((tr) => tr["outAssetsNames"].toLowerCase().contains(filterProvider.assetName.name.toLowerCase())).toList();
+    //   filteredTransactions = trToFilter.where((tr) => tr["additional"]["outAssetsNames"].toLowerCase().contains(filterProvider.assetName.name.toLowerCase())).toList();
     // }
 
     if (filterProvider.assetName.name.isNotEmpty) {
       if(filterProvider.direction == "all") {
-        filteredTransactions = trToFilter.where((tr) => isInListOfStrings(tr["assetsIds"].keys.toList(), filterProvider.assetName.id)).toList();
+        filteredTransactions = trToFilter.where((tr) => isInListOfStrings(tr["additional"]["assetsIds"].keys.toList(), filterProvider.assetName.id)).toList();
       }
       if(filterProvider.direction == "in") {
-        filteredTransactions = trToFilter.where((tr) => isInListOfStrings(tr["inAssetsIds"].keys.toList(), filterProvider.assetName.id)).toList();
+        filteredTransactions = trToFilter.where((tr) => isInListOfStrings(tr["additional"]["inAssetsIds"].keys.toList(), filterProvider.assetName.id)).toList();
       }
       if(filterProvider.direction == "out") {
-        filteredTransactions = trToFilter.where((tr) => isInListOfStrings(tr["outAssetsIds"].keys.toList(), filterProvider.assetName.id)).toList();
+        filteredTransactions = trToFilter.where((tr) => isInListOfStrings(tr["additional"]["outAssetsIds"].keys.toList(), filterProvider.assetName.id)).toList();
       }
     }
     filteredTransactions = filteredTransactions.toSet().toList();

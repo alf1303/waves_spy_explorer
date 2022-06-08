@@ -16,10 +16,20 @@ class TransactionDetailsProvider extends ChangeNotifier{
   final _transactionProvider = TransactionProvider();
 
   String tr = "";
+  Map<String, dynamic> trsHold = {};
 
-  setTransaction(trs) {
+  setTransaction(Map<String, dynamic>trs) {
+    trsHold = trs;
     JsonEncoder encoder = const JsonEncoder.withIndent('  ');
-    tr = encoder.convert(trs);
+    var trs2 = {...trs};
+    trs2.remove("additional");
+    tr = encoder.convert(trs2);
+    notifyListeners();
+  }
+
+  setFullTransaction() {
+    JsonEncoder encoder = const JsonEncoder.withIndent('  ');
+    tr = encoder.convert(trsHold);
     notifyListeners();
   }
 
