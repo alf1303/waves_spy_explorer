@@ -9,5 +9,7 @@ class Nft {
 
   Nft.common(this.data);
 
+  Nft.jedi({this.data, required this.isDuck, required this.isDjedi, required this.mantleLvl});
+
   Nft({this.data, required this.isDuck, required this.isFarming, required this.farmingPower});
 }

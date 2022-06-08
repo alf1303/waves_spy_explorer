@@ -57,17 +57,18 @@ class NftView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String link = getUrl();
-    String farmInfo = nft.isFarming ? "(staked, ${nft.farmingPower}%)" : "";
+    String farmInfo = nft.isFarming ? "(farming, ${nft.farmingPower}%)" :
+    nft.isDjedi ? "(in wars, ${nft.mantleLvl}lvl)" : "";
     return InkWell(
       hoverColor: hoverColor,
       onTap: showDetails,
       child: Container(
-        padding: EdgeInsets.all(5),
-        margin: EdgeInsets.all(2),
-        decoration: BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: BorderRadius.all(Radius.circular(5))),
+        padding: const EdgeInsets.all(5),
+        margin: const EdgeInsets.all(2),
+        decoration: BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: BorderRadius.all(const Radius.circular(5))),
         child: Row(
           children: [
-            SizedBox(width: 300, child: Text("${nft.data["name"]} $farmInfo", style: TextStyle(color: nft.isFarming ? Colors.greenAccent : Colors.white),)),
+            SizedBox(width: 300, child: Text("${nft.data["name"]} $farmInfo", style: TextStyle(color: nft.isFarming ? Colors.greenAccent : nft.isDjedi ? Colors.deepOrangeAccent : Colors.white),)),
             SizedBox(width: 450, child: Row(
               children: [
                 Tooltip(
