@@ -18,6 +18,7 @@ Map<String, String> dAppsDict = {};
 addPrvtAddr() {
   addAdditionalToTransactionDetails();
   dAppsDict.addAll(privateAddr);
+  setHighliteFlag();
   showSnackMsg("Prvt addr added");
 }
 

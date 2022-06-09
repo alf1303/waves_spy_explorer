@@ -5,6 +5,7 @@ import 'package:waves_spy/src/constants.dart';
 import 'package:waves_spy/src/helpers/helpers.dart';
 import 'package:intl/intl.dart';
 import 'package:waves_spy/src/models/asset.dart';
+import 'package:waves_spy/src/providers/filter_provider.dart';
 import 'package:waves_spy/src/providers/transaction_details_provider.dart';
 import 'package:waves_spy/src/providers/transaction_provider.dart';
 import 'package:waves_spy/src/styles.dart';
@@ -30,6 +31,7 @@ class _SimpleTransViewState extends State<SimpleTransView> with AutomaticKeepAli
     Color color = Colors.white;
     color = getColorByType(widget.td["type"]);
     final _transactionProvider = TransactionProvider();
+    final filterProvider = FilterProvider();
     final type = widget.td["type"];
     bool exop = false;
     Widget header = Text("");
@@ -85,6 +87,8 @@ class _SimpleTransViewState extends State<SimpleTransView> with AutomaticKeepAli
     List<Widget> payList = payment.entries.map((e) => assetBuilder(e.key, e.value, exop, p["exchPriceAsset"], out)).toList();
     List<Widget> inList = transfers.entries.map((e) => assetBuilder(e.key, e.value, exop, p["exchPriceAsset"], inn)).toList();
     final count = widget.td["additional"]["tradeAddrCount"];
+    // print(count);
+    final borderColor = filterProvider.highlightTradeAccs ? count == 2 ? Colors.yellow : count == 1 ? Colors.deepOrange : Colors.grey : Colors.grey;
     return InkWell(
       hoverColor: hoverColor,
       onTap: showDetails,
@@ -92,7 +96,7 @@ class _SimpleTransViewState extends State<SimpleTransView> with AutomaticKeepAli
           padding: const EdgeInsets.all(5),
           margin: const EdgeInsets.all(2),
           decoration: BoxDecoration(
-              border: Border.all(color: count == 2 ? Colors.yellow : count == 1 ? Colors.deepOrange : Colors.grey), borderRadius: const BorderRadius.all(Radius.circular(5))),
+              border: Border.all(color: borderColor), borderRadius: const BorderRadius.all(Radius.circular(5))),
           child: Row(
             children: [
               SizedBox(width: 150, child: LabeledText(label: "", value: formattedDate, name: "", colr: color)),
