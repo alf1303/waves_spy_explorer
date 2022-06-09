@@ -32,6 +32,7 @@ class TransactionProvider extends ChangeNotifier {
   final nftProvider = NftProvider();
   final dataScriptProvider = DataScriptProvider();
   final statsProvider = StatsProvider();
+  DateTime lastLoadedTransactionDate = DateTime.now();
   String curAddr = "";
   List<String> aliases = List.empty(growable: true);
   String afterGlob = "";
@@ -180,20 +181,17 @@ class TransactionProvider extends ChangeNotifier {
         final ids = await extractAssets(res);
         await getMassAssetsInfo(ids);
         fillTransactionsWithAssetsNames(res);
-
         filteredTransactions = allTransactions;
 
         filterTransactions();
-        final lastTrans = filteredTransactions.isEmpty ? null : filteredTransactions[filteredTransactions.length-1];
-        final firstTrans = filteredTransactions.isEmpty ? null : filteredTransactions[0];
-        filterProvider.actualFrom = lastTrans == null ? DateTime.now() : timestampToDate(lastTrans["timestamp"]);
-        filterProvider.actualTo = firstTrans == null ? DateTime.now() : timestampToDate(firstTrans["timestamp"]);
-        createInfo();
+
+        // createInfo();
         filterProvider.notifyAll();
         statsProvider.notifyAll();
         progressProvider.notify();
       }
-
+      dynamic lastTrLoaded = filterProvider.reverseTransactions ? allTransactions[0] : allTransactions[allTransactions.length - 1];
+      lastLoadedTransactionDate = timestampToDate(lastTrLoaded["timestamp"]);
       progressProvider.stopTransactions();
 
       // print("Loaded ${allTransactions.length}, last: $afterGlob");
@@ -222,6 +220,7 @@ class TransactionProvider extends ChangeNotifier {
     final assetsLocalIds = <String, String>{};
     for (var tr in transactions) {
       tr["additional"] = <String, dynamic>{};
+      tr["additional"]["tradeAddrCount"] = 0;
       final transAssetsMap = <String, String>{};
       final trAddressesMap = <String, String>{};
       final Map<String, double> inAssetsIds = {};
@@ -395,27 +394,39 @@ class TransactionProvider extends ChangeNotifier {
     List<dynamic> res = List.empty(growable: true);
     if(curAddr.isNotEmpty) {
       progressProvider.startNfts();
-      String afterId = after == null ? "" : afterGlobNft;
-      var resp = await http.get(Uri.parse("$nodeUrl/assets/nft/$address/limit/$limitNft?after=$afterId"));
-      if(resp.statusCode == 200) {
-        final json = jsonDecode(resp.body);
-        res = json;
-      } else {
-        progressProvider.stopNfts();
-        print("Cant fetch NFTs list: " + resp.body);
-        showSnackError("Cant fetch NFTs list: " + resp.body);
-        // throw("Cant fetch NFTs list: " + resp.body);
-      }
-      List<Nft> nftList = res.map((e) => Nft(
-          data: e,
-          isDuck: e["name"].contains("DUCK") && (e["issuer"] == "3PEktVux2RhchSN63DsDo4b4mz4QqzKSeDv" || e["issuer"] == "3PDVuU45H7Eh5dmtNbnRNRStGwULA7NY6Hb" || e["issuer"] == "3PKmLiGEfqLWMC1H9xhzqvAZKUXfFm8uoeg"),
-          isFarming: false,
-          farmingPower: 0
-      )).toList();
-      if(afterId.isEmpty) {
-        nftProvider.nfts = nftList;
-      } else {
-        nftProvider.nfts.addAll(nftList);
+      bool stop = false;
+      while (!stop) {
+        String afterId = after == null ? "" : afterGlobNft;
+        var resp = await http.get(Uri.parse("$nodeUrl/assets/nft/$address/limit/$limitNft?after=$afterId"));
+        if(resp.statusCode == 200) {
+          final json = jsonDecode(resp.body);
+          res = json;
+          if(res.isEmpty) {
+            stop = true;
+          } else {
+            var lastNft = res[res.length - 1];
+            after = true;
+            afterGlobNft = lastNft["assetId"];
+            print(afterGlobNft);
+            // print("LastTrans: $afterGlob, trts: ${lastTrans["timestamp"]}, curFromDateTs: $curFromDateTs");
+          }
+        } else {
+          progressProvider.stopNfts();
+          print("Cant fetch NFTs list: " + resp.body);
+          showSnackError("Cant fetch NFTs list: " + resp.body);
+          // throw("Cant fetch NFTs list: " + resp.body);
+        }
+        List<Nft> nftList = res.map((e) => Nft(
+            data: e,
+            isDuck: e["name"].contains("DUCK") && (e["issuer"] == "3PEktVux2RhchSN63DsDo4b4mz4QqzKSeDv" || e["issuer"] == "3PDVuU45H7Eh5dmtNbnRNRStGwULA7NY6Hb" || e["issuer"] == "3PKmLiGEfqLWMC1H9xhzqvAZKUXfFm8uoeg"),
+            isFarming: false,
+            farmingPower: 0
+        )).toList();
+        if(afterId.isEmpty) {
+          nftProvider.nfts = nftList;
+        } else {
+          nftProvider.nfts.addAll(nftList);
+        }
       }
       // print("Loaded Nfts: " + nftProvider.nfts.length.toString());
       if(!stakedDucksLoaded || !jediDucksLoaded) {
@@ -530,6 +541,7 @@ class TransactionProvider extends ChangeNotifier {
   }
 
   void filterTransactions() {
+    print("filter1");
     final filterProvider = FilterProvider();
     List<dynamic> datedTransactions = List.from(allTransactions);
     // print("Transactions loaded: " + datedTransactions.length.toString());
@@ -551,7 +563,7 @@ class TransactionProvider extends ChangeNotifier {
     } else {
       filteredTransactions = datedTransactions;
     }
-
+    print("filter2");
     if(filterProvider.addrName.isNotEmpty) {
       filteredTransactions = filteredTransactions.where((tr) => tr["additional"]["addressesIds"].contains(filterProvider.addrName)).toList();
     }
@@ -610,6 +622,10 @@ class TransactionProvider extends ChangeNotifier {
       }
     }
     filteredTransactions = filteredTransactions.toSet().toList();
+    final lastTrans = filteredTransactions.isEmpty ? null : filteredTransactions[filteredTransactions.length-1];
+    final firstTrans = filteredTransactions.isEmpty ? null : filteredTransactions[0];
+    filterProvider.actualFrom = lastTrans == null ? DateTime.now() : timestampToDate(lastTrans["timestamp"]);
+    filterProvider.actualTo = firstTrans == null ? DateTime.now() : timestampToDate(firstTrans["timestamp"]);
     createInfo();
     notifyListeners();
   }

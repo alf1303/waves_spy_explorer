@@ -32,6 +32,7 @@ class FilterProvider extends ChangeNotifier{
   bool reverseTransactions = false;
   bool onlyTraders = false; // addresses, created for trading activity
   String minValue = "0";
+  bool highlightTradeAccs = false;
 
   Map<String, AddressesStatsItem> finalList = {};
   double sumacum_in = 0;
@@ -59,6 +60,8 @@ class FilterProvider extends ChangeNotifier{
       for (var tr in _transactionProvider.filteredTransactions) {
         var additional = tr["additional"];
         int type = tr["type"];
+        // print(additional);
+        // print(assId);
         if(tr["additional"]["inAssetsIds"].containsKey(assetName.id)) {
           // assId = tr["additional"]["inAssetsIds"].keys.toList()[0];
           int decimals = assetName.decimals;
@@ -72,6 +75,7 @@ class FilterProvider extends ChangeNotifier{
             addNewEntryOrCombine(finalList, val, tr["sender"], "in", additional["tradeAddrCount"]);
           }
         }
+
         if(tr["additional"]["outAssetsIds"].containsKey(assetName.id)) {
           // assId = tr["additional"]["outAssetsIds"].keys.toList()[0];
           int decimals = assetsGlobal[assId] == null ? 1 : assetsGlobal[assId]!.decimals;
@@ -88,11 +92,13 @@ class FilterProvider extends ChangeNotifier{
               addNewEntryOrCombine(finalList, transfer["amount"]/pow(10, decimals), transfer["recipient"], "out", additional["tradeAddrCount"]);
             }
           } else if(type == 7) {
+            print("beb");
             addNewEntryOrCombine(finalList, val, tr["sender"], "out", additional["tradeAddrCount"]);
           } else if(type == 6) {
             addNewEntryOrCombine(finalList, val, "${tr["sender"]}", "out", additional["tradeAddrCount"]);
           }
         }
+
       }
 
       sum_in = sumacum_in.toStringAsFixed(2);
@@ -196,8 +202,12 @@ class FilterProvider extends ChangeNotifier{
   Future<void> changeFromDate(DateTime date) async{
     from = date;
     // _transactionProvider.filterTransactions();
-    _transactionProvider.allTransactions.clear();
-    await _transactionProvider.getTransactions(address: _transactionProvider.curAddr);
+    if (from!.isAfter(_transactionProvider.lastLoadedTransactionDate)) {
+      _transactionProvider.filterTransactions();
+    } else {
+      _transactionProvider.allTransactions.clear();
+      await _transactionProvider.getTransactions(address: _transactionProvider.curAddr);
+    }
     notifyAll();
   }
 

@@ -9,6 +9,7 @@ import 'package:waves_spy/src/main_page.dart';
 import 'package:waves_spy/src/models/stats_item.dart';
 import 'package:waves_spy/src/providers/asset_provider.dart';
 import 'package:waves_spy/src/providers/data_script_provider.dart';
+import 'package:waves_spy/src/providers/filter_provider.dart';
 import 'package:waves_spy/src/providers/label_provider.dart';
 import 'package:waves_spy/src/providers/nft_provider.dart';
 import 'package:waves_spy/src/providers/stats_provider.dart';
@@ -25,7 +26,7 @@ final dataProvider = DataScriptProvider();
 final statsProvider = StatsProvider();
 final labelProvideer = LabelProvider();
 final transactionDetailsProvider = TransactionDetailsProvider();
-
+final filterProvider = FilterProvider();
 
 Future<void> loadMoreTr() async {
     await transactionProvider.getMoreTransactions();
@@ -542,5 +543,10 @@ void setLabelAddr() {
 
 void addAdditionalToTransactionDetails() {
     transactionDetailsProvider.setFullTransaction();
+}
+
+void setHighliteFlag() {
+    filterProvider.highlightTradeAccs = true;
+    filterProvider.notifyListeners();
 }
 
