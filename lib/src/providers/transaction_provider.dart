@@ -40,6 +40,7 @@ class TransactionProvider extends ChangeNotifier {
   int limit = 1000;
   int limitNft = 1000;
 
+  bool isLoading = false;
   bool stakedDucksLoaded = false;
   bool jediDucksLoaded = false;
   bool allTransactionsLoaded = false;
@@ -91,15 +92,21 @@ class TransactionProvider extends ChangeNotifier {
     aliases = await fetchAliases(curAddr);
     // print("Aliases: ");
     // print(aliases);
+    print("** Start loading transactions");
     await getTransactions(address: curAddr);
+    print("** Transactions loaded");
     await getAssets(curAddr);
-    // await getNft(curAddr); //implement
+    print("** Assets loaded");
     await getData(curAddr); //implement
+    print("** Data loaded");
     await getScript(curAddr); //implement
+    print("** Script loaded");
     await getNft(address: curAddr);
+    print("** Nft loaded");
     setDucksStatsData();
     statsProvider.notifyAll();
     progressProvider.stop();
+    isLoading = false;
     notifyListeners();
   }
 
@@ -152,7 +159,7 @@ class TransactionProvider extends ChangeNotifier {
         if (resp.statusCode == 200) {
           final json = jsonDecode(resp.body);
           res = json[0];
-          // print("Loaded: " + res.length.toString());
+          print("Loaded: " + res.length.toString());
           if(res.isEmpty) {
             stopDate = true;
             allTransactionsLoaded = true;
@@ -162,7 +169,7 @@ class TransactionProvider extends ChangeNotifier {
             afterGlob = lastTrans["id"];
             final curFromDateTs = dateToTimestamp(filterProvider.from);
             stopDate = lastTrans["timestamp"] < curFromDateTs || curFromDateTs == 0;
-            // print("LastTrans: $afterGlob, trts: ${lastTrans["timestamp"]}, curFromDateTs: $curFromDateTs");
+            print("LastTrans: $afterGlob, trts: ${lastTrans["timestamp"]}, curFromDateTs: $curFromDateTs");
           }
 
         } else {
@@ -178,12 +185,15 @@ class TransactionProvider extends ChangeNotifier {
         } else {
           filterProvider.reverseTransactions ? allTransactions.insertAll(0, res.reversed) : allTransactions.addAll(res);
         }
+        print("zuzu");
         final ids = await extractAssets(res);
         await getMassAssetsInfo(ids);
         fillTransactionsWithAssetsNames(res);
         filteredTransactions = allTransactions;
 
+        print("loading filter start");
         filterTransactions();
+        print("loading filter finish");
 
         // createInfo();
         filterProvider.notifyAll();
@@ -217,8 +227,10 @@ class TransactionProvider extends ChangeNotifier {
   // Loop through transactions and find all assets ids and addresses present in transaction
   // create sets in each transaction json and global set(for next step - fetching names)
   Future<Map<String, String>> extractAssets(List<dynamic> transactions) async {
+    print("ex_1");
     final assetsLocalIds = <String, String>{};
     for (var tr in transactions) {
+      print(tr["id"]);
       tr["additional"] = <String, dynamic>{};
       tr["additional"]["tradeAddrCount"] = 0;
       final transAssetsMap = <String, String>{};
@@ -226,7 +238,6 @@ class TransactionProvider extends ChangeNotifier {
       final Map<String, double> inAssetsIds = {};
       final Map<String, double> outAssetsIds = {};
       int type = tr["type"];
-
       tr.containsKey("sender") ? trAddressesMap[tr["sender"]] = getAddrName(tr['sender']) : {};
       tr.containsKey("dApp") ? trAddressesMap[tr["dApp"]] = getAddrName(tr["dApp"]) : {};
 
@@ -336,6 +347,7 @@ class TransactionProvider extends ChangeNotifier {
       tr["additional"]["outAssetsIds"] = outAssetsIds;
       assetsLocalIds.addAll(transAssetsMap);
     }
+    print("ouyeh");
     return assetsLocalIds;
   }
 
@@ -429,15 +441,21 @@ class TransactionProvider extends ChangeNotifier {
         }
       }
       // print("Loaded Nfts: " + nftProvider.nfts.length.toString());
-      if(!stakedDucksLoaded || !jediDucksLoaded) {
+      if(!stakedDucksLoaded) {
         Map<String, int> stakedDucks = await getStakedDucks(address);
         List<dynamic> stakedDucksData = await getMassAssets(stakedDucks);
-        List<Nft> stakedDucksNft = stakedDucksData.map((el) => Nft(
-          data: el,
-          isDuck: true,
-          isFarming: true,
-          farmingPower: stakedDucks[el["assetId"]] ?? 0
-        )).toList();
+        List<Nft> stakedDucksNft = stakedDucksData.map((el) =>
+            Nft(
+                data: el,
+                isDuck: true,
+                isFarming: true,
+                farmingPower: stakedDucks[el["assetId"]] ?? 0
+            )).toList();
+        stakedDucksLoaded = true;
+        nftProvider.nfts.addAll(stakedDucksNft);
+
+      }
+      if(!jediDucksLoaded) {
         Map<String, JediItem> jediDucks = await getJediDucks(address);
         List<dynamic> jediDucksData = await getMassAssets(jediDucks);
         List<Nft> jediDucksNfts = jediDucksData.map((el) => Nft.jedi(
@@ -446,9 +464,7 @@ class TransactionProvider extends ChangeNotifier {
           isDjedi: true,
           mantleLvl: jediDucks[el["assetId"]]!.mantlelvl
         )).toList();
-        stakedDucksLoaded = true;
         jediDucksLoaded = true;
-        nftProvider.nfts.addAll(stakedDucksNft);
         nftProvider.nfts.addAll(jediDucksNfts);
       }
       
@@ -628,6 +644,7 @@ class TransactionProvider extends ChangeNotifier {
     filterProvider.actualTo = firstTrans == null ? DateTime.now() : timestampToDate(firstTrans["timestamp"]);
     createInfo();
     notifyListeners();
+    print("filter3");
   }
 
   Future<Map<String, int>> getStakedDucks(String address) async{

@@ -8,6 +8,7 @@ import 'dart:convert';
 import 'package:waves_spy/src/helpers/helpers.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/services.dart';
+import 'package:waves_spy/src/providers/progress_bars_provider.dart';
 import 'package:waves_spy/src/providers/transaction_provider.dart';
 import 'package:waves_spy/src/widgets/other/custom_widgets.dart';
 
@@ -52,7 +53,10 @@ class _InputWidgetState extends State<InputWidget> {
     //     break;
     //   }
     // }
-    await _transactionProvider.setCurrAddr(_inputController.text.trim());
+    if (!_transactionProvider.isLoading) {
+      _transactionProvider.isLoading = true;
+      await _transactionProvider.setCurrAddr(_inputController.text.trim());
+    }
   }
 
   loadMore() async {
@@ -95,7 +99,7 @@ class _InputWidgetState extends State<InputWidget> {
                 label: Text(apploc!.addrHint),
               ),
               onFieldSubmitted: (val) {
-                onSearch();
+                  onSearch();
               },
             ),
           );

@@ -486,9 +486,13 @@ void collectDucksStats(Map<String, dynamic> tr) {
 }
 
 void processDuckHatch(Map<String, dynamic> tr) {
+    // print(tr);
     const String label = "Ducks hatched";
     const int count = 1;
-    double amount = tr["payment"][0]["amount"];
+    double amount = 0;
+    if (tr["payment"].length > 0) {
+        amount = tr["payment"][0]["amount"];
+    }
     statsProvider.updateDuckStats(label, count, amount);
 }
 
@@ -515,7 +519,10 @@ void processRebirth(Map<String, dynamic> tr) {
 void processBuyPerch(Map<String, dynamic> tr) {
     const String label = "Perches purchased";
     const int count = 1;
-    double amount = tr["payment"][0]["amount"];
+    double amount = 0;
+    if (tr["payment"].length > 0) {
+        amount = tr["payment"][0]["amount"];
+    }
     statsProvider.updateDuckStats(label, count, amount);
 }
 
