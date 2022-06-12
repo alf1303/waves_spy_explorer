@@ -16,7 +16,7 @@ import 'package:waves_spy/src/widgets/transactions/transactions_list.dart';
 
 import 'charts/puzzle/eagle_earnings.dart';
 
-const String version = "v_1.0.1     ";
+const String version = "v_1.0.2     ";
 final GlobalKey<ScaffoldMessengerState> messengerKey = GlobalKey<ScaffoldMessengerState>();
 class MainPage extends StatelessWidget {
   const MainPage({Key? key, this.address}) : super(key: key);
