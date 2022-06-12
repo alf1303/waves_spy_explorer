@@ -82,7 +82,7 @@ class _PuzzleChartState extends State<PuzzleChart> {
       gridData: FlGridData(
         show: true,
         drawVerticalLine: true,
-        horizontalInterval: 100,
+        horizontalInterval: widget.gridSize,
         verticalInterval: 5,
         getDrawingHorizontalLine: (value) {
           return FlLine(
