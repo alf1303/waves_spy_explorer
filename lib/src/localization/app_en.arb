@@ -3,7 +3,7 @@
   "@appTitle": {
     "description": "The title of the application"
   },
-    "headerTitle": "Waves Spy Explorer",
+    "headerTitle": "Waves Address Explorer",
     "@headerTitle": {
       "description": "The title of the Scaffold"
     },

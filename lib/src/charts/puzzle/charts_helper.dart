@@ -13,6 +13,7 @@ Future<List<ChartItem>> getPuzzleEarnings() async{
   } else {
     print("Some error: " + resp.body);
   }
+  result.removeLast();
   return result;
 }
 
@@ -27,5 +28,6 @@ Future<List<ChartItem>> getEagleEarnings() async{
   } else {
     print("Some error: " + resp.body);
   }
+  result.removeLast();
   return result;
 }
