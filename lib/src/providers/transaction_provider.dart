@@ -93,17 +93,19 @@ class TransactionProvider extends ChangeNotifier {
     // print("Aliases: ");
     // print(aliases);
     print("** Start loading transactions");
-    await getTransactions(address: curAddr);
-    print("** Transactions loaded");
-    await getAssets(curAddr);
-    print("** Assets loaded");
-    await getData(curAddr); //implement
-    print("** Data loaded");
-    await getScript(curAddr); //implement
-    print("** Script loaded");
-    await getNft(address: curAddr);
-    print("** Nft loaded");
-    setDucksStatsData();
+    bool result = await getTransactions(address: curAddr);
+    if (result) {
+      print("** Transactions loaded");
+      await getAssets(curAddr);
+      print("** Assets loaded");
+      await getData(curAddr); //implement
+      print("** Data loaded");
+      await getScript(curAddr); //implement
+      print("** Script loaded");
+      await getNft(address: curAddr);
+      print("** Nft loaded");
+      setDucksStatsData();
+    }
     statsProvider.notifyAll();
     progressProvider.stop();
     isLoading = false;
@@ -143,7 +145,7 @@ class TransactionProvider extends ChangeNotifier {
     await getTransactions(address: curAddr, after: true);
   }
 
-  Future<void> getTransactions({required String address, bool? after, BuildContext? context}) async {
+  Future<bool> getTransactions({required String address, bool? after, BuildContext? context}) async {
     if (curAddr.isNotEmpty) {
       progressProvider.startTransactions();
       final filterProvider = FilterProvider();
@@ -177,7 +179,8 @@ class TransactionProvider extends ChangeNotifier {
           progressProvider.stop();
           showSnackError(resp.body);
           print("Failed to load transactions list\n" + resp.body);
-          throw("Transactions not loaded");
+          // throw("Transactions not loaded");
+          return false;
         }
       
         if (after == "") {
@@ -211,6 +214,7 @@ class TransactionProvider extends ChangeNotifier {
       // }
       // allTransactions = allTransactions.where((element) => element["type"] == 16).toList();
     }
+    return true;
   }
 
   Future<dynamic> getWavesBalances() async {

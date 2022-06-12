@@ -30,7 +30,7 @@ class _PuzzleChartState extends State<PuzzleChart> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(20),
+      padding: EdgeInsets.all(25),
       child: LineChart(
         mainData()
     ),);
@@ -40,7 +40,7 @@ class _PuzzleChartState extends State<PuzzleChart> {
     const style = TextStyle(
       color: Colors.white70,
       // fontWeight: FontWeight.bold,
-      fontSize: 10,
+      fontSize: 14,
     );
     Widget text;
     // print(value);

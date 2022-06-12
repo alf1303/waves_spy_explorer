@@ -37,11 +37,15 @@ class MainPage extends StatelessWidget {
                   children: [
                     SizedBox(height: 35, child: Image.asset('assets/images/logo.png', fit: BoxFit.scaleDown,)),
                     SelectableText(AppLocalizations.of(context)!.headerTitle + "     "),
-                    InputWidget(address: address),
                     Expanded(
                       child: Consumer<LabelProvider>(
                           builder: (context, model, child) {
-                            return model.isAddressPresent ? Text(getAddrName(transactionProvider.curAddr), style: TextStyle(fontSize: 16),) : Container();
+                            return Row(
+                              children: [
+                                InputWidget(address: address),
+                                model.isAddressPresent ? Text(getAddrName(transactionProvider.curAddr), style: TextStyle(fontSize: 16),) : Container()
+                              ],
+                            );
                           }),
                     )
                   ],
@@ -55,7 +59,7 @@ class MainPage extends StatelessWidget {
                       Navigator.of(context).pushNamed(PuzzleEarnings.routeName);
                     },
                   ),
-                  SizedBox(width: 10,),
+                  const SizedBox(width: 10,),
                   OutlinedButton(
                     child: const Text("Eagle Earnings"),
                     onPressed: () {

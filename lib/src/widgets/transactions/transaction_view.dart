@@ -434,7 +434,8 @@ class LinkToAddress extends StatelessWidget {
             text: label,
             recognizer: TapGestureRecognizer()..onTap = () async {
               String baseUri = Uri.base.toString();
-              String uri = baseUri.substring(0, baseUri.length - 2);
+              final lastSlash = baseUri.lastIndexOf("/");
+              String uri = baseUri.substring(0, lastSlash - 1);
               String addr = "";
               if (alias) {
                 addr = val.split("->")[1];
@@ -473,7 +474,8 @@ class LinkToAnyAddress extends StatelessWidget {
         icon: Icon(Icons.telegram_sharp),
         onPressed: () async {
           String baseUri = Uri.base.toString();
-          String uri = baseUri.substring(0, baseUri.length - 2);
+          final lastSlash = baseUri.lastIndexOf("/");
+          String uri = baseUri.substring(0, lastSlash);
           String addr = "";
           String link = val;
           await _launchURL(link);
