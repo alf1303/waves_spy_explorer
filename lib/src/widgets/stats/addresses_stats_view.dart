@@ -33,6 +33,7 @@ class _AddressesStatsViewState extends State<AddressesStatsView> {
   @override
   Widget build(BuildContext context) {
     final _trProvider = TransactionProvider();
+    final fontSize = getFontSize(context);
     return Container(
       child: Consumer<FilterProvider>(
         builder: (context, model, child) {
@@ -76,7 +77,7 @@ class _AddressesStatsViewState extends State<AddressesStatsView> {
                 child: ListView(
                   primary: false,
                   shrinkWrap: true,
-                  children: getList(model.finalList, model.assetName, income),
+                  children: getList(model.finalList, model.assetName, income, fontSize),
                 ),
               ),
             ],
@@ -87,20 +88,20 @@ class _AddressesStatsViewState extends State<AddressesStatsView> {
   }
 }
 
-List<Widget> getList(Map<String, AddressesStatsItem> map, Asset assName, bool income) {
+List<Widget> getList(Map<String, AddressesStatsItem> map, Asset assName, bool income, double fontSize) {
   List<Widget> list = List.empty(growable: true);
   var sortedKeys = map.keys.toList(growable:false)
     ..sort((k1, k2) => income ? map[k2]!.income.compareTo(map[k1]!.income) : map[k2]!.outcome.compareTo(map[k1]!.outcome));
   final sortedMap =  LinkedHashMap
       .fromIterable(sortedKeys, key: (k) => k, value: (k) => map[k]);
   sortedMap.forEach((key, value) {
-    final ele = ResultWidget(value, assName.name);
+    final ele = ResultWidget(value, assName.name, fontSize);
     list.add(ele);
   });
   return list;
 }
 
-Widget ResultWidget(AddressesStatsItem? it, String assName) {
+Widget ResultWidget(AddressesStatsItem? it, String assName, double fontSize) {
   String key = it!.address;
   String val = it.address;
   bool hidden = false;
@@ -116,7 +117,7 @@ Widget ResultWidget(AddressesStatsItem? it, String assName) {
             return Row(
               children: [
                 // SizedBox(width: 350, child: LinkToAddress(val: val, label: val, color: Colors.white,)),
-                SizedBox(width: 350, child: LabeledText(label: "view: ", value: val, addrLink: true, colr: it.tradeAddrCount >= 1 ? Colors.yellow : null)),
+                SizedBox(width: 350, child: LabeledText(label: "view: ", value: val, addrLink: true, colr: it.tradeAddrCount >= 1 ? Colors.yellow : null, fontSize: fontSize)),
                 GestureDetector(
                   onTap: () {
                     setStat(() => hidden = !hidden);

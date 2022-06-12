@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:waves_spy/src/helpers/helpers.dart';
 import 'package:waves_spy/src/models/asset.dart';
 import 'package:waves_spy/src/providers/asset_provider.dart';
 import 'package:waves_spy/src/providers/transaction_provider.dart';
@@ -27,6 +28,8 @@ class AssetsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fontSize = getFontSize(context);
+    final iconSize = getIconSize(context);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -47,7 +50,7 @@ class AssetsList extends StatelessWidget {
                       return Row(
                         children: [
                           const Text("ID                     "),
-                          Expanded(child: InputWidgetFilter(controller: _textController, onchanged: filterByName, hint: "clear", clearFunc: clearAssetName, label: "enter name or id to filter")),
+                          Expanded(child: InputWidgetFilter(controller: _textController, onchanged: filterByName, hint: "clear", clearFunc: clearAssetName, label: "enter name or id to filter", fontSize: fontSize, iconSize: iconSize)),
                         ],
                       );
                     },

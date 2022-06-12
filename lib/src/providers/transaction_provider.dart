@@ -45,7 +45,7 @@ class TransactionProvider extends ChangeNotifier {
   bool jediDucksLoaded = false;
   bool allTransactionsLoaded = false;
 
-  Widget filterData = Text("Filter options: ");
+  Widget filterData = Text("Filter options: ", style: TextStyle(fontSize: getLastFontSize()),);
 
   List<dynamic> allTransactions = List.empty(growable: true);
   List<dynamic> filteredTransactions = List.empty(growable: true);
@@ -180,6 +180,7 @@ class TransactionProvider extends ChangeNotifier {
           showSnackError(resp.body);
           print("Failed to load transactions list\n" + resp.body);
           // throw("Transactions not loaded");
+          progressProvider.notify();
           return false;
         }
       
@@ -561,7 +562,7 @@ class TransactionProvider extends ChangeNotifier {
   }
 
   void filterTransactions() {
-    print("filter1");
+    // print("filter1");
     final filterProvider = FilterProvider();
     List<dynamic> datedTransactions = List.from(allTransactions);
     // print("Transactions loaded: " + datedTransactions.length.toString());
@@ -583,7 +584,7 @@ class TransactionProvider extends ChangeNotifier {
     } else {
       filteredTransactions = datedTransactions;
     }
-    print("filter2");
+    // print("filter2");
     if(filterProvider.addrName.isNotEmpty) {
       filteredTransactions = filteredTransactions.where((tr) => tr["additional"]["addressesIds"].contains(filterProvider.addrName)).toList();
     }
@@ -648,7 +649,7 @@ class TransactionProvider extends ChangeNotifier {
     filterProvider.actualTo = firstTrans == null ? DateTime.now() : timestampToDate(firstTrans["timestamp"]);
     createInfo();
     notifyListeners();
-    print("filter3");
+    // print("filter3");
   }
 
   Future<Map<String, int>> getStakedDucks(String address) async{

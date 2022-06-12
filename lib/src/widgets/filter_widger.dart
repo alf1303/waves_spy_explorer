@@ -29,9 +29,17 @@ class FilterWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // return const Center(child: Text("FILTER BUTTONS"),);
+    final height = getHeight(context);
+    final width = getWidth(context);
+    final isMob = isPortrait(context);
+    final fontSize = getFontSize(context);
+    final iconSize = getIconSize(context);
+    final isNarr = isNarrow(context);
+    final textStyle = TextStyle(fontSize: fontSize);
     final apploc = AppLocalizations.of(context);
     final _filterProvider = FilterProvider();
     final _transactionProvider = TransactionProvider();
+    print("height: $height, width: $width");
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
       child: Consumer<FilterProvider>(
@@ -51,91 +59,99 @@ class FilterWidget extends StatelessWidget {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Container(
-                    height: 57,
-                    padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
-                    // decoration: BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: BorderRadius.all(Radius.circular(5))),
-                    child: Row(
-                      children: [
-                        CustomGroupRadio(label: "Asset transfers", value: 4, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor,),
-                        CustomGroupRadio(label: "Mass Payments", value: 11, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor),
-                        CustomGroupRadio(label: "Invokes", value: 16, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor),
-                        CustomGroupRadio(label: "Exchanges", value: 7, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor),
-                        CustomGroupRadio(label: "Issues", value: 3, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor),
-                        CustomGroupRadio(label: "Burns", value: 6, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor),
-                        MyToolTip(
-                            message: "clear type",
-                            child: IconButton(onPressed: clearType, icon: const Icon(Icons.close,)))
-                      ],
-                    ),
-                  ),
-                  MyToolTip(
-                    message: model.reverseTransactions ? apploc!.newFirst : apploc!.oldFirst,
-                    child: IconButton(onPressed: onReverseChange,
-                      icon: Icon(model.reverseTransactions ? Icons.arrow_upward_outlined : Icons.arrow_downward_rounded)),
-                  ),
-                  MyToolTip(
-                      message: "Show only strange accounts, \n yellow - trades between strange acc",
-                      child: Checkbox(value: _filterProvider.onlyTraders, onChanged: changeOnlyTraders)),
-                  Expanded(
-                    child: Container(
+              SizedBox(
+                height: fontSize*4.5,
+                child: Row(
+                  children: [
+                    Container(
                       padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
+                      // decoration: BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: BorderRadius.all(Radius.circular(5))),
+                      child: isNarr ? OutlinedButton(
+                        child: Text("type", style: textStyle,),
+                        onPressed: () {
+                          showDialog(context: context, builder: (context) {
+                            return MyDialog(
+                              child: TypeWidget(model, fontSize, iconSize),
+                              iconSize: iconSize,
+                            );
+                          });
+                        },
+                      ) : TypeWidget(model, fontSize, iconSize)
+                    ),
+                    MyToolTip(
+                      message: model.reverseTransactions ? apploc!.newFirst : apploc!.oldFirst,
+                      child: IconButton(onPressed: onReverseChange,
+                        icon: Icon(model.reverseTransactions ? Icons.arrow_upward_outlined : Icons.arrow_downward_rounded, size: iconSize,)),
+                    ),
+                    Visibility(
+                      visible: model.highlightTradeAccs,
+                      child: MyToolTip(
+                          message: "Show only strange accounts, \n yellow - trades between strange acc",
+                          child: Checkbox(value: _filterProvider.onlyTraders, onChanged: changeOnlyTraders,)),
+                    ),
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
+                        child: Row(
+                          children: [
+                            Expanded(
+                                child: InputWidgetFilter(controller: addressController, onchanged: addressChanged, clearFunc: clearAddress, label: "address", hint: apploc.clearAddress, fontSize: fontSize, iconSize: iconSize)
+                            ),
+                            Expanded(
+                                child: InputWidgetFilter(controller: minValueController, onchanged: minValueChanged, clearFunc: minValueClear, label: "min value", hint: apploc.clearMinValue, isNumeric: true, fontSize: fontSize, iconSize: iconSize)
+                            ),
+                            Expanded(
+                              child: Visibility(child: InputWidgetFilter(controller: functController, onchanged: functChanged, clearFunc: clearFunc, label: "function name", hint: apploc.clearFunction, fontSize: fontSize, iconSize: iconSize),
+                                visible: funcNameVisible,)
+                    ),
+
+                  ],
+                )
+                )
+                )
+                ]),
+              ),
+              SizedBox(
+                height: fontSize*3.5,
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: Row(
+                        children: [
+                          MyToolTip(
+                              message: "Load more transactions",
+                              child: loadButton(loadMore, "More", fontSize)),
+                          MyToolTip(
+                              message: "Load all transactions",
+                              child: loadButton(loadAll, "Load All", fontSize)),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 8,),
+                    Expanded(
+                      flex: 2,
+                        child: dateTimePicker(_filterProvider.changeFromDate, DateTime(2022).toString(),  "from", "clear from date", fontSize, iconSize)
+                    ),
+                    const SizedBox(width: 8,),
+                    Expanded(
+                      flex: 2,
                       child: Row(
                         children: [
                           Expanded(
-                              child: InputWidgetFilter(controller: addressController, onchanged: addressChanged, clearFunc: clearAddress, label: "address", hint: apploc.clearAddress)
+                            child: dateTimePicker(_filterProvider.changeToDate, DateTime.now().add(const Duration(hours: 1)).toString(), "to", "clear to date", fontSize, iconSize)
                           ),
-                          Expanded(
-                              child: InputWidgetFilter(controller: minValueController, onchanged: minValueChanged, clearFunc: minValueClear, label: "min value", hint: apploc.clearMinValue, isNumeric: true)
-                          ),
-                          Expanded(
-                            child: Visibility(child: InputWidgetFilter(controller: functController, onchanged: functChanged, clearFunc: clearFunc, label: "function name", hint: apploc.clearFunction),
-                              visible: funcNameVisible,)
-                  ),
-
-                ],
-              )
-              )
-              )
-              ]),
-              Row(
-                children: [
-                  Expanded(
-                    flex: 3,
-                    child: Row(
-                      children: [
-                        MyToolTip(
-                            message: "Load more transactions",
-                            child: loadButton(loadMore, "Load More")),
-                        MyToolTip(
-                            message: "Load all transactions",
-                            child: loadButton(loadAll, "Load All")),
-                        Expanded(
-                          child: dateTimePicker(_filterProvider.changeFromDate, DateTime(2022).toString(),  "from", "clear from date")
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 15,),
-                  Expanded(
-                    flex: 2,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: dateTimePicker(_filterProvider.changeToDate, DateTime.now().add(const Duration(hours: 1)).toString(), "to", "clear to date")
-                        ),
-                      ],
+                    const SizedBox(width: 8,),
+                    Expanded(
+                      flex: 4,
+                        child: assetFilter(context)
                     ),
-                  ),
-                  const SizedBox(width: 8,),
-                  Expanded(
-                    flex: 4,
-                      child: assetFilter(context)
-                  ),
-                  directionSelect(),
-                ],
+                    directionSelect(fontSize),
+                  ],
+                ),
               ),
               Container(
                 padding: const EdgeInsets.all(4),
@@ -158,22 +174,51 @@ class FilterWidget extends StatelessWidget {
     );
   }
 
+  Widget TypeWidget(model, fontSize, iconSize) {
+    return StatefulBuilder(
+        builder: (context, setStat) {
+          final fProv = FilterProvider();
+          clrFunc() {
+            clearType();
+            setStat(() {
+            });
+          }
+          print("${fProv.fType}");
+          return Row(
+            children: [
+              CustomGroupRadio(label: "Asset transfers", value: 4, groupValue: fProv.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor, fontSize: fontSize,),
+              CustomGroupRadio(label: "Mass Payments", value: 11, groupValue: fProv.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor, fontSize: fontSize),
+              CustomGroupRadio(label: "Invokes", value: 16, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor, fontSize: fontSize),
+              CustomGroupRadio(label: "Exchanges", value: 7, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor, fontSize: fontSize),
+              CustomGroupRadio(label: "Issues", value: 3, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor, fontSize: fontSize),
+              CustomGroupRadio(label: "Burns", value: 6, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor, fontSize: fontSize),
+              MyToolTip(
+                  message: "clear type",
+                  child: IconButton(onPressed: clrFunc, icon: Icon(Icons.close, size: iconSize,)))
+            ],
+          );
+        }
+    );
+  }
+
   Widget assetFilter(BuildContext context) {
     final apploc = AppLocalizations.of(context);
+    final fontSize = getFontSize(context);
     return DropdownSearch<Asset>(
       showClearButton: true,
       popupProps: const PopupProps.menu(showSearchBox: true),
       dropdownSearchDecoration: InputDecoration(border: const OutlineInputBorder(),
+          labelStyle: TextStyle(fontSize: fontSize),
           isDense: true,
           labelText: "asset name or id",
-          suffixIcon: IconButton(onPressed: clearFunc, icon: const Icon(Icons.close,), tooltip: apploc?.clearAsset,)),
+          suffixIcon: IconButton(onPressed: clearAsset, icon: const Icon(Icons.close,), tooltip: apploc?.clearAsset,)),
       asyncItems: (String filter) => getData(filter),
       itemAsString: (Asset u) => "${u.name} - ${u.id}",
       onChanged: (Asset? data) => assetChanged(data),
     );
   }
 
-  Widget directionSelect() {
+  Widget directionSelect(double fontSize) {
     return MyToolTip(
       message: "direction of transactions",
       child: Padding(
@@ -182,7 +227,7 @@ class FilterWidget extends StatelessWidget {
             items: dirs.map((String items) {
               return DropdownMenuItem(
                 value: items,
-                child: Text(items),
+                child: Text(items, style: TextStyle(fontSize: fontSize),),
               );
             }).toList(),
             value: dirValue,
@@ -192,7 +237,7 @@ class FilterWidget extends StatelessWidget {
     );
   }
 
-  Widget loadButton(funct, String text) {
+  Widget loadButton(funct, String text, fontSize) {
     return InkWell(
       onTap: funct,
       hoverColor: hoverColor,
@@ -200,22 +245,23 @@ class FilterWidget extends StatelessWidget {
         margin: const EdgeInsets.only(right: 5),
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
         decoration: BoxDecoration(border: Border.all(color: Colors.greenAccent), borderRadius: BorderRadius.circular(8)),
-        child: Text(text),
+        child: Text(text, style: TextStyle(fontSize: fontSize),),
       ),
     );
   }
 
-  Widget dateTimePicker(funct, String initialValue, String label, String tooltip) {
+  Widget dateTimePicker(funct, String initialValue, String label, String tooltip, double fontSize, double iconSize) {
     return DateTimePicker(
       type: DateTimePickerType.dateTime,
       firstDate: DateTime(2018),
       lastDate: DateTime(2023),
+      style: TextStyle(fontSize: fontSize),
       // dateLabelText: "from",
       decoration: InputDecoration(
           border: const OutlineInputBorder(),
           isDense: true,
           labelText: label,
-          suffixIcon: IconButton(onPressed: clearFromDate, icon: const Icon(Icons.close,), tooltip: tooltip,)
+          suffixIcon: IconButton(onPressed: clearFromDate, iconSize: iconSize, icon: const Icon(Icons.close,), tooltip: tooltip,)
       ),
       initialValue: initialValue,
       onChanged: (val) async{
@@ -335,7 +381,7 @@ class FilterWidget extends StatelessWidget {
 
 }
 
-Widget InputWidgetFilter({controller, onchanged, clearFunc, label, hint, bool? isNumeric, bool? padded, bool? submit}) {
+Widget InputWidgetFilter({controller, onchanged, clearFunc, label, hint, bool? isNumeric, bool? padded, bool? submit, double? fontSize, double? iconSize}) {
   bool isNum = isNumeric ?? false;
   final bool padde = padded ?? false;
   final bool submi = submit ?? false;
@@ -346,10 +392,11 @@ Widget InputWidgetFilter({controller, onchanged, clearFunc, label, hint, bool? i
           children: [
       Expanded(
       child: Padding(
-        padding: padde ? const EdgeInsets.only(left: 20.0, right: 150, bottom: 10) : const EdgeInsets.all(4),
+        padding: padde ? const EdgeInsets.only(left: 20.0, right: 150, bottom: 5) : const EdgeInsets.all(4),
         child: TextFormField(
         onChanged: !submi ? onchanged : null,
             onFieldSubmitted: submi ? onchanged : null,
+            style: TextStyle(fontSize: fontSize),
             controller: controller,
             keyboardType: isNum ? const TextInputType.numberWithOptions(decimal: true) : null,
             inputFormatters: isNum ? [
@@ -359,7 +406,7 @@ Widget InputWidgetFilter({controller, onchanged, clearFunc, label, hint, bool? i
         border: const OutlineInputBorder(borderSide: BorderSide(color: Colors.blueGrey)),
         isDense: true,
         labelText: label,
-        suffixIcon: IconButton(onPressed: clearFunc, icon: const Icon(Icons.close,), tooltip: hint,)
+        suffixIcon: IconButton(onPressed: clearFunc, iconSize: iconSize, icon: const Icon(Icons.close,), tooltip: hint,)
   ),
   ),
       ),

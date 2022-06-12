@@ -31,3 +31,20 @@ class MyToolTip extends StatelessWidget {
     );
   }
 }
+
+class MyDialog extends StatelessWidget {
+  MyDialog({Key? key, required this.child, required this.iconSize}) : super(key: key);
+  final iconSize;
+  Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      actions: [
+        OutlinedButton(onPressed: () {Navigator.pop(context);}, child: Text("Close", style: TextStyle(fontSize: iconSize*0.7),),)
+      ],
+      content: child,
+    );
+  }
+}
+

@@ -35,30 +35,41 @@ class _MainAreaState extends State<MainArea>  with SingleTickerProviderStateMixi
   Widget build(BuildContext context) {
     final _transactionProvider = TransactionProvider();
     final radius = Radius.circular(16);
+    final height = getHeight(context);
+    final width = getWidth(context);
+    final isMob = isPortrait(context);
+    final fontSize = getFontSize(context);
+    final iconSize = getIconSize(context);
     return Scaffold(
-      appBar: AppBar(
-        title: TabBar(
-            // indicator: ShapeDecoration(
-            //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topRight: radius, topLeft: radius)),
-            //     color: Colors.white10
-            // ),
-          controller: tabController,
-            tabs: const [
-          // const Tab(text: "Transactions", icon: const MyProgressBar(label: "trans"),),
-          // Tab(text: "Assets", icon: MyProgressBar(label: "assets")),
-          // Tab(text: "NFTs", icon: MyProgressBar(label: "nfts")),
-          // // Tab(text: "Data", icon: MyProgressBar(label: "data")),
-          // Tab(icon: MyProgressBar(label: "data"), child: Row(children: [Text("Data"), Icon(Icons.check_rounded, color: Colors.greenAccent,)],),),
-          // Tab(text: "Script", icon: MyProgressBar(label: "script")),
-          // Tab(text: "Stats",),
-              TabHeaderWidget(name: "Transactions", label: "trans", index: 0),
-              TabHeaderWidget(name: "Assets", label: "assets",index: 1,),
-              TabHeaderWidget(name: "Nfts", label: "nfts", index: 2,),
-              TabHeaderWidget(name: "Data", label: "data", index: 3,),
-              TabHeaderWidget(name: "Script", label: "script", index: 4,),
-              TabHeaderWidget(name: "Stats", label: "none", index: 5,),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(fontSize*3),
+        child: AppBar(
+          title: TabBar(
+            padding: EdgeInsets.all(0),
+              labelPadding: EdgeInsets.all(0),
 
-        ]),
+              // indicator: ShapeDecoration(
+              //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topRight: radius, topLeft: radius)),
+              //     color: Colors.white10
+              // ),
+            controller: tabController,
+              tabs: const [
+            // const Tab(text: "Transactions", icon: const MyProgressBar(label: "trans"),),
+            // Tab(text: "Assets", icon: MyProgressBar(label: "assets")),
+            // Tab(text: "NFTs", icon: MyProgressBar(label: "nfts")),
+            // // Tab(text: "Data", icon: MyProgressBar(label: "data")),
+            // Tab(icon: MyProgressBar(label: "data"), child: Row(children: [Text("Data"), Icon(Icons.check_rounded, color: Colors.greenAccent,)],),),
+            // Tab(text: "Script", icon: MyProgressBar(label: "script")),
+            // Tab(text: "Stats",),
+                TabHeaderWidget(name: "Transactions", label: "trans", index: 0),
+                TabHeaderWidget(name: "Assets", label: "assets",index: 1,),
+                TabHeaderWidget(name: "Nfts", label: "nfts", index: 2,),
+                TabHeaderWidget(name: "Data", label: "data", index: 3,),
+                TabHeaderWidget(name: "Script", label: "script", index: 4,),
+                TabHeaderWidget(name: "Stats", label: "none", index: 5,),
+
+          ]),
+        ),
       ),
       body: Column(
         children: [
@@ -88,12 +99,20 @@ class TabHeaderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final height = getHeight(context);
+    final width = getWidth(context);
+    final isMob = isPortrait(context);
+    final fontSize = getFontSize(context);
+    final iconSize = getIconSize(context);
+    final textStyle = TextStyle(fontSize: fontSize);
     return Consumer<ProgressProvider>(
       builder: (context, model, child) {
         return Tab(
+          height: fontSize*3,
           // icon: MyProgressBar(label: label),
-          child: Container(
-            color: null,
+          child: SizedBox(
+            // color: null,
+            // height: fontSize,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -102,19 +121,19 @@ class TabHeaderWidget extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                  Text(name),
+                  Text(name, style: textStyle,),
                   label == "none" ? Container() : model.isPresent(label) ?
-                  label == "script" ? const Icon(Icons.check_rounded, color: Colors.greenAccent) :
+                  label == "script" ? Icon(Icons.check_rounded, color: Colors.greenAccent, size: iconSize,) :
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(" (${model.getLoadedItemsCountProxy(label).toString()})", style: const TextStyle(color: Colors.greenAccent),),
+                      Text(" (${model.getLoadedItemsCountProxy(label).toString()})", style: TextStyle(color: Colors.greenAccent, fontSize: fontSize),),
                       Visibility(
                           visible: model.allTransactionsLoadedProxy(),
-                          child: const Icon(Icons.check_rounded, color: Colors.greenAccent))
+                          child: Icon(Icons.check_rounded, color: Colors.greenAccent, size: iconSize,))
                     ],
                   ) :
-                  const Icon(Icons.remove, color: Colors.redAccent,)
+                  Icon(Icons.remove, color: Colors.redAccent, size: iconSize,)
                 ],
                 ),
               ],
