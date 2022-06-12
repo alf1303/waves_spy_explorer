@@ -88,7 +88,7 @@ class _InputWidgetState extends State<InputWidget> {
       ),
       Consumer<TransactionProvider>(
         builder: (context, model, child) {
-          _inputController.text = _transactionProvider.curAddr.isEmpty ? "3PAtzncjJGWRpCtkR55wAzcfZ9fubMeA4JU" : _transactionProvider.curAddr;
+          _inputController.text = _transactionProvider.curAddr.isEmpty ? "" : _transactionProvider.curAddr;
           return SizedBox(
             width: 500,
             child: TextFormField(

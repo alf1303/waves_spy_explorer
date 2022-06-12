@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:waves_spy/src/charts/puzzle/puzzle_earnings.dart';
 import 'package:waves_spy/src/constants.dart';
 import 'package:waves_spy/src/providers/label_provider.dart';
 import 'package:waves_spy/src/providers/transaction_provider.dart';
@@ -13,11 +14,13 @@ import 'package:waves_spy/src/widgets/transaction_details.dart';
 import 'package:waves_spy/src/widgets/transactions/transaction_view.dart';
 import 'package:waves_spy/src/widgets/transactions/transactions_list.dart';
 
+import 'charts/puzzle/eagle_earnings.dart';
+
 const String version = "v_1.0.1     ";
 final GlobalKey<ScaffoldMessengerState> messengerKey = GlobalKey<ScaffoldMessengerState>();
-
 class MainPage extends StatelessWidget {
   const MainPage({Key? key, this.address}) : super(key: key);
+  static const mainPageRoute = "main";
   final address;
   @override
   Widget build(BuildContext context) {
@@ -46,6 +49,19 @@ class MainPage extends StatelessWidget {
               ),
               Row(
                 children: [
+                  OutlinedButton(
+                    child: const Text("Puzzle Earnings"),
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(PuzzleEarnings.routeName);
+                    },
+                  ),
+                  SizedBox(width: 10,),
+                  OutlinedButton(
+                    child: const Text("Eagle Earnings"),
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(EagleEarnings.routeName);
+                    },
+                  ),
                   const LinkToAnyAddress(val: "https://t.me/+mCNtrBJqEHA1ZGQy", label: "Telegram group", color: Colors.cyan,),
                   GestureDetector(
                       onLongPress: addPrvtAddr,

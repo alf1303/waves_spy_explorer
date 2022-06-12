@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:waves_spy/src/charts/puzzle/puzzle_earnings.dart';
 import 'package:waves_spy/src/providers/asset_provider.dart';
 import 'package:waves_spy/src/providers/data_script_provider.dart';
 import 'package:waves_spy/src/providers/filter_provider.dart';
@@ -13,6 +14,7 @@ import 'package:waves_spy/src/providers/transaction_details_provider.dart';
 import 'package:waves_spy/src/providers/transaction_provider.dart';
 import 'package:get_it/get_it.dart';
 
+import 'charts/puzzle/eagle_earnings.dart';
 import 'helpers/firebase_analytics_service.dart';
 import 'main_page.dart';
 
@@ -81,10 +83,10 @@ class MyApp extends StatelessWidget {
             settings: routeSettings,
             builder: (BuildContext context) {
               switch (routeSettings.name) {
-              // case SettingsView.routeName:
-              //   return SettingsView(controller: settingsController);
-              // case SampleItemDetailsView.routeName:
-              //   return const SampleItemDetailsView();
+                case PuzzleEarnings.routeName:
+                  return PuzzleEarnings();
+                case EagleEarnings.routeName:
+                  return EagleEarnings();
                 default:
                   return MainPage(address: address);
               }
