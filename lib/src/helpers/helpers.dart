@@ -28,6 +28,9 @@ final labelProvideer = LabelProvider();
 final transactionDetailsProvider = TransactionDetailsProvider();
 final filterProvider = FilterProvider();
 
+double fSize = 12;
+bool isNarr = false;
+
 Future<void> loadMoreTr() async {
     await transactionProvider.getMoreTransactions();
 }
@@ -555,5 +558,41 @@ void addAdditionalToTransactionDetails() {
 void setHighliteFlag() {
     filterProvider.highlightTradeAccs = true;
     filterProvider.notifyListeners();
+}
+
+double getHeight(BuildContext context) {
+    return MediaQuery.of(context).size.height;
+}
+
+double getWidth(BuildContext context) {
+    return MediaQuery.of(context).size.width;
+}
+
+bool isPortrait(BuildContext context) {
+    return getHeight(context) > getWidth(context);
+}
+
+double getFontSize(BuildContext context) {
+    final ff = getWidth(context)*0.007;
+    fSize = ff >= 10 ? ff : 10;
+    isNarr =  getWidth(context) <= 1280;
+    return fSize;
+}
+
+double getIconSize(BuildContext context) {
+    return getFontSize(context)*1.6;
+}
+
+bool isNarrow(BuildContext context) {
+    isNarr =  getWidth(context) <= 1280;
+    return isNarr;
+}
+
+double getLastFontSize() {
+    return fSize;
+}
+
+bool lastIsNarrow() {
+    return isNarr;
 }
 

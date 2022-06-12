@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:waves_spy/src/helpers/helpers.dart';
 import 'package:waves_spy/src/main_page.dart';
 import 'package:waves_spy/src/models/chart_item.dart';
 //https://script.google.com/macros/s/AKfycbzPF4gGSCKDedr_WVB9xGGG8V-rkYtEyU87CtZr8TriBTd_JQhoi61j8uyh_6_k-kI/exec
@@ -14,23 +15,28 @@ class EagleEarnings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fontSize = getFontSize(context);
+    final iconSize = getIconSize(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          children: [
-            InkWell(
-              radius: 15,
-              onTap: () {
-                Navigator.of(context).pushNamedAndRemoveUntil(MainPage.mainPageRoute, (route) => false);
-              },
-              child: Row(children: [
-                SizedBox(height: 35, child: Image.asset('assets/images/logo.png', fit: BoxFit.scaleDown,)),
-                Text(AppLocalizations.of(context)!.headerTitle + "     ", style: TextStyle(fontSize: 14),),
-              ],),
-            ),
-            const SizedBox(width: 10,),
-            const Expanded(child: Text("Aggregator Earnings")),
-          ],
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(fontSize*3.5),
+        child: AppBar(
+          title: Row(
+            children: [
+              InkWell(
+                radius: 15,
+                onTap: () {
+                  Navigator.of(context).pushNamedAndRemoveUntil(MainPage.mainPageRoute, (route) => false);
+                },
+                child: Row(children: [
+                  SizedBox(height: iconSize, child: Image.asset('assets/images/logo.png', fit: BoxFit.scaleDown,)),
+                  Text(AppLocalizations.of(context)!.headerTitle + "     ", style: TextStyle(fontSize: fontSize),),
+                ],),
+              ),
+              const SizedBox(width: 10,),
+              Expanded(child: Text("Aggregator Earnings", style: TextStyle(fontSize: fontSize*1.3),)),
+            ],
+          ),
         ),
       ),
       body: Center(child: FutureBuilder<List<ChartItem>>(
@@ -53,13 +59,13 @@ class EagleEarnings extends StatelessWidget {
             widget = Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text("Total rewards for Eagles staking for $diff days: ${sum.toStringAsFixed(2)} USDN", style: TextStyle(fontSize: 16),),
-                Text("~ ${oneEagleEarning.toStringAsFixed(2)} USDN/day for 1 Early Eagle, ${(sum/77).toStringAsFixed(2)} USDN total"),
+                Text("Total rewards for Eagles staking for $diff days: ${sum.toStringAsFixed(2)} USDN", style: TextStyle(fontSize: fontSize*1.3),),
+                Text("~ ${oneEagleEarning.toStringAsFixed(2)} USDN/day for 1 Early Eagle, ${(sum/77).toStringAsFixed(2)} USDN total", style: TextStyle(fontSize: fontSize*1.3),),
                 Expanded(child: PuzzleChart(data: snapshot.data!, gridSize: 2.5,)),
               ],
             );
           } else if (snapshot.hasError) {
-            widget = Text("Some error: " + snapshot.error.toString());
+            widget = Text("Some error: " + snapshot.error.toString(), style: TextStyle(fontSize: fontSize),);
           } else {
             widget = CircularProgressIndicator();
           }

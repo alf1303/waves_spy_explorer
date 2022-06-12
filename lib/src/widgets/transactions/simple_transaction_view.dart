@@ -27,6 +27,13 @@ class _SimpleTransViewState extends State<SimpleTransView> with AutomaticKeepAli
 
   @override
   Widget build(BuildContext context) {
+    final height = getHeight(context);
+    final width = getWidth(context);
+    final isMob = isPortrait(context);
+    final fontSize = getFontSize(context);
+    final iconSize = getIconSize(context);
+    final textStyle = TextStyle(fontSize: fontSize);
+    final isZoomed = isNarrow(context);
     String formattedDate = DateFormat('dd-MM-yyyy  kk:mm:ss').format(timestampToDate(widget.td["timestamp"]));
     Color color = Colors.white;
     color = getColorByType(widget.td["type"]);
@@ -42,19 +49,19 @@ class _SimpleTransViewState extends State<SimpleTransView> with AutomaticKeepAli
     Map<String, double> transfers = p["transfers"];
     switch (p['header']) {
       case "invoke":
-        header = invokeHeader(p);
+        header = invokeHeader(p, fontSize);
         break;
       case "transfer":
-        header = transferHeader(p);
+        header = transferHeader(p, fontSize);
         break;
       case "massTransfer":
-        header = massTransferHeader(p);
+        header = massTransferHeader(p, fontSize);
         break;
       case "burn":
         header = burnHeader(p);
         break;
       case "exchange":
-        header = exchangeHeader(p);
+        header = exchangeHeader(p, fontSize);
         break;
     // TODO implement:
       case "setScript":
@@ -64,10 +71,10 @@ class _SimpleTransViewState extends State<SimpleTransView> with AutomaticKeepAli
       case "alias":
         break;
       case "issue":
-        header = issueHeader(p);
+        header = issueHeader(p, fontSize);
         break;
       case "reissue":
-        header = issueHeader(p);
+        header = issueHeader(p, fontSize);
         break;
       case "setAssetScript":
         break;
@@ -99,18 +106,18 @@ class _SimpleTransViewState extends State<SimpleTransView> with AutomaticKeepAli
               border: Border.all(color: borderColor), borderRadius: const BorderRadius.all(Radius.circular(5))),
           child: Row(
             children: [
-              SizedBox(width: 150, child: LabeledText(label: "", value: formattedDate, name: "", colr: color)),
-              SizedBox(width: 150, child: LabeledText(label: "", value: getTypeName(widget.td["type"]), name: "${widget.td["type"]}", colr: color), ),
+              SizedBox(width: 150, child: LabeledText(label: "", value: formattedDate, name: "", colr: color, fontSize: fontSize)),
+              SizedBox(width: 150, child: LabeledText(label: "", value: getTypeName(widget.td["type"]), name: "${widget.td["type"]}", colr: color, fontSize: fontSize), ),
               Padding(
                 padding: const EdgeInsets.only(right: 8.0),
-                child: SizedBox(width: 100, child: LabeledText(label: "", value: widget.td["id"], name: "", colr: Colors.grey)),
+                child: SizedBox(width: 100, child: LabeledText(label: "", value: widget.td["id"], name: "", colr: Colors.grey, fontSize: fontSize)),
               ),
 
               Expanded(
-                child: widget.td["type"] == 16 ? SizedBox(width: 350, child: invokeHeader(p)) :
-                  widget.td["type"] == 4 ? SizedBox(width: 350, child: transferHeader(p)) :
-                      widget.td["type"] == 11 ? SizedBox(width: 350, child: massTransferHeader(p)) :
-                          widget.td["type"] == 3 || widget.td["type"] == 5 ? issueHeader(p) :
+                child: widget.td["type"] == 16 ? SizedBox(width: 350, child: invokeHeader(p, fontSize)) :
+                  widget.td["type"] == 4 ? SizedBox(width: 350, child: transferHeader(p, fontSize)) :
+                      widget.td["type"] == 11 ? SizedBox(width: 350, child: massTransferHeader(p, fontSize)) :
+                          widget.td["type"] == 3 || widget.td["type"] == 5 ? issueHeader(p, fontSize) :
                             Container(),
               ),
               widget.td["type"] == 3 || widget.td["type"] == 5 ? Container() : Expanded(
@@ -157,7 +164,7 @@ class _SimpleTransViewState extends State<SimpleTransView> with AutomaticKeepAli
 }
 
 
-Widget invokeHeader(Map<String, dynamic> p) {
+Widget invokeHeader(Map<String, dynamic> p, double fontSize) {
   final _trProvider = TransactionProvider();
   return Padding(
     padding: const EdgeInsets.only(right: 8.0),
@@ -166,24 +173,24 @@ Widget invokeHeader(Map<String, dynamic> p) {
         Expanded(
           child: Padding(
             padding: const EdgeInsets.only(right: 8.0),
-            child: SizedBox(width: 100, child: LabeledText(label: "", value: p["function"], name: "", colr: invokeColor)),
+            child: SizedBox(width: 100, child: LabeledText(label: "", value: p["function"], name: "", colr: invokeColor, fontSize: fontSize)),
           ),
         ),
         Expanded(child: isCurrentAddr(p["dApp"]) ?
-          LabeledText(label: "sender:", value: p["sender"], name: getAddrName(p["sender"]), colr: invokeColor, addrLink: true) :
-            LabeledText(label: "dApp:", value: p["dApp"], name: getAddrName(p["dApp"]), colr: invokeColor, addrLink: true)),
+          LabeledText(label: "sender:", value: p["sender"], name: getAddrName(p["sender"]), colr: invokeColor, addrLink: true, fontSize: fontSize) :
+            LabeledText(label: "dApp:", value: p["dApp"], name: getAddrName(p["dApp"]), colr: invokeColor, addrLink: true, fontSize: fontSize)),
       ],
     ),
   );
 }
 
-Widget exchangeHeader(Map<String, dynamic> p) {
+Widget exchangeHeader(Map<String, dynamic> p, double fontSize) {
   return Row(
     children: [
       SizedBox(width: 600,
           child: Row(
             children: [
-              LabeledText(label: "sellOrder:", value: "", name: "", colr: exchangeColor),
+              LabeledText(label: "sellOrder:", value: "", name: "", colr: exchangeColor, fontSize: fontSize),
               Expanded(child: assetBuilder(p['amountAsset'], p['sellOrder'], false, p['amountAsset'], "out"))
             ],
           )
@@ -191,7 +198,7 @@ Widget exchangeHeader(Map<String, dynamic> p) {
       SizedBox(width: 300,
           child: Row(
             children: [
-              LabeledText(label: "buyOrder:", value: "", name: "", colr: exchangeColor),
+              LabeledText(label: "buyOrder:", value: "", name: "", colr: exchangeColor, fontSize: fontSize),
               Expanded(child: assetBuilder(p['amountAsset'], p['buyOrder'], false, p['amountAsset'], "in"))
             ],
           )
@@ -201,7 +208,7 @@ Widget exchangeHeader(Map<String, dynamic> p) {
   );
 }
 
-Widget transferHeader(Map<String, dynamic> p) {
+Widget transferHeader(Map<String, dynamic> p, double fontSize) {
   String suffix = "";
   if(p["direction"] == "IN") {
     suffix = "from: ";
@@ -213,13 +220,13 @@ Widget transferHeader(Map<String, dynamic> p) {
     child: Row(
       children: [
         SizedBox(width: 150, child: Container(),),
-        Expanded(child: LabeledText(label: suffix, value: p["anotherAddr"], name: "", colr: transferColor, addrLink: true)),
+        Expanded(child: LabeledText(label: suffix, value: p["anotherAddr"], name: "", colr: transferColor, addrLink: true, fontSize: fontSize)),
       ],
     ),
   );
 }
 
-Widget massTransferHeader(Map<String, dynamic> p) {
+Widget massTransferHeader(Map<String, dynamic> p, double fontSize) {
   final _transactionProvider = TransactionProvider();
   String lbl = "from";
   if(isCurrentAddr(p["sender"])) {
@@ -230,13 +237,13 @@ Widget massTransferHeader(Map<String, dynamic> p) {
     child: Row(
       children: [
         SizedBox(width: 150, child: Container(),),
-        Expanded(child: SizedBox(width: 740, child: LabeledText(label: lbl, value: p["anotherAddr"], name: p["name"], colr: massTransferColor, addrLink: true),)),
+        Expanded(child: SizedBox(width: 740, child: LabeledText(label: lbl, value: p["anotherAddr"], name: p["name"], colr: massTransferColor, addrLink: true, fontSize: fontSize),)),
       ],
     ),
   );
 }
 
-Widget issueHeader(Map<String, dynamic> p) {
+Widget issueHeader(Map<String, dynamic> p, double fontSize) {
   String lbl = "quantity: ";
   Asset? ass = getAssetFromLoaded(p["assetId"]);
   int decimals = 0;
@@ -252,7 +259,7 @@ Widget issueHeader(Map<String, dynamic> p) {
     child: Row(
       children: [
         // SizedBox(width: 150, child: Container(),),
-        Expanded(child: SizedBox(child: LabeledText(label: lbl, value: "${quantity.toString()} $name (${p["assetId"]})", colr: Colors.white),)),
+        Expanded(child: SizedBox(child: LabeledText(label: lbl, value: "${quantity.toString()} $name (${p["assetId"]})", colr: Colors.white, fontSize: fontSize),)),
       ],
     ),
   );

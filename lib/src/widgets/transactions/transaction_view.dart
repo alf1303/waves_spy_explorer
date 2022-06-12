@@ -35,6 +35,7 @@ class _TransViewState extends State<TransView> with AutomaticKeepAliveClientMixi
     String formattedDate = DateFormat('dd-MM-yyyy  kk:mm:ss').format(timestampToDate(widget.td["timestamp"]));
     Color color = Colors.white;
     color = getColorByType(widget.td["type"]);
+    final fontSize = getFontSize(context);
     return InkWell(
       hoverColor: hoverColor,
       onTap: showDetails,
@@ -46,10 +47,10 @@ class _TransViewState extends State<TransView> with AutomaticKeepAliveClientMixi
           children: [
           Row(
             children: [
-            SizedBox(width: 240, child: LabeledText(label: "type: ", value: getTypeName(widget.td["type"]), name: "${widget.td["type"]}", colr: color), ),
-            SizedBox(width: 300, child: LabeledText(label: "date: ", value: formattedDate, name: "", colr: color)),
-            SizedBox(width: 200, child: LabeledText(label: "height: ", value: widget.td["height"].toString(), name: "", colr: color)),
-            LabeledText(label: "id: ", value: widget.td["id"], name: "", colr: color),
+            SizedBox(width: 240, child: LabeledText(label: "type: ", value: getTypeName(widget.td["type"]), name: "${widget.td["type"]}", colr: color, fontSize: fontSize), ),
+            SizedBox(width: 300, child: LabeledText(label: "date: ", value: formattedDate, name: "", colr: color, fontSize: fontSize)),
+            SizedBox(width: 200, child: LabeledText(label: "height: ", value: widget.td["height"].toString(), name: "", colr: color, fontSize: fontSize)),
+            LabeledText(label: "id: ", value: widget.td["id"], name: "", colr: color, fontSize: fontSize),
           ],),
             const Divider(),
             Details(td: widget.td)
@@ -84,7 +85,7 @@ class Details extends StatelessWidget {
   const Details({Key? key, this.td}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-
+    final fontSize = getFontSize(context);
     final _transactionProvider = TransactionProvider();
     final type = td["type"];
     bool exop = false;
@@ -96,19 +97,19 @@ class Details extends StatelessWidget {
     Map<String, double> transfers = p["transfers"];
     switch (p['header']) {
       case "invoke":
-        header = invokeHeader(p);
+        header = invokeHeader(p, fontSize);
         break;
       case "transfer":
-        header = transferHeader(p);
+        header = transferHeader(p, fontSize);
         break;
       case "massTransfer":
-        header = massTransferHeader(p);
+        header = massTransferHeader(p, fontSize);
         break;
       case "burn":
         header = burnHeader(p);
         break;
       case "exchange":
-        header = exchangeHeader(p);
+        header = exchangeHeader(p, fontSize);
         break;
         // TODO implement:
       case "setScript":
@@ -162,23 +163,23 @@ class Details extends StatelessWidget {
   }
 }
 
-Widget invokeHeader(Map<String, dynamic> p) {
+Widget invokeHeader(Map<String, dynamic> p, double fontSize) {
   return Row(
     children: [
-      SizedBox(width: 240, child: LabeledText(label: "function:", value: p["function"], name: "", colr: invokeColor)),
-      SizedBox(width: 500, child: SingleChildScrollView(scrollDirection: Axis.horizontal, child: LabeledText(label: "dApp:", value: p["dApp"], name: p["dAppName"], colr: invokeColor)),),
-      SizedBox(child: LabeledText(label: "Sender:", value: p["sender"], name: "", colr: invokeColor),),
+      SizedBox(width: 240, child: LabeledText(label: "function:", value: p["function"], name: "", colr: invokeColor, fontSize: fontSize)),
+      SizedBox(width: 500, child: SingleChildScrollView(scrollDirection: Axis.horizontal, child: LabeledText(label: "dApp:", value: p["dApp"], name: p["dAppName"], colr: invokeColor, fontSize: fontSize)),),
+      SizedBox(child: LabeledText(label: "Sender:", value: p["sender"], name: "", colr: invokeColor, fontSize: fontSize),),
     ],
   );
 }
 
-Widget exchangeHeader(Map<String, dynamic> p) {
+Widget exchangeHeader(Map<String, dynamic> p, double fontSize) {
   return Row(
     children: [
       SizedBox(width: 600,
           child: Row(
             children: [
-              LabeledText(label: "sellOrder:", value: "", name: "", colr: exchangeColor),
+              LabeledText(label: "sellOrder:", value: "", name: "", colr: exchangeColor, fontSize: fontSize),
               Expanded(child: assetBuilder(p['amountAsset'], p['sellOrder'], false, p['amountAsset'], "out"))
             ],
           )
@@ -186,7 +187,7 @@ Widget exchangeHeader(Map<String, dynamic> p) {
       SizedBox(width: 300,
           child: Row(
             children: [
-              LabeledText(label: "buyOrder:", value: "", name: "", colr: exchangeColor),
+              LabeledText(label: "buyOrder:", value: "", name: "", colr: exchangeColor, fontSize: fontSize),
               Expanded(child: assetBuilder(p['amountAsset'], p['buyOrder'], false, p['amountAsset'], "in"))
             ],
           )
@@ -196,7 +197,7 @@ Widget exchangeHeader(Map<String, dynamic> p) {
   );
 }
 
-Widget transferHeader(Map<String, dynamic> p) {
+Widget transferHeader(Map<String, dynamic> p, double fontSize) {
   String suffix = "";
   if(p["direction"] == "IN") {
     suffix = "Received from: ";
@@ -205,18 +206,18 @@ Widget transferHeader(Map<String, dynamic> p) {
   }
   return Row(
     children: [
-      SizedBox(child: LabeledText(label: suffix, value: p["anotherAddr"], name: p["name"], colr: transferColor),),
+      SizedBox(child: LabeledText(label: suffix, value: p["anotherAddr"], name: p["name"], colr: transferColor, fontSize: fontSize),),
       // SizedBox(width: 800, child: LabeledText("dApp:", "${p["dApp"]} (${p["dAppName"]})"),),
     ],
   );
 }
 
-Widget massTransferHeader(Map<String, dynamic> p) {
+Widget massTransferHeader(Map<String, dynamic> p, double fontSize) {
   final _transactionProvider = TransactionProvider();
   return Row(
     children: [
-      SizedBox(width: 740, child: LabeledText(label: "From", value: p["anotherAddr"], name: p["name"], colr: massTransferColor),),
-      SizedBox(child: LabeledText(label: "Receiver", value: _transactionProvider.curAddr, name: "", colr: massTransferColor),),
+      SizedBox(width: 740, child: LabeledText(label: "From", value: p["anotherAddr"], name: p["name"], colr: massTransferColor, fontSize: fontSize),),
+      SizedBox(child: LabeledText(label: "Receiver", value: _transactionProvider.curAddr, name: "", colr: massTransferColor, fontSize: fontSize),),
       // SizedBox(width: 800, child: LabeledText("dApp:", "${p["dApp"]} (${p["dAppName"]})"),),
     ],
   );
@@ -251,7 +252,10 @@ Widget assetBuilderLocal(String id, val, exop, String amountId, String dir, [Str
     }
   }
   print("4");
-  Widget widget = value != 0 ?Text("${value.truncat(decimals)} ${res[0]!.name}$rec", style: TextStyle(color: dir == "in" ? inAssetsColor : outAssetsColor),) : Container();
+  double fontSize = fSize;
+  bool isNarr = lastIsNarrow();
+  String vvv = !isNarr ? value.truncat(decimals).toString() : value.truncat(decimals).toStringAsFixed(2);
+  Widget widget = value != 0 ?Text("${vvv} ${res[0]!.name}$rec", style: TextStyle(fontSize: fontSize, color: dir == "in" ? inAssetsColor : outAssetsColor),) : Container();
   print("end");
   return widget;
 }
@@ -261,6 +265,8 @@ Widget assetBuilder(String id, val, exop, String amountId, String dir, [String? 
   String tmpAss = id + ".|." + amountId;
   // print("$id, $val, $exop, $amountId, $dir, $receiver");
   // return Text("fhefsdk");
+  double fontSize = getLastFontSize();
+  bool isNarr = lastIsNarrow();
   return FutureBuilder<List<Asset?>>(
       future: getAssetInfoLabel(tmpAss),
       builder: (context, snapshot) {
@@ -282,15 +288,16 @@ Widget assetBuilder(String id, val, exop, String amountId, String dir, [String? 
             }
           }
           // print(snapshot.data);
-          widget = value != 0 ?Text("${value.truncat(decimals)} ${snapshot.data![0]!.name}$rec", style: TextStyle(color: dir == "in" ? inAssetsColor : outAssetsColor),) : Container();
+          String vvv = !isNarr ? value.truncat(decimals).toString() : value.truncat(decimals).toStringAsFixed(2);
+          widget = value != 0 ?Text("$vvv ${snapshot.data![0]!.name}$rec", style: TextStyle(fontSize: fontSize, color: dir == "in" ? inAssetsColor : outAssetsColor),) : Container();
           if(value == 555) {
-            widget = Container(color: Colors.yellow, child: Text("Alarm"),);
+            widget = Container(color: Colors.yellow, child: Text("Alarm", style: TextStyle(fontSize: fontSize),),);
           }
         } else if (snapshot.hasError) {
           print(snapshot.error.toString());
-          widget = Text("Error");
+          widget = Text("Error", style: TextStyle(fontSize: fontSize));
         } else {
-          widget = Text("loading");
+          widget = Text("loading", style: TextStyle(fontSize: fontSize));
         }
         return widget;
       }
@@ -303,9 +310,10 @@ class OutWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fontSize = getFontSize(context);
     return Row(
       children: [
-        payList.isNotEmpty ? const Text("Out --> ", style: TextStyle(color: outAssetsColor),) : Container(),
+        payList.isNotEmpty ? Text("Out --> ", style: TextStyle(fontSize: fontSize, color: outAssetsColor),) : Container(),
         Expanded(
           child: ListView(
             shrinkWrap: true,
@@ -322,9 +330,10 @@ class InWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fontSize = getFontSize(context);
     return Row(
       children: [
-        income.isNotEmpty ? const Text("In <-- ", style: TextStyle(color: inAssetsColor),) : Container(),
+        income.isNotEmpty ? Text("In <-- ", style: TextStyle(fontSize: fontSize, color: inAssetsColor),) : Container(),
         Expanded(
           child: ListView(
             shrinkWrap: true,
@@ -335,27 +344,28 @@ class InWidget extends StatelessWidget {
   }
 }
 
-Widget LabeledText({String? label, String? value, String? name, Color? colr, bool? addrLink}) {
+Widget LabeledText({String? label, String? value, String? name, Color? colr, bool? addrLink, required double fontSize}) {
   final labl = label ?? "";
   final val = value ?? "";
   final nam = name ?? "";
   final col = colr ?? Colors.white;
   final aLink = addrLink ?? false;
   final alias = aLink && val.isNotEmpty && val.length != 35;
+  double fSize = fontSize;
 
-  return !alias ? LabeledTextLocal(labl: labl, val: val, nam: nam, col: col, aLink: aLink) :
+  return !alias ? LabeledTextLocal(labl: labl, val: val, nam: nam, col: col, aLink: aLink, fontSize: fontSize) :
       FutureBuilder<String>(
         future: fetchAddrByAlias(val),
         builder: (context, snapshot) {
           Widget widget = Text("");
           if(snapshot.hasData) {
             String addr = snapshot.data ?? val;
-            widget = LabeledTextLocal(labl: labl, val: "$val->$addr", nam: nam, col: col, aLink: aLink, alias: alias);
+            widget = LabeledTextLocal(labl: labl, val: "$val->$addr", nam: nam, col: col, aLink: aLink, alias: alias, fontSize: fontSize);
           } else if(snapshot.hasError) {
             print("Err: fetching address by aias: $val");
-            widget = LabeledTextLocal(labl: labl, val: val, nam: nam, col: col, aLink: aLink);
+            widget = LabeledTextLocal(labl: labl, val: val, nam: nam, col: col, aLink: aLink, fontSize: fontSize);
           } else {
-            widget = const Text("Loading...");
+            widget = Text("Loading...", style: TextStyle(fontSize: fontSize),);
           }
           return widget;
         },
@@ -364,22 +374,22 @@ Widget LabeledText({String? label, String? value, String? name, Color? colr, boo
 
 
 
-Widget LabeledTextLocal({required String labl, required String val, required String nam, required Color col, required bool aLink, bool? alias}) {
+Widget LabeledTextLocal({required String labl, required String val, required String nam, required Color col, required bool aLink, bool? alias, required double fontSize}) {
 final bool ali = alias ?? false;
   // print("$labl, $val, $nam");
   return Row(
     mainAxisSize: MainAxisSize.min,
     children: [
       !aLink ?
-    Text(labl, style: const TextStyle(color: Colors.grey),) :
-    LinkToAddress(val: val, label: labl, alias: ali,),
+    Text(labl, style: TextStyle(fontSize: fontSize, color: Colors.grey),) :
+    LinkToAddress(val: val, label: labl, alias: ali, fontSize: fontSize,),
     Expanded(
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
           children: [
-            nam == "" ? Text("") : SelectableText("($nam)", style: TextStyle(color: col)),
-            SelectableText(val + " ", style: TextStyle(color: col),),
+            nam == "" ? Text("") : SelectableText("($nam)", style: TextStyle(fontSize: fontSize, color: col)),
+            SelectableText(val + " ", style: TextStyle(fontSize: fontSize, color: col),),
           ],
         ),
       ),
@@ -403,11 +413,12 @@ Widget LabeledTextNoScroll([String? label, String? value, String? name, Color? c
 }
 
 class LinkToAddress extends StatelessWidget {
-  const LinkToAddress({Key? key, required this.val, required this.label, this.color, required this.alias}) : super(key: key);
+  const LinkToAddress({Key? key, required this.val, required this.label, this.color, required this.alias, required this.fontSize}) : super(key: key);
   final String val;
   final String label;
   final Color? color;
   final bool alias;
+  final fontSize;
 
   _launchURL(url) async {
     if (await canLaunch(url)) {
@@ -429,6 +440,7 @@ class LinkToAddress extends StatelessWidget {
                       color: color ?? Colors.grey,
                       offset: const Offset(0, -2))
                 ],
+                fontSize: fontSize,
                 color: Colors.transparent,
                 decoration: TextDecoration.underline, decorationThickness: 2, decorationColor: Colors.grey),
             text: label,
@@ -467,11 +479,12 @@ class LinkToAnyAddress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final iconSize = getIconSize(context);
     return       Tooltip(
       message: "Go to $label",
       child: IconButton(
         color: Colors.white,
-        icon: Icon(Icons.telegram_sharp),
+        icon: Icon(Icons.telegram_sharp, size: iconSize,),
         onPressed: () async {
           String baseUri = Uri.base.toString();
           final lastSlash = baseUri.lastIndexOf("/");

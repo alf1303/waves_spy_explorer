@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:waves_spy/src/helpers/helpers.dart';
 import 'package:waves_spy/src/providers/data_script_provider.dart';
 import 'package:waves_spy/src/widgets/data/data_view.dart';
 import 'package:waves_spy/src/widgets/filter_widger.dart';
@@ -23,6 +24,8 @@ class DataList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fontSize = getFontSize(context);
+    final iconSize = getIconSize(context);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -33,7 +36,7 @@ class DataList extends StatelessWidget {
               children: [
                 Expanded(
                     child: InputWidgetFilter(controller: _textController, onchanged: filterByText, hint: "clear", clearFunc: clearText,
-                        label: "enter text to filter, use &&& or ||| for combining text expressions(if needed)", padded: true)
+                        label: "enter text to filter, use &&& or ||| for combining text expressions(if needed)", padded: true, fontSize: fontSize, iconSize: iconSize)
                 ),
               ],
             )

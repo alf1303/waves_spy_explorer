@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:waves_spy/src/helpers/helpers.dart';
 import 'package:waves_spy/src/providers/transaction_provider.dart';
 import 'package:waves_spy/src/widgets/data/data_view.dart';
 import 'package:waves_spy/src/widgets/transactions/simple_transaction_view.dart';
@@ -49,7 +50,7 @@ class InvokeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
+    final fontSize = getFontSize(context);
     return Container(
       padding: const EdgeInsets.all(5),
       margin: const EdgeInsets.all(2),
@@ -61,7 +62,7 @@ class InvokeView extends StatelessWidget {
             itemBuilder: (context, index) {
               return Column(
                 children: [
-                  InvokeItem(invokes[index]),
+                  InvokeItem(invokes[index], fontSize),
                   const Divider()
                 ],
               );
@@ -72,11 +73,11 @@ class InvokeView extends StatelessWidget {
   }
 }
 
-Widget InvokeItem(dynamic inv) {
+Widget InvokeItem(dynamic inv, double fontSize) {
   return Container(
     child: Row(children: [
-      SizedBox(width: 350, child: LabeledText(label: "invoke: ", value: "${inv["call"]["function"]}()", name: ""),),
-      SizedBox(width: 400, child: LabeledText(label: "", value: "${inv["dApp"]}", name: ""),),
+      SizedBox(width: 350, child: LabeledText(label: "invoke: ", value: "${inv["call"]["function"]}()", name: "", fontSize: fontSize),),
+      SizedBox(width: 400, child: LabeledText(label: "", value: "${inv["dApp"]}", name: "", fontSize: fontSize),),
       SizedBox(width: 400, child: Column(
         children: [
           Transfers(inv),

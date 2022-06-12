@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:waves_spy/src/app.dart';
 import 'package:waves_spy/src/charts/puzzle/puzzle_earnings.dart';
 import 'package:waves_spy/src/constants.dart';
+import 'package:waves_spy/src/helpers/helpers.dart';
 import 'package:waves_spy/src/providers/label_provider.dart';
 import 'package:waves_spy/src/providers/transaction_provider.dart';
 import 'package:waves_spy/src/widgets/filter_widger.dart';
@@ -25,56 +27,64 @@ class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final transactionProvider = TransactionProvider();
+    final height = getHeight(context);
+    final width = getWidth(context);
+    final isMob = isPortrait(context);
+    final fontSize = getFontSize(context);
+    final iconSize = getIconSize(context);
     return ScaffoldMessenger(
       key: messengerKey,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Row(
-                  children: [
-                    SizedBox(height: 35, child: Image.asset('assets/images/logo.png', fit: BoxFit.scaleDown,)),
-                    SelectableText(AppLocalizations.of(context)!.headerTitle + "     "),
-                    Expanded(
-                      child: Consumer<LabelProvider>(
-                          builder: (context, model, child) {
-                            return Row(
-                              children: [
-                                InputWidget(address: address),
-                                model.isAddressPresent ? Text(getAddrName(transactionProvider.curAddr), style: TextStyle(fontSize: 16),) : Container()
-                              ],
-                            );
-                          }),
-                    )
-                  ],
+      child: isMob? MobilePage() : Scaffold(
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(fontSize*3.5),
+          child: AppBar(
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Row(
+                    children: [
+                      SizedBox(height: iconSize, child: Image.asset('assets/images/logo.png', fit: BoxFit.scaleDown,)),
+                      SelectableText(AppLocalizations.of(context)!.headerTitle + "     ", style: TextStyle(fontSize: fontSize),),
+                      Expanded(
+                        child: Consumer<LabelProvider>(
+                            builder: (context, model, child) {
+                              return Row(
+                                children: [
+                                  InputWidget(address: address),
+                                  model.isAddressPresent ? Text(getAddrName(transactionProvider.curAddr), style: TextStyle(fontSize: fontSize),) : Container()
+                                ],
+                              );
+                            }),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              Row(
-                children: [
-                  OutlinedButton(
-                    child: const Text("Puzzle Earnings"),
-                    onPressed: () {
-                      Navigator.of(context).pushNamed(PuzzleEarnings.routeName);
-                    },
-                  ),
-                  const SizedBox(width: 10,),
-                  OutlinedButton(
-                    child: const Text("Eagle Earnings"),
-                    onPressed: () {
-                      Navigator.of(context).pushNamed(EagleEarnings.routeName);
-                    },
-                  ),
-                  const LinkToAnyAddress(val: "https://t.me/+mCNtrBJqEHA1ZGQy", label: "Telegram group", color: Colors.cyan,),
-                  GestureDetector(
-                      onLongPress: addPrvtAddr,
-                      child: const Text(version, style: TextStyle(fontSize: 10),)),
-                ],
-              )
-            ],
-          ),
+                Row(
+                  children: [
+                    OutlinedButton(
+                      child: Text("Puzzle Earnings", style: TextStyle(fontSize: fontSize),),
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(PuzzleEarnings.routeName);
+                      },
+                    ),
+                    const SizedBox(width: 10,),
+                    OutlinedButton(
+                      child: Text("Eagle Earnings", style: TextStyle(fontSize: fontSize),),
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(EagleEarnings.routeName);
+                      },
+                    ),
+                    const LinkToAnyAddress(val: "https://t.me/+mCNtrBJqEHA1ZGQy", label: "Telegram group", color: Colors.cyan,),
+                    GestureDetector(
+                        onLongPress: addPrvtAddr,
+                        child: Text(version, style: TextStyle(fontSize: fontSize*0.6),)),
+                  ],
+                )
+              ],
+            ),
 
+          ),
         ),
         body: Column(
           children: [

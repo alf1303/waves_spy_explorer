@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:waves_spy/src/helpers/helpers.dart';
 import 'package:waves_spy/src/models/chart_item.dart';
 
 
@@ -29,6 +30,7 @@ class _PuzzleChartState extends State<PuzzleChart> {
 
   @override
   Widget build(BuildContext context) {
+    final fontSize = getFontSize(context);
     return Container(
       padding: EdgeInsets.all(25),
       child: LineChart(
@@ -37,10 +39,10 @@ class _PuzzleChartState extends State<PuzzleChart> {
   }
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
-    const style = TextStyle(
+    final style = TextStyle(
       color: Colors.white70,
       // fontWeight: FontWeight.bold,
-      fontSize: 14,
+      fontSize: getLastFontSize()
     );
     Widget text;
     // print(value);
@@ -62,10 +64,11 @@ class _PuzzleChartState extends State<PuzzleChart> {
   }
 
   Widget leftTitleWidgets(double value, TitleMeta meta) {
-    const style = TextStyle(
-      color: Color(0xff67727d),
+    final fontSize = getLastFontSize();
+    final style = TextStyle(
+      color: const Color(0xff67727d),
       fontWeight: FontWeight.bold,
-      fontSize: 15,
+      fontSize: fontSize,
     );
     String text;
     if(value.toInt()%widget.gridSize == 0) {

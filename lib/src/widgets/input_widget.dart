@@ -24,7 +24,7 @@ class _InputWidgetState extends State<InputWidget> {
   final _inputController = TextEditingController();
 
   final _transactionProvider = TransactionProvider();
-
+  FocusNode? focusNode;
 
   @override
   void initState() {
@@ -34,7 +34,13 @@ class _InputWidgetState extends State<InputWidget> {
         _transactionProvider.setCurrAddr(widget.address);
       }
     });
+    focusNode = FocusNode(canRequestFocus: false);
+  }
 
+
+  @override
+  void dispose() {
+    focusNode?.dispose();
   }
 
   onSearch() async{
@@ -53,10 +59,13 @@ class _InputWidgetState extends State<InputWidget> {
     //     break;
     //   }
     // }
+    // focusNode?.unfocus();
+    FocusManager.instance.primaryFocus?.unfocus();
     if (!_transactionProvider.isLoading) {
       _transactionProvider.isLoading = true;
       await _transactionProvider.setCurrAddr(_inputController.text.trim());
     }
+
   }
 
   loadMore() async {
@@ -79,27 +88,34 @@ class _InputWidgetState extends State<InputWidget> {
   @override
   Widget build(BuildContext context) {
     final apploc = AppLocalizations.of(context);
+    final height = getHeight(context);
+    final width = getWidth(context);
+    final fontSize = getFontSize(context);
+    final iconSize = getIconSize(context);
     return Row(children: [
       MyToolTip(
         message: apploc?.paste,
         child: IconButton(
             onPressed: pasteFromClipboard,
-            icon: const Icon(Icons.paste)),
+            icon: Icon(Icons.paste, size: iconSize,)),
       ),
       Consumer<TransactionProvider>(
         builder: (context, model, child) {
           _inputController.text = _transactionProvider.curAddr.isEmpty ? "" : _transactionProvider.curAddr;
           return SizedBox(
-            width: 500,
+            width: width*0.2,
             child: TextFormField(
-              textInputAction: TextInputAction.go,
+              // textInputAction: TextInputAction.go,
+              // focusNode: focusNode,
               controller: _inputController,
+              style: TextStyle(fontSize: fontSize),
               decoration: InputDecoration(
                 isDense: true,
-                label: Text(apploc!.addrHint),
+                label: Text(apploc!.addrHint, style: TextStyle(fontSize: fontSize),),
               ),
               onFieldSubmitted: (val) {
                   onSearch();
+                  // focusNode!.unfocus();
               },
             ),
           );
@@ -109,7 +125,7 @@ class _InputWidgetState extends State<InputWidget> {
         message: apploc!.search,
         child: IconButton(
             onPressed: onSearch,
-            icon: const Icon(Icons.search_rounded)),
+            icon: Icon(Icons.search_rounded, size: iconSize,)),
       ),
       // TextButton(onPressed: loadMore, child: Text(apploc.loadMore)),
       // TextButton(onPressed: loadAll, child: Text(apploc.loadAll))

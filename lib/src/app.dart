@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:waves_spy/src/charts/puzzle/puzzle_earnings.dart';
+import 'package:waves_spy/src/helpers/helpers.dart';
 import 'package:waves_spy/src/providers/asset_provider.dart';
 import 'package:waves_spy/src/providers/data_script_provider.dart';
 import 'package:waves_spy/src/providers/filter_provider.dart';
@@ -97,3 +98,17 @@ class MyApp extends StatelessWidget {
       ,);
   }
 }
+
+class MobilePage extends StatelessWidget {
+  const MobilePage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Text("Change orientation, please"),
+      ),
+    );
+  }
+}
+

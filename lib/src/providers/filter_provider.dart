@@ -110,6 +110,7 @@ class FilterProvider extends ChangeNotifier{
 
     Widget out = RichText(
       text: TextSpan(
+        style: TextStyle(fontSize: getLastFontSize()),
           children: [
             LblGroup(label: "Loaded transactions", val: allTrxLength.toString()),
             LblGroup(label: "Filtered transactions", val: filteredTrxLength.toString()),
