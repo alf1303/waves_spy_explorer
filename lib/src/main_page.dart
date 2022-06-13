@@ -62,18 +62,24 @@ class MainPage extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    OutlinedButton(
-                      child: Text("Puzzle Earnings", style: TextStyle(fontSize: fontSize),),
-                      onPressed: () {
-                        Navigator.of(context).pushNamed(PuzzleEarnings.routeName);
-                      },
+                    SizedBox(
+                      height: fontSize*2,
+                      child: OutlinedButton(
+                        child: Text("Puzzle Earnings", style: TextStyle(fontSize: fontSize),),
+                        onPressed: () {
+                          Navigator.of(context).pushNamed(PuzzleEarnings.routeName);
+                        },
+                      ),
                     ),
                     const SizedBox(width: 10,),
-                    OutlinedButton(
-                      child: Text("Eagle Earnings", style: TextStyle(fontSize: fontSize),),
-                      onPressed: () {
-                        Navigator.of(context).pushNamed(EagleEarnings.routeName);
-                      },
+                    SizedBox(
+                      height: fontSize*2,
+                      child: OutlinedButton(
+                        child: Text("Eagle Earnings", style: TextStyle(fontSize: fontSize),),
+                        onPressed: () {
+                          Navigator.of(context).pushNamed(EagleEarnings.routeName);
+                        },
+                      ),
                     ),
                     const LinkToAnyAddress(val: "https://t.me/+mCNtrBJqEHA1ZGQy", label: "Telegram group", color: Colors.cyan,),
                     GestureDetector(
