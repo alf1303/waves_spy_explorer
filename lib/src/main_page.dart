@@ -65,7 +65,8 @@ class MainPage extends StatelessWidget {
                     SizedBox(
                       height: fontSize*2,
                       child: OutlinedButton(
-                        child: Text("Puzzle Earn", style: TextStyle(fontSize: fontSize),),
+                        style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.cyan), ),
+                        child: Text("Puzzles Chart", style: TextStyle(fontSize: fontSize, color: Colors.cyanAccent),),
                         onPressed: () {
                           Navigator.of(context).pushNamed(PuzzleEarnings.routeName);
                         },
@@ -75,7 +76,8 @@ class MainPage extends StatelessWidget {
                     SizedBox(
                       height: fontSize*2,
                       child: OutlinedButton(
-                        child: Text("Eagle Earn", style: TextStyle(fontSize: fontSize),),
+                        style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.cyan), ),
+                        child: Text("Eagle Chart", style: TextStyle(fontSize: fontSize, color: Colors.cyanAccent),),
                         onPressed: () {
                           Navigator.of(context).pushNamed(EagleEarnings.routeName);
                         },
