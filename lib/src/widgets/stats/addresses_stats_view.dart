@@ -34,11 +34,13 @@ class _AddressesStatsViewState extends State<AddressesStatsView> {
   Widget build(BuildContext context) {
     final _trProvider = TransactionProvider();
     final fontSize = getFontSize(context);
+    final width = getWidth(context);
+    final textStyle = TextStyle(fontSize: fontSize);
     return Container(
       child: Consumer<FilterProvider>(
         builder: (context, model, child) {
           return model.assetName.id.isEmpty ?
-          const Center(child: Text("   Need to select asset in filters to show addresses info", style: TextStyle(color: Colors.yellowAccent),)) :
+          Center(child: Text("   Need to select asset in filters to show addresses info", style: TextStyle(fontSize: fontSize, color: Colors.yellowAccent),)) :
           Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,10 +66,10 @@ class _AddressesStatsViewState extends State<AddressesStatsView> {
                 child: Divider(height: 4, color: Colors.blueGrey,),
               ),
               Row(children: [
-                const SizedBox(width: 300, child: Center(child: Text("Address")),),
-                InkWell(child: const SizedBox(width: 300, child: Center(child: Text("In")),), onTap: sortByIn),
-                InkWell(child: const SizedBox(width: 200, child: Center(child: Text("Out")),), onTap: sortByOut,),
-                const SizedBox(width: 150, child: Center(child: Text("Address Name")),),
+                SizedBox(width: fontSize*26, child: Center(child: Text("Address", style: textStyle,)),),
+                InkWell(child: SizedBox(width: fontSize*12, child: Center(child: Text("In", style: textStyle)),), onTap: sortByIn),
+                InkWell(child: SizedBox(width: fontSize*12, child: Center(child: Text("Out", style: textStyle)),), onTap: sortByOut,),
+                SizedBox(width: fontSize*10, child: Center(child: Text("Address Name", style: textStyle)),),
               ],),
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 3.0),
@@ -114,23 +116,25 @@ Widget ResultWidget(AddressesStatsItem? it, String assName, double fontSize) {
       StatefulBuilder(
           builder: (context, setStat) {
             val = hidden ? key.replaceRange(2, key.length - 2, "." * (key.length - 4)) : key;
+            final width = getWidth(context);
             return Row(
               children: [
                 // SizedBox(width: 350, child: LinkToAddress(val: val, label: val, color: Colors.white,)),
-                SizedBox(width: 350, child: LabeledText(label: "view: ", value: val, addrLink: true, colr: it.tradeAddrCount >= 1 ? Colors.yellow : null, fontSize: fontSize)),
-                GestureDetector(
-                  onTap: () {
-                    setStat(() => hidden = !hidden);
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.only(right: 15),
-                    color: Colors.cyan.shade900, child: const Text("         "),),
-                ),
+                SizedBox(width: fontSize*26, child: LabeledText(label: "view: ", value: val, addrLink: true, colr: it.tradeAddrCount >= 1 ? Colors.yellow : null, fontSize: fontSize)),
+                // GestureDetector(
+                //   onTap: () {
+                //     setStat(() => hidden = !hidden);
+                //   },
+                //   child: Container(
+                //     margin: const EdgeInsets.only(right: 15),
+                //     color: Colors.cyan.shade900, child: const Text("         "),),
+                // ),
               ],
             );
           }),
-      SizedBox(width: 200, child: SelectableText("${it.income.toStringAsFixed(5)} $assName", style: const TextStyle(color: Colors.green),)),
-      SizedBox(width: 250, child: SelectableText("${it.outcome.toStringAsFixed(5)} $assName", style: const TextStyle(color: Colors.redAccent),)),
+      SizedBox(width: 3,),
+      SizedBox(width: fontSize*12, child: SelectableText("${it.income.toStringAsFixed(5)} $assName", style: TextStyle(fontSize: fontSize, color: Colors.green),)),
+      SizedBox(width: fontSize*12, child: SelectableText("${it.outcome.toStringAsFixed(5)} $assName", style: TextStyle(fontSize: fontSize, color: Colors.redAccent),)),
       SelectableText(getAddrName(val), style: const TextStyle(color: Colors.white60),)
     ],),
   );

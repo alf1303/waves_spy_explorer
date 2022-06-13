@@ -28,29 +28,36 @@ class AssetsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = getWidth(context);
     final fontSize = getFontSize(context);
     final iconSize = getIconSize(context);
+    final textStyle = TextStyle(fontSize: fontSize);
+    final isNarr = isNarrow(context);
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(4.0),
       child: Column(
         children: [
           // const MyProgressBar(label: "assets"),
           Padding(
-            padding: const EdgeInsets.only(left: 6.0),
+            padding: const EdgeInsets.only(left: 2.0),
             child: Row(
               children: [
-                const SizedBox(width: 250, child: Text("Name")),
-                const SizedBox(width: 150, child: Text("Wallet")),
-                SizedBox(width: 150, child: Container()), //Text("Staked")),
-                const SizedBox(width: 70, child: Text("Issue")),
-                const SizedBox(width: 70, child: Text("Scripted")),
+                SizedBox(width: width*0.19, child: Text("Name", style: textStyle,),),
+                SizedBox(width: width*0.11, child: Text("Wallet", style: textStyle)),
+                // SizedBox(width: width*0.05, child: Container()), //Text("Staked")),
+                !isNarr ? SizedBox(width: width*0.06, child: Text("Issue", style: textStyle)) : Container(),
+                // !isNarr ? SizedBox(width: width*0.06, child: Text("Scripted", style: textStyle)) : Container(),
                 Expanded(
                   child: SizedBox(child: Consumer<AssetProvider>(
                     builder: (context, model, child) {
                       return Row(
                         children: [
-                          const Text("ID                     "),
-                          Expanded(child: InputWidgetFilter(controller: _textController, onchanged: filterByName, hint: "clear", clearFunc: clearAssetName, label: "enter name or id to filter", fontSize: fontSize, iconSize: iconSize)),
+                          !isNarr ? Text("ID                     ", style: textStyle) : Container(),
+                          Expanded(
+                            child: SizedBox(
+                                height: fontSize*4,
+                                child: InputWidgetFilter(controller: _textController, onchanged: filterByName, hint: "clear", clearFunc: clearAssetName, label: "enter name or id to filter", fontSize: fontSize, iconSize: iconSize)),
+                          ),
                         ],
                       );
                     },
@@ -59,10 +66,10 @@ class AssetsList extends StatelessWidget {
               ],
             ),
           ),
-          const Padding(
+          !isNarr ? const Padding(
             padding: EdgeInsets.symmetric(vertical: 3.0),
             child: Divider(height: 4, color: Colors.blueGrey,),
-          ),
+          ) : Container(),
           Expanded(
             child: Consumer<AssetProvider>(
               builder: (context, model, child) {

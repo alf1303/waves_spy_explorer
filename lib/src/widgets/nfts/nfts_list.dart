@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:waves_spy/src/helpers/helpers.dart';
 import 'package:waves_spy/src/providers/nft_provider.dart';
 import 'package:waves_spy/src/providers/transaction_provider.dart';
 import 'package:waves_spy/src/widgets/data/data_list.dart';
@@ -41,6 +42,12 @@ Future<void> _scrollListener() async{
 
   @override
   Widget build(BuildContext context) {
+    final width = getWidth(context);
+    final fontSize = getFontSize(context);
+    final iconSize = getIconSize(context);
+    final textStyle = TextStyle(fontSize: fontSize);
+    final isNarr = isNarrow(context);
+    final nameWidth = !isNarr ? width*0.17 : width*0.22;
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Column(
@@ -49,10 +56,10 @@ Future<void> _scrollListener() async{
           Padding(
             padding: const EdgeInsets.only(left: 6.0),
             child: Row(
-              children: const [
-                SizedBox(width: 300, child: Text("Name"),),
-                SizedBox(width: 450, child: Text("Id"),),
-                SizedBox(child: Text("Issuer"),),
+              children: [
+                SizedBox(width: nameWidth, child: Text("Name", style: textStyle,),),
+                SizedBox(width: width*0.234, child: Text("Id", style: textStyle,),),
+                !isNarr ? SizedBox(child: Text("Issuer", style: textStyle,),): Container(),
               ],
             ),
           ),

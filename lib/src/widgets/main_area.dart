@@ -118,8 +118,9 @@ class TabHeaderWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 MyProgressBar(label: label),
-                Row(
+                Column(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                   Text(name, style: textStyle,),
                   label == "none" ? Container() : model.isPresent(label) ?
@@ -127,13 +128,13 @@ class TabHeaderWidget extends StatelessWidget {
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(" (${model.getLoadedItemsCountProxy(label).toString()})", style: TextStyle(color: Colors.greenAccent, fontSize: fontSize),),
+                      Text(" (${model.getLoadedItemsCountProxy(label).toString()})", style: TextStyle(color: Colors.greenAccent, fontSize: fontSize*0.7),),
                       Visibility(
                           visible: model.allTransactionsLoadedProxy(),
-                          child: Icon(Icons.check_rounded, color: Colors.greenAccent, size: iconSize,))
+                          child: Icon(Icons.check_rounded, color: Colors.greenAccent, size: iconSize*0.7,))
                     ],
                   ) :
-                  Icon(Icons.remove, color: Colors.redAccent, size: iconSize,)
+                  Icon(Icons.remove, color: Colors.redAccent, size: iconSize*0.7,)
                 ],
                 ),
               ],

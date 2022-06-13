@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:waves_spy/src/helpers/helpers.dart';
 import 'package:waves_spy/src/widgets/transactions/transaction_view.dart';
 
 class DataView extends StatelessWidget {
@@ -8,6 +9,8 @@ class DataView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fontSize = getFontSize(context);
+    final isNarr = isNarrow(context);
     return Container(
       padding: EdgeInsets.all(5),
       margin: EdgeInsets.all(2),
@@ -20,31 +23,31 @@ class DataView extends StatelessWidget {
             child: SelectableText.rich(
               TextSpan(
                 children: [
-                  const TextSpan(
+                  TextSpan(
                     text: "Key: ",
-                    style: TextStyle(color: Colors.white60)
+                    style: TextStyle(fontSize: fontSize, color: Colors.white60)
                   ),
                   TextSpan(
                     text: data["key"],
-                    style: const TextStyle(color: Colors.white)
+                    style: TextStyle(fontSize: fontSize, color: Colors.white)
                   )
                 ]
               ),
             ),
           ),
-          Divider(),
+          !isNarr ? Divider() : Container(),
           SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: SelectableText.rich(
                  TextSpan(
                     children: [
-                      const TextSpan(
+                      TextSpan(
                           text: "Value: ",
-                          style: TextStyle(color: Colors.white60)
+                          style: TextStyle(fontSize: fontSize, color: Colors.white60)
                       ),
                       TextSpan(
                           text: data["value"].toString(),
-                          style: const TextStyle(color: Colors.white)
+                          style: TextStyle(fontSize: fontSize, color: Colors.white)
                       )
                     ]
                 ),

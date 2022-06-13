@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:waves_spy/src/helpers/helpers.dart';
 
 TextSpan  LblGroup({required String label, required String val, String? tab, bool? newLine}) {
   String t = tab ?? "";
   String end = newLine == null ? "" : "\n";
+  final fontSize = getLastFontSize();
   return val.isEmpty ? const TextSpan() : TextSpan(
       children: [
         TextSpan(
-            style: const TextStyle(color: Colors.grey),
+            style: TextStyle(color: Colors.grey, fontSize: fontSize),
             text: "$t$label: "
         ),
         TextSpan(
-            style: const TextStyle(color: Colors.white),
+            style: TextStyle(color: Colors.white, fontSize: fontSize),
             text: "$val, $end"
         )
       ]
@@ -40,6 +42,7 @@ class MyDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+
       actions: [
         OutlinedButton(onPressed: () {Navigator.pop(context);}, child: Text("Close", style: TextStyle(fontSize: iconSize*0.7),),)
       ],

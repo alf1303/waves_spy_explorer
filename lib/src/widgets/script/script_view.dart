@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:waves_spy/src/helpers/helpers.dart';
 import 'package:waves_spy/src/providers/data_script_provider.dart';
 
 class ScriptView extends StatefulWidget {
@@ -12,12 +13,13 @@ class _ScriptViewState extends State<ScriptView> with AutomaticKeepAliveClientMi
 
   @override
   Widget build(BuildContext context) {
+    final fontSize = getFontSize(context);
     super.build(context);
     return Consumer<DataScriptProvider>(builder: (context, model, child) {
       return Container( child:
       SingleChildScrollView(
         primary: false,
-          child: SelectableText(model.script)),
+          child: SelectableText(model.script, style: TextStyle(fontSize: fontSize),)),
       padding: EdgeInsets.all(10),);
     });
   }

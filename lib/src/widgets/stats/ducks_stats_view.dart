@@ -18,6 +18,7 @@ class DucksStatsView extends StatelessWidget {
   Widget build(BuildContext context) {
     final _trProvider = TransactionProvider();
     final _filterProvider = FilterProvider();
+    final fontSize = getFontSize(context);
     return Container(
       child: Consumer<StatsProvider>(
         builder: (context, model, child) {
@@ -57,10 +58,10 @@ class DucksStatsView extends StatelessWidget {
                       padding: EdgeInsets.all(4.0),
                       child: Divider(height: 3, color: Colors.blueGrey,),
                     ),
-                    Text("Common stats: "),
+                    Text("Common stats: ", style: TextStyle(fontSize: fontSize),),
                     RichText(
                       text: TextSpan(
-                        style: const TextStyle(fontSize: 16, height: 1.3),
+                        style: TextStyle(fontSize: fontSize, height: 1.3),
                         children: getBaseStats()
                       ),
                     ),
@@ -68,10 +69,10 @@ class DucksStatsView extends StatelessWidget {
                       padding: const EdgeInsets.all(4.0),
                       child: Divider(height: 3, color: Colors.blueGrey,),
                     ),
-                    const Text("Rebirth results: "),
+                    Text("Rebirth results: ", style: TextStyle(fontSize: fontSize)),
                     RichText(
                       text: TextSpan(
-                          style: const TextStyle(fontSize: 16, height: 1.3),
+                          style: TextStyle(fontSize: fontSize, height: 1.3),
                           children: getRebirthStats()
                       ),
                     ),

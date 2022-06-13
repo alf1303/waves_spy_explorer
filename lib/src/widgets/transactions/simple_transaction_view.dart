@@ -30,10 +30,10 @@ class _SimpleTransViewState extends State<SimpleTransView> with AutomaticKeepAli
     final height = getHeight(context);
     final width = getWidth(context);
     final isMob = isPortrait(context);
-    final fontSize = getFontSize(context);
+    final fontSize = getSmallFontSize(context);
     final iconSize = getIconSize(context);
     final textStyle = TextStyle(fontSize: fontSize);
-    final isZoomed = isNarrow(context);
+    final isNarr = isNarrow(context);
     String formattedDate = DateFormat('dd-MM-yyyy  kk:mm:ss').format(timestampToDate(widget.td["timestamp"]));
     Color color = Colors.white;
     color = getColorByType(widget.td["type"]);
@@ -91,11 +91,16 @@ class _SimpleTransViewState extends State<SimpleTransView> with AutomaticKeepAli
     if (widget.td.containsKey("dApp")) {dApp = widget.td["dApp"];}
     String out = !isCurrentAddr(dApp) ? "out" : "in";
     String inn = !isCurrentAddr(dApp) ? "in" : "out";
-    List<Widget> payList = payment.entries.map((e) => assetBuilder(e.key, e.value, exop, p["exchPriceAsset"], out)).toList();
-    List<Widget> inList = transfers.entries.map((e) => assetBuilder(e.key, e.value, exop, p["exchPriceAsset"], inn)).toList();
+    final fail = widget.td["additional"]["fail"];
+    List<Widget> payList = payment.entries.map((e) => assetBuilder(e.key, e.value, exop, p["exchPriceAsset"], out, null, fail)).toList();
+    List<Widget> inList = transfers.entries.map((e) => assetBuilder(e.key, e.value, exop, p["exchPriceAsset"], inn, null, fail)).toList();
     final count = widget.td["additional"]["tradeAddrCount"];
     // print(count);
-    final borderColor = filterProvider.highlightTradeAccs ? count == 2 ? Colors.yellow : count == 1 ? Colors.deepOrange : Colors.grey : Colors.grey;
+    color = fail ? Colors.grey : color;
+    final borderColor = fail ? Colors.red : filterProvider.highlightTradeAccs ? count == 2 ? Colors.yellow : count == 1 ? Colors.lightGreen : Colors.grey : Colors.grey;
+    final typeName = isNarr ? getTypeName(widget.td["type"]).split(" ")[0] : getTypeName(widget.td["type"]);
+    final typeNumber = isNarr ? "" : widget.td["type"];
+    final dateStr = isNarr ? formattedDate.substring(0, 10) : formattedDate;
     return InkWell(
       hoverColor: hoverColor,
       onTap: showDetails,
@@ -103,15 +108,16 @@ class _SimpleTransViewState extends State<SimpleTransView> with AutomaticKeepAli
           padding: const EdgeInsets.all(5),
           margin: const EdgeInsets.all(2),
           decoration: BoxDecoration(
+            // color: fail ? Colors.white12 : null,
               border: Border.all(color: borderColor), borderRadius: const BorderRadius.all(Radius.circular(5))),
           child: Row(
             children: [
-              SizedBox(width: 150, child: LabeledText(label: "", value: formattedDate, name: "", colr: color, fontSize: fontSize)),
-              SizedBox(width: 150, child: LabeledText(label: "", value: getTypeName(widget.td["type"]), name: "${widget.td["type"]}", colr: color, fontSize: fontSize), ),
-              Padding(
+              SizedBox(width: width*0.09, child: LabeledText(label: "", value: dateStr, name: "", colr: color.withOpacity(0.5), fontSize: fontSize)),
+              SizedBox(width: width*0.09, child: LabeledText(label: "", value: typeName, name: "$typeNumber", colr: color, fontSize: fontSize), ),
+              !isNarr ? Padding(
                 padding: const EdgeInsets.only(right: 8.0),
                 child: SizedBox(width: 100, child: LabeledText(label: "", value: widget.td["id"], name: "", colr: Colors.grey, fontSize: fontSize)),
-              ),
+              ): SizedBox(),
 
               Expanded(
                 child: widget.td["type"] == 16 ? SizedBox(width: 350, child: invokeHeader(p, fontSize)) :
@@ -165,7 +171,7 @@ class _SimpleTransViewState extends State<SimpleTransView> with AutomaticKeepAli
 
 
 Widget invokeHeader(Map<String, dynamic> p, double fontSize) {
-  final _trProvider = TransactionProvider();
+  final fail = p["fail"];
   return Padding(
     padding: const EdgeInsets.only(right: 8.0),
     child: Row(
@@ -173,33 +179,34 @@ Widget invokeHeader(Map<String, dynamic> p, double fontSize) {
         Expanded(
           child: Padding(
             padding: const EdgeInsets.only(right: 8.0),
-            child: SizedBox(width: 100, child: LabeledText(label: "", value: p["function"], name: "", colr: invokeColor, fontSize: fontSize)),
+            child: SizedBox(width: 100, child: LabeledText(label: "", value: p["function"], name: "", colr: fail? disabledColor : invokeColor, fontSize: fontSize)),
           ),
         ),
         Expanded(child: isCurrentAddr(p["dApp"]) ?
-          LabeledText(label: "sender:", value: p["sender"], name: getAddrName(p["sender"]), colr: invokeColor, addrLink: true, fontSize: fontSize) :
-            LabeledText(label: "dApp:", value: p["dApp"], name: getAddrName(p["dApp"]), colr: invokeColor, addrLink: true, fontSize: fontSize)),
+          LabeledText(label: "sender:", value: p["sender"], name: getAddrName(p["sender"]), colr: fail? disabledColor : invokeColor, addrLink: true, fontSize: fontSize) :
+            LabeledText(label: "dApp:", value: p["dApp"], name: getAddrName(p["dApp"]), colr: fail? disabledColor : invokeColor, addrLink: true, fontSize: fontSize)),
       ],
     ),
   );
 }
 
 Widget exchangeHeader(Map<String, dynamic> p, double fontSize) {
+  final fail = p["fail"];
   return Row(
     children: [
       SizedBox(width: 600,
           child: Row(
             children: [
-              LabeledText(label: "sellOrder:", value: "", name: "", colr: exchangeColor, fontSize: fontSize),
-              Expanded(child: assetBuilder(p['amountAsset'], p['sellOrder'], false, p['amountAsset'], "out"))
+              LabeledText(label: "sellOrder:", value: "", name: "", colr: fail ? disabledColor : exchangeColor, fontSize: fontSize),
+              Expanded(child: assetBuilder(p['amountAsset'], p['sellOrder'], false, p['amountAsset'], "out", null, fail))
             ],
           )
       ),
       SizedBox(width: 300,
           child: Row(
             children: [
-              LabeledText(label: "buyOrder:", value: "", name: "", colr: exchangeColor, fontSize: fontSize),
-              Expanded(child: assetBuilder(p['amountAsset'], p['buyOrder'], false, p['amountAsset'], "in"))
+              LabeledText(label: "buyOrder:", value: "", name: "", colr: fail ? disabledColor : exchangeColor, fontSize: fontSize),
+              Expanded(child: assetBuilder(p['amountAsset'], p['buyOrder'], false, p['amountAsset'], "in", null, fail))
             ],
           )
       ),
@@ -209,6 +216,7 @@ Widget exchangeHeader(Map<String, dynamic> p, double fontSize) {
 }
 
 Widget transferHeader(Map<String, dynamic> p, double fontSize) {
+  final fail = p["fail"];
   String suffix = "";
   if(p["direction"] == "IN") {
     suffix = "from: ";
@@ -219,15 +227,15 @@ Widget transferHeader(Map<String, dynamic> p, double fontSize) {
     padding: const EdgeInsets.only(right: 8.0),
     child: Row(
       children: [
-        SizedBox(width: 150, child: Container(),),
-        Expanded(child: LabeledText(label: suffix, value: p["anotherAddr"], name: "", colr: transferColor, addrLink: true, fontSize: fontSize)),
+        SizedBox(width: fontSize*0.07, child: Container(),),
+        Expanded(child: LabeledText(label: suffix, value: p["anotherAddr"], name: "", colr: fail ? disabledColor : transferColor, addrLink: true, fontSize: fontSize)),
       ],
     ),
   );
 }
 
 Widget massTransferHeader(Map<String, dynamic> p, double fontSize) {
-  final _transactionProvider = TransactionProvider();
+  final fail = p["fail"];
   String lbl = "from";
   if(isCurrentAddr(p["sender"])) {
     lbl = "sender";
@@ -236,14 +244,15 @@ Widget massTransferHeader(Map<String, dynamic> p, double fontSize) {
     padding: const EdgeInsets.only(right: 8.0),
     child: Row(
       children: [
-        SizedBox(width: 150, child: Container(),),
-        Expanded(child: SizedBox(width: 740, child: LabeledText(label: lbl, value: p["anotherAddr"], name: p["name"], colr: massTransferColor, addrLink: true, fontSize: fontSize),)),
+        SizedBox(width: fontSize*0.07, child: Container(),),
+        Expanded(child: SizedBox(width: 740, child: LabeledText(label: lbl, value: p["anotherAddr"], name: p["name"], colr: fail ? disabledColor : massTransferColor, addrLink: true, fontSize: fontSize),)),
       ],
     ),
   );
 }
 
 Widget issueHeader(Map<String, dynamic> p, double fontSize) {
+  final fail = p["fail"];
   String lbl = "quantity: ";
   Asset? ass = getAssetFromLoaded(p["assetId"]);
   int decimals = 0;
@@ -259,7 +268,7 @@ Widget issueHeader(Map<String, dynamic> p, double fontSize) {
     child: Row(
       children: [
         // SizedBox(width: 150, child: Container(),),
-        Expanded(child: SizedBox(child: LabeledText(label: lbl, value: "${quantity.toString()} $name (${p["assetId"]})", colr: Colors.white, fontSize: fontSize),)),
+        Expanded(child: SizedBox(child: LabeledText(label: lbl, value: "${quantity.toString()} $name (${p["assetId"]})", colr: fail ? disabledColor : Colors.white, fontSize: fontSize),)),
       ],
     ),
   );
@@ -267,6 +276,7 @@ Widget issueHeader(Map<String, dynamic> p, double fontSize) {
 
 // TODO
 Widget burnHeader(Map<String, dynamic> p) {
+  final fail = p["fail"];
   return Padding(
     padding: const EdgeInsets.only(right: 8.0),
     child: Container()
