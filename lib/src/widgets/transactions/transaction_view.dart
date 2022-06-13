@@ -448,8 +448,8 @@ class LinkToAddress extends StatelessWidget {
             text: label,
             recognizer: TapGestureRecognizer()..onTap = () async {
               String baseUri = Uri.base.toString();
-              final lastSlash = baseUri.lastIndexOf("/");
-              String uri = baseUri.substring(0, lastSlash - 1);
+              final lastSlash = baseUri.lastIndexOf("#");
+              String uri = baseUri.substring(0, lastSlash);
               String addr = "";
               if (alias) {
                 addr = val.split("->")[1];
