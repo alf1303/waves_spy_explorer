@@ -71,7 +71,7 @@ class TransactionProvider extends ChangeNotifier {
 
   void createInfo() {
     final _filterProvider = FilterProvider();
-    filterData = _filterProvider.createFilterDataString(allTransactions.length, filteredTransactions.length);
+    filterData = _filterProvider.createFilterDataString(allTransactions.length, filteredTransactions.length, getLastFontSize());
   }
 
   Future<void> setCurrAddr(String address) async {
@@ -235,7 +235,8 @@ class TransactionProvider extends ChangeNotifier {
     print("ex_1");
     final assetsLocalIds = <String, String>{};
     for (var tr in transactions) {
-      print(tr["id"]);
+      // print(tr["id"]);
+      final bool fail = tr["applicationStatus"] != "succeeded";
       tr["additional"] = <String, dynamic>{};
       tr["additional"]["tradeAddrCount"] = 0;
       final transAssetsMap = <String, String>{};
@@ -343,13 +344,14 @@ class TransactionProvider extends ChangeNotifier {
           inAssetsIds.addAll(p["transfers"]);
       }
 
+      tr["additional"]["fail"] = fail;
       tr["additional"]["addresses"] = trAddressesMap;
       tr["additional"]["assetsIds"] = transAssetsMap;
       tr["additional"]["addressesNames"] = trAddressesMap.values.join(",");
       tr["additional"]["addressesIds"] = trAddressesMap.keys.join(",");
 
-      tr["additional"]["inAssetsIds"] = inAssetsIds;
-      tr["additional"]["outAssetsIds"] = outAssetsIds;
+      tr["additional"]["inAssetsIds"] = fail ? {} : inAssetsIds;
+      tr["additional"]["outAssetsIds"] = fail ? {} : outAssetsIds;
       assetsLocalIds.addAll(transAssetsMap);
     }
     print("ouyeh");
@@ -562,7 +564,7 @@ class TransactionProvider extends ChangeNotifier {
   }
 
   void filterTransactions() {
-    // print("filter1");
+    print("filter1");
     final filterProvider = FilterProvider();
     List<dynamic> datedTransactions = List.from(allTransactions);
     // print("Transactions loaded: " + datedTransactions.length.toString());
@@ -584,7 +586,7 @@ class TransactionProvider extends ChangeNotifier {
     } else {
       filteredTransactions = datedTransactions;
     }
-    // print("filter2");
+    print("filter2");
     if(filterProvider.addrName.isNotEmpty) {
       filteredTransactions = filteredTransactions.where((tr) => tr["additional"]["addressesIds"].contains(filterProvider.addrName)).toList();
     }
@@ -630,7 +632,7 @@ class TransactionProvider extends ChangeNotifier {
     // if(filterProvider.direction == "out") {
     //   filteredTransactions = trToFilter.where((tr) => tr["additional"]["outAssetsNames"].toLowerCase().contains(filterProvider.assetName.name.toLowerCase())).toList();
     // }
-
+    print("filter 2.5");
     if (filterProvider.assetName.name.isNotEmpty) {
       if(filterProvider.direction == "all") {
         filteredTransactions = trToFilter.where((tr) => isInListOfStrings(tr["additional"]["assetsIds"].keys.toList(), filterProvider.assetName.id)).toList();
@@ -649,7 +651,7 @@ class TransactionProvider extends ChangeNotifier {
     filterProvider.actualTo = firstTrans == null ? DateTime.now() : timestampToDate(firstTrans["timestamp"]);
     createInfo();
     notifyListeners();
-    // print("filter3");
+    print("filter3");
   }
 
   Future<Map<String, int>> getStakedDucks(String address) async{
@@ -688,7 +690,7 @@ class TransactionProvider extends ChangeNotifier {
     return ress;
   }
 
-  bool isInListOfStrings(List<String> list, String item) {
+  bool isInListOfStrings(List<dynamic> list, String item) {
     for (String el in list) {
       if (el == item) {
         return true;

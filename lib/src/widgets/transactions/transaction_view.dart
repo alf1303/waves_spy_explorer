@@ -252,7 +252,7 @@ Widget assetBuilderLocal(String id, val, exop, String amountId, String dir, [Str
     }
   }
   print("4");
-  double fontSize = fSize;
+  double fontSize = getLastSmallFontSize();
   bool isNarr = lastIsNarrow();
   String vvv = !isNarr ? value.truncat(decimals).toString() : value.truncat(decimals).toStringAsFixed(2);
   Widget widget = value != 0 ?Text("${vvv} ${res[0]!.name}$rec", style: TextStyle(fontSize: fontSize, color: dir == "in" ? inAssetsColor : outAssetsColor),) : Container();
@@ -260,13 +260,14 @@ Widget assetBuilderLocal(String id, val, exop, String amountId, String dir, [Str
   return widget;
 }
 
-Widget assetBuilder(String id, val, exop, String amountId, String dir, [String? receiver]) {
+Widget assetBuilder(String id, val, exop, String amountId, String dir, [String? receiver, bool? fail]) {
   String rec = receiver == null ? "" : " to $receiver";
   String tmpAss = id + ".|." + amountId;
   // print("$id, $val, $exop, $amountId, $dir, $receiver");
   // return Text("fhefsdk");
-  double fontSize = getLastFontSize();
   bool isNarr = lastIsNarrow();
+  double fontSize = !isNarr ? getLastSmallFontSize() : getLastFontSize();
+  bool failure = fail ?? false;
   return FutureBuilder<List<Asset?>>(
       future: getAssetInfoLabel(tmpAss),
       builder: (context, snapshot) {
@@ -289,7 +290,7 @@ Widget assetBuilder(String id, val, exop, String amountId, String dir, [String? 
           }
           // print(snapshot.data);
           String vvv = !isNarr ? value.truncat(decimals).toString() : value.truncat(decimals).toStringAsFixed(2);
-          widget = value != 0 ?Text("$vvv ${snapshot.data![0]!.name}$rec", style: TextStyle(fontSize: fontSize, color: dir == "in" ? inAssetsColor : outAssetsColor),) : Container();
+          widget = value != 0 ?Text("$vvv ${snapshot.data![0]!.name}$rec", style: TextStyle(fontSize: fontSize, color: failure ? disabledColor : dir == "in" ? inAssetsColor : outAssetsColor),) : Container();
           if(value == 555) {
             widget = Container(color: Colors.yellow, child: Text("Alarm", style: TextStyle(fontSize: fontSize),),);
           }
@@ -313,7 +314,7 @@ class OutWidget extends StatelessWidget {
     final fontSize = getFontSize(context);
     return Row(
       children: [
-        payList.isNotEmpty ? Text("Out --> ", style: TextStyle(fontSize: fontSize, color: outAssetsColor),) : Container(),
+        payList.isNotEmpty && !isNarr ? Text("Out --> ", style: TextStyle(fontSize: fontSize, color: outAssetsColor),) : Container(),
         Expanded(
           child: ListView(
             shrinkWrap: true,
@@ -333,7 +334,7 @@ class InWidget extends StatelessWidget {
     final fontSize = getFontSize(context);
     return Row(
       children: [
-        income.isNotEmpty ? Text("In <-- ", style: TextStyle(fontSize: fontSize, color: inAssetsColor),) : Container(),
+        income.isNotEmpty && !isNarr ? Text("In <-- ", style: TextStyle(fontSize: fontSize, color: inAssetsColor),) : Container(),
         Expanded(
           child: ListView(
             shrinkWrap: true,
@@ -402,13 +403,14 @@ Widget LabeledTextNoScroll([String? label, String? value, String? name, Color? c
   final val = value ?? "";
   final nam = name ?? "";
   final col = colr ?? Colors.white;
+  final fontSize = getLastFontSize();
   // print("$labl, $val, $nam");
   return Row(
     mainAxisSize: MainAxisSize.min,
     children: [
-      Text(labl, style: const TextStyle(color: Colors.grey),),
-      nam == "" ? Text("") : SelectableText("($name)", style: TextStyle(color: col)),
-      SelectableText(val + " ", style: TextStyle(color: col),),
+      Text(labl, style: TextStyle(fontSize: fontSize, color: Colors.grey),),
+      nam == "" ? Text("") : SelectableText("($name)", style: TextStyle(fontSize: fontSize, color: col)),
+      SelectableText(val + " ", style: TextStyle(fontSize: fontSize, color: col),),
     ],);
 }
 

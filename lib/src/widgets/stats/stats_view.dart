@@ -32,6 +32,9 @@ class _StatsViewState extends State<StatsView> with SingleTickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     final _trProvider = TransactionProvider();
+    final fontSize = getFontSize(context);
+    final smFontSize = getSmallFontSize(context);
+    final textStyle = TextStyle(fontSize: fontSize);
     var radius = Radius.circular(10);
     return Container(
       child: Column(
@@ -43,10 +46,10 @@ class _StatsViewState extends State<StatsView> with SingleTickerProviderStateMix
             //     color: Colors.white10
             // ),
               controller: statsController,
-              tabs: const[
-            Tab(child: Text("Addresses stats")),
-            Tab(child: Text("Ducks stats"),),
-            Tab(child: Text("Call Stats"),),
+              tabs: [
+            Tab(child: Text("Addresses stats", style: textStyle,)),
+            Tab(child: Text("Ducks stats", style: textStyle,),),
+            Tab(child: Text("Call Stats", style: textStyle),),
           ]),
           Expanded(
             child: TabBarView(

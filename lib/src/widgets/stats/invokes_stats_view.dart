@@ -15,6 +15,7 @@ class InvokesStatsView extends StatelessWidget {
   Widget build(BuildContext context) {
     final _trProvider = TransactionProvider();
     final _filterProvider = FilterProvider();
+    final fontSize = getFontSize(context);
     return Container(
       child: Consumer<StatsProvider>(
         builder: (context, model, child) {
@@ -38,7 +39,7 @@ class InvokesStatsView extends StatelessWidget {
                     text: TextSpan(
                       style: const TextStyle(fontSize: 16),
                       children:[
-                    const TextSpan(text: "Calls:\n", style: TextStyle(color: Colors.white, fontSize: 16)),
+                    TextSpan(text: "Calls:\n", style: TextStyle(color: Colors.white, fontSize: fontSize)),
                     TextSpan(children: getCallsList(model.calls))
                   ]),),
                 )

@@ -92,16 +92,20 @@ class _InputWidgetState extends State<InputWidget> {
     final width = getWidth(context);
     final fontSize = getFontSize(context);
     final iconSize = getIconSize(context);
+    final isNarr = isNarrow(context);
     return Row(children: [
       MyToolTip(
         message: apploc?.paste,
-        child: IconButton(
-            onPressed: pasteFromClipboard,
-            icon: Icon(Icons.paste, size: iconSize,)),
+        child: Visibility(
+          visible: !isNarr,
+          child: IconButton(
+              onPressed: pasteFromClipboard,
+              icon: Icon(Icons.paste, size: iconSize,)),
+        ),
       ),
       Consumer<TransactionProvider>(
         builder: (context, model, child) {
-          _inputController.text = _transactionProvider.curAddr.isEmpty ? "" : _transactionProvider.curAddr;
+          _inputController.text = _transactionProvider.curAddr.isEmpty ? "3PGFHzVGT4NTigwCKP1NcwoXkodVZwvBuuU" : _transactionProvider.curAddr;
           return SizedBox(
             width: width*0.2,
             child: TextFormField(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 const invokeColor = Colors.cyanAccent;
+const disabledColor = Colors.grey;
 const transferColor = Colors.yellow;
 const massTransferColor = Colors.deepOrangeAccent;
 const exchangeColor = Colors.deepPurpleAccent;

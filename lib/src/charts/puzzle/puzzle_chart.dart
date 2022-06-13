@@ -47,7 +47,8 @@ class _PuzzleChartState extends State<PuzzleChart> {
     Widget text;
     // print(value);
     String val = "";
-    if (value < widget.data.length && value%2 == 0) {
+    final module = !lastIsNarrow() ? 2 : 4;
+    if (value < widget.data.length && value%module == 0) {
       DateTime date = widget.data[value.toInt()].date;
       String month = date.month.toString().length == 1 ? "0" + date.month.toString() : date.month.toString();
       String day = date.day.toString().length == 1 ? "0" + date.day.toString() : date.day.toString();
@@ -65,13 +66,15 @@ class _PuzzleChartState extends State<PuzzleChart> {
 
   Widget leftTitleWidgets(double value, TitleMeta meta) {
     final fontSize = getLastFontSize();
+    final isNarr = lastIsNarrow();
     final style = TextStyle(
       color: const Color(0xff67727d),
       fontWeight: FontWeight.bold,
       fontSize: fontSize,
     );
     String text;
-    if(value.toInt()%widget.gridSize == 0) {
+    double module = !isNarr ? widget.gridSize : widget.gridSize*4;
+    if(value.toInt()%module == 0) {
       text = value.toInt().toString();
     } else {
       return Container();
@@ -111,7 +114,7 @@ class _PuzzleChartState extends State<PuzzleChart> {
         bottomTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
-            reservedSize: 90,
+            reservedSize: getLastFontSize()*6,
             interval: 1,
             getTitlesWidget: bottomTitleWidgets,
           ),

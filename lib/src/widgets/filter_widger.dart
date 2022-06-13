@@ -54,10 +54,11 @@ class FilterWidget extends StatelessWidget {
           addressController.selection = TextSelection.fromPosition(TextPosition(offset: addressController.text.length));
 
           dirValue = _filterProvider.direction;
-          bool funcNameVisible = _filterProvider.fType.contains(16);
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
               SizedBox(
                 height: fontSize*4.5,
@@ -66,17 +67,7 @@ class FilterWidget extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
                       // decoration: BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: BorderRadius.all(Radius.circular(5))),
-                      child: isNarr ? OutlinedButton(
-                        child: Text("type", style: textStyle,),
-                        onPressed: () {
-                          showDialog(context: context, builder: (context) {
-                            return MyDialog(
-                              child: TypeWidget(model, fontSize, iconSize),
-                              iconSize: iconSize,
-                            );
-                          });
-                        },
-                      ) : TypeWidget(model, fontSize, iconSize)
+                      child: TypeWidget(model, fontSize, iconSize)
                     ),
                     MyToolTip(
                       message: model.reverseTransactions ? apploc!.newFirst : apploc!.oldFirst,
@@ -89,44 +80,25 @@ class FilterWidget extends StatelessWidget {
                           message: "Show only strange accounts, \n yellow - trades between strange acc",
                           child: Checkbox(value: _filterProvider.onlyTraders, onChanged: changeOnlyTraders,)),
                     ),
-                    Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
-                        child: Row(
-                          children: [
-                            Expanded(
-                                child: InputWidgetFilter(controller: addressController, onchanged: addressChanged, clearFunc: clearAddress, label: "address", hint: apploc.clearAddress, fontSize: fontSize, iconSize: iconSize)
-                            ),
-                            Expanded(
-                                child: InputWidgetFilter(controller: minValueController, onchanged: minValueChanged, clearFunc: minValueClear, label: "min value", hint: apploc.clearMinValue, isNumeric: true, fontSize: fontSize, iconSize: iconSize)
-                            ),
-                            Expanded(
-                              child: Visibility(child: InputWidgetFilter(controller: functController, onchanged: functChanged, clearFunc: clearFunc, label: "function name", hint: apploc.clearFunction, fontSize: fontSize, iconSize: iconSize),
-                                visible: funcNameVisible,)
-                    ),
-
-                  ],
-                )
-                )
-                )
+                    !isNarr ? Expanded(child: InputFields(apploc, fontSize, iconSize)) : Container()
                 ]),
               ),
+              isNarr ? SizedBox(
+                  height: fontSize*4.5,
+                  child: InputFields(apploc, fontSize, iconSize)) : Container(),
               SizedBox(
-                height: fontSize*3.5,
+                height: !isNarr ? fontSize*3 : fontSize*5,
                 child: Row(
                   children: [
-                    Expanded(
-                      flex: 2,
-                      child: Row(
-                        children: [
-                          MyToolTip(
-                              message: "Load more transactions",
-                              child: loadButton(loadMore, "More", fontSize)),
-                          MyToolTip(
-                              message: "Load all transactions",
-                              child: loadButton(loadAll, "Load All", fontSize)),
-                        ],
-                      ),
+                    Row(
+                      children: [
+                        MyToolTip(
+                            message: "Load more transactions",
+                            child: loadButton(loadMore, "More", fontSize)),
+                        MyToolTip(
+                            message: "Load all transactions",
+                            child: loadButton(loadAll, "Load All", fontSize)),
+                      ],
                     ),
                     const SizedBox(width: 8,),
                     Expanded(
@@ -153,20 +125,6 @@ class FilterWidget extends StatelessWidget {
                   ],
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.all(4),
-                // decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
-                child: Consumer<TransactionProvider>(
-                  builder: (context, model, child) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        model.filterData
-                      ],
-                    );
-                  },
-                ),
-              )
             ],
           );
         },
@@ -174,44 +132,58 @@ class FilterWidget extends StatelessWidget {
     );
   }
 
-  Widget TypeWidget(model, fontSize, iconSize) {
-    return StatefulBuilder(
-        builder: (context, setStat) {
-          final fProv = FilterProvider();
-          clrFunc() {
-            clearType();
-            setStat(() {
-            });
-          }
-          print("${fProv.fType}");
-          return Row(
-            children: [
-              CustomGroupRadio(label: "Asset transfers", value: 4, groupValue: fProv.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor, fontSize: fontSize,),
-              CustomGroupRadio(label: "Mass Payments", value: 11, groupValue: fProv.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor, fontSize: fontSize),
-              CustomGroupRadio(label: "Invokes", value: 16, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor, fontSize: fontSize),
-              CustomGroupRadio(label: "Exchanges", value: 7, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor, fontSize: fontSize),
-              CustomGroupRadio(label: "Issues", value: 3, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor, fontSize: fontSize),
-              CustomGroupRadio(label: "Burns", value: 6, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor, fontSize: fontSize),
-              MyToolTip(
-                  message: "clear type",
-                  child: IconButton(onPressed: clrFunc, icon: Icon(Icons.close, size: iconSize,)))
-            ],
-          );
-        }
+  Widget InputFields(apploc, fontSize, iconSize) {
+    final _filterProvider = FilterProvider();
+    bool funcNameVisible = _filterProvider.fType.contains(16);
+    return Container(
+        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
+        child: Row(
+          children: [
+            Expanded(
+                child: InputWidgetFilter(controller: addressController, onchanged: addressChanged, clearFunc: clearAddress, label: "address", hint: apploc.clearAddress, fontSize: fontSize, iconSize: iconSize)
+            ),
+            Expanded(
+                child: InputWidgetFilter(controller: minValueController, onchanged: minValueChanged, clearFunc: minValueClear, label: "min value", hint: apploc.clearMinValue, isNumeric: true, fontSize: fontSize, iconSize: iconSize)
+            ),
+            Expanded(
+                child: Visibility(child: InputWidgetFilter(controller: functController, onchanged: functChanged, clearFunc: clearFunc, label: "function name", hint: apploc.clearFunction, fontSize: fontSize, iconSize: iconSize),
+                  visible: funcNameVisible,)
+            ),
+
+          ],
+        )
     );
+  }
+
+  Widget TypeWidget(model, fontSize, iconSize) {
+    return Row(
+      children: [
+        CustomGroupRadio(label: "Asset transfers", value: 4, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor, fontSize: fontSize,),
+        CustomGroupRadio(label: "Mass Payments", value: 11, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor, fontSize: fontSize),
+        CustomGroupRadio(label: "Invokes", value: 16, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor, fontSize: fontSize),
+        CustomGroupRadio(label: "Exchanges", value: 7, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor, fontSize: fontSize),
+        CustomGroupRadio(label: "Issues", value: 3, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor, fontSize: fontSize),
+        CustomGroupRadio(label: "Burns", value: 6, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor, fontSize: fontSize),
+        MyToolTip(
+            message: "clear type",
+            child: IconButton(onPressed: clearType, icon: Icon(Icons.close, size: iconSize,)))
+      ],
+    );;
   }
 
   Widget assetFilter(BuildContext context) {
     final apploc = AppLocalizations.of(context);
     final fontSize = getFontSize(context);
+    final iconSize = getIconSize(context);
     return DropdownSearch<Asset>(
+      dropdownSearchTextStyle: TextStyle(fontSize: fontSize),
       showClearButton: true,
-      popupProps: const PopupProps.menu(showSearchBox: true),
+      popupProps: PopupProps.menu(showSearchBox: true, textStyle: TextStyle(fontSize: fontSize)),
       dropdownSearchDecoration: InputDecoration(border: const OutlineInputBorder(),
           labelStyle: TextStyle(fontSize: fontSize),
           isDense: true,
           labelText: "asset name or id",
-          suffixIcon: IconButton(onPressed: clearAsset, icon: const Icon(Icons.close,), tooltip: apploc?.clearAsset,)),
+          suffixIcon: IconButton(onPressed: clearAsset, icon: Icon(Icons.close, size: iconSize,), tooltip: apploc?.clearAsset,)),
       asyncItems: (String filter) => getData(filter),
       itemAsString: (Asset u) => "${u.name} - ${u.id}",
       onChanged: (Asset? data) => assetChanged(data),

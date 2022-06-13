@@ -27,7 +27,7 @@ class DataList extends StatelessWidget {
     final fontSize = getFontSize(context);
     final iconSize = getIconSize(context);
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(4.0),
       child: Column(
         children: [
           // const MyProgressBar(label: "data"),
@@ -35,8 +35,11 @@ class DataList extends StatelessWidget {
             child: Row(
               children: [
                 Expanded(
-                    child: InputWidgetFilter(controller: _textController, onchanged: filterByText, hint: "clear", clearFunc: clearText,
-                        label: "enter text to filter, use &&& or ||| for combining text expressions(if needed)", padded: true, fontSize: fontSize, iconSize: iconSize)
+                    child: SizedBox(
+                      height: fontSize*4,
+                      child: InputWidgetFilter(controller: _textController, onchanged: filterByText, hint: "clear", clearFunc: clearText,
+                          label: "enter text to filter, use &&& or ||| for combining text expressions(if needed)", padded: true, fontSize: fontSize, iconSize: iconSize),
+                    )
                 ),
               ],
             )

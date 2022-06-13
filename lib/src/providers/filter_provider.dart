@@ -39,7 +39,7 @@ class FilterProvider extends ChangeNotifier{
   double sumacum_out = 0;
 
   //create RichText for indicating current filter parameters
-  Widget createFilterDataString(int allTrxLength, int filteredTrxLength) {
+  Widget createFilterDataString(int allTrxLength, int filteredTrxLength, double fontSize) {
     final types = fType.map((e) => typeDict[e]).join(", ");
     String sum_in = "";
     String sum_out = "";
@@ -110,7 +110,7 @@ class FilterProvider extends ChangeNotifier{
 
     Widget out = RichText(
       text: TextSpan(
-        style: TextStyle(fontSize: getLastFontSize()),
+        style: TextStyle(fontSize: fontSize),
           children: [
             LblGroup(label: "Loaded transactions", val: allTrxLength.toString()),
             LblGroup(label: "Filtered transactions", val: filteredTrxLength.toString()),

@@ -28,7 +28,8 @@ final labelProvideer = LabelProvider();
 final transactionDetailsProvider = TransactionDetailsProvider();
 final filterProvider = FilterProvider();
 
-double fSize = 12;
+double fSize = 12; // stored regular fontSize for calling without context
+double smallFSize = 10; // stored smaller fontSize for calling without context
 bool isNarr = false;
 
 Future<void> loadMoreTr() async {
@@ -251,6 +252,7 @@ parseTransactionType(Map<String, dynamic> td)  {
     var p = <String, dynamic>{};
     p['exchPriceAsset'] = " ";
     p["sender"] = td["sender"];
+    p["fail"] = td["additional"]["fail"];
     switch(td['type']) {
         case 16:
             p["dApp"] = td["dApp"];
@@ -573,10 +575,18 @@ bool isPortrait(BuildContext context) {
 }
 
 double getFontSize(BuildContext context) {
-    final ff = getWidth(context)*0.007;
+    final ff = getWidth(context)*0.009;
     fSize = ff >= 10 ? ff : 10;
+    smallFSize = ff >= 5 ? ff*0.85 : 5;
     isNarr =  getWidth(context) <= 1280;
     return fSize;
+}
+
+double getSmallFontSize(BuildContext context) {
+    final ff = getFontSize(context);
+    smallFSize = ff >= 5 ? ff*0.85 : 5;
+    isNarr =  getWidth(context) <= 1280;
+    return smallFSize;
 }
 
 double getIconSize(BuildContext context) {
@@ -590,6 +600,10 @@ bool isNarrow(BuildContext context) {
 
 double getLastFontSize() {
     return fSize;
+}
+
+double getLastSmallFontSize() {
+    return smallFSize;
 }
 
 bool lastIsNarrow() {

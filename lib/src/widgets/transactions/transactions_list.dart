@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:waves_spy/src/widgets/filter_bar.dart';
 import 'package:waves_spy/src/widgets/filter_widger.dart';
 import 'package:waves_spy/src/widgets/other/progress_bar.dart';
 import 'package:waves_spy/src/widgets/transactions/base_transaction_view.dart';
@@ -50,7 +51,7 @@ class _TransactionsListState extends State<TransactionsList> {
         mainAxisSize: MainAxisSize.min,
         children: [
           // const MyProgressBar(label: "trans"),
-          FilterWidget(),
+          FilterBar(),
           Expanded(
             child: Consumer<TransactionProvider>(
               builder: (context, model, child) {

@@ -51,6 +51,7 @@ class InvokeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final fontSize = getFontSize(context);
+    final isNarr = isNarrow(context);
     return Container(
       padding: const EdgeInsets.all(5),
       margin: const EdgeInsets.all(2),
@@ -63,7 +64,7 @@ class InvokeView extends StatelessWidget {
               return Column(
                 children: [
                   InvokeItem(invokes[index], fontSize),
-                  const Divider()
+                  !isNarr ? const Divider() : Container()
                 ],
               );
             }),
