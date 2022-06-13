@@ -58,7 +58,7 @@ Future<void> _scrollListener() async{
             child: Row(
               children: [
                 SizedBox(width: nameWidth, child: Text("Name", style: textStyle,),),
-                SizedBox(width: width*0.234, child: Text("Id", style: textStyle,),),
+                SizedBox(width: width*0.26, child: Text("Id", style: textStyle,),),
                 !isNarr ? SizedBox(child: Text("Issuer", style: textStyle,),): Container(),
               ],
             ),
