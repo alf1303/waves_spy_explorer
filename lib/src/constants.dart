@@ -172,7 +172,7 @@ const publicAddr = {
   "3P6fAxtw12pjFhayEfpcUWxgu2BHVCeP78A": "PuzzleMarket",
   "3P3pDosq4GCwfJkvq4yqKvvoTwmoqc9qPmo": "DuckWrapper - PuzzleMarket",
   "3PDWpgk1ycioUwtzjoXKxUqYTzAgUG2mf8x": "Monster Presale",
-  "3PMcMiMEs6w56NRGacksXtFG5zS7doE9fpL": "Forbes owner(Vova)",
+  "3PMcMiMEs6w56NRGacksXtFG5zS7doE9fpL": "Forbes owner",
   "3PF8pKC8CdmW9sEJUxQVSfezYRSJeThoNR3": "Pluto issuer",
   "3P9VVzzkP1Cfsk3LtTeuUaQqUt5D7sLthLe": "Pluto dApp",
 
