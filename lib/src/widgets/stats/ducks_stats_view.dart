@@ -51,6 +51,7 @@ class DucksStatsView extends StatelessWidget {
                           LblGroup(label: "address", val: _trProvider.curAddr, newLine: true),
                           LblGroup(label: "freeDucks", val: model.freeDucksCount.toString(), newLine: true),
                           LblGroup(label: "stakedDucks", val: model.stakedDucksCount.toString(), newLine: true),
+                            LblGroup(label: "ducks in Wars", val: model.freeDucksCount.toString(), newLine: true),
                         ]
                       ),
                     ),

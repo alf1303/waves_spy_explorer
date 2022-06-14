@@ -61,7 +61,7 @@ class FilterWidget extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               SizedBox(
-                height: fontSize*4.5,
+                // height: fontSize*4.5,
                 child: Row(
                   children: [
                     Container(
@@ -84,17 +84,17 @@ class FilterWidget extends StatelessWidget {
                 ]),
               ),
               isNarr ? SizedBox(
-                  height: fontSize*4.5,
+                  // height: fontSize*4.5,
                   child: InputFields(apploc, fontSize, iconSize)) : Container(),
               SizedBox(
-                height: !isNarr ? fontSize*3 : fontSize*5,
+                // height: !isNarr ? fontSize*3 : fontSize*5,
                 child: Row(
                   children: [
                     Row(
                       children: [
                         MyToolTip(
                             message: "Load more transactions",
-                            child: loadButton(loadMore, "More", fontSize)),
+                            child: loadButton(loadMore, "Load More", fontSize)),
                         MyToolTip(
                             message: "Load all transactions",
                             child: loadButton(loadAll, "Load All", fontSize)),

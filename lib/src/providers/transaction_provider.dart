@@ -154,7 +154,17 @@ class TransactionProvider extends ChangeNotifier {
       while (!stopDate) {
         String afterId = after == null ? "" : afterGlob;
         after = true;
-        var resp = await http.get(Uri.parse("$nodeUrl/transactions/address/$address/limit/$limit?after=$afterId"));
+        var resp;
+        int attempts = 10;
+        while (attempts > 0) {
+          try {
+            resp = await http.get(Uri.parse("$nodeUrl/transactions/address/$address/limit/$limit?after=$afterId"));
+            attempts = 0;
+          } catch(err) {
+            attempts -= 1;
+            print("Catched XMLHttpRequest error, retrying... $attempts left");
+          }
+        }
         // print("trx");
         // print(resp.body);
         // print("");
@@ -189,7 +199,7 @@ class TransactionProvider extends ChangeNotifier {
         } else {
           filterProvider.reverseTransactions ? allTransactions.insertAll(0, res.reversed) : allTransactions.addAll(res);
         }
-        print("zuzu");
+        // print("zuzu");
         final ids = await extractAssets(res);
         await getMassAssetsInfo(ids);
         fillTransactionsWithAssetsNames(res);
@@ -232,7 +242,7 @@ class TransactionProvider extends ChangeNotifier {
   // Loop through transactions and find all assets ids and addresses present in transaction
   // create sets in each transaction json and global set(for next step - fetching names)
   Future<Map<String, String>> extractAssets(List<dynamic> transactions) async {
-    print("ex_1");
+    // print("ex_1");
     final assetsLocalIds = <String, String>{};
     for (var tr in transactions) {
       // print(tr["id"]);
@@ -354,7 +364,7 @@ class TransactionProvider extends ChangeNotifier {
       tr["additional"]["outAssetsIds"] = fail ? {} : outAssetsIds;
       assetsLocalIds.addAll(transAssetsMap);
     }
-    print("ouyeh");
+    // print("ouyeh");
     return assetsLocalIds;
   }
 

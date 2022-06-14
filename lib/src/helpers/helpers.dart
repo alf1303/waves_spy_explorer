@@ -386,6 +386,7 @@ int getDucksCount() {
 void setDucksStatsData() {
     statsProvider.freeDucksCount = nftProvider.nfts.where((nft) => nft.isDuck && !nft.isFarming).toList().length;
     statsProvider.stakedDucksCount = nftProvider.nfts.where((nft) => nft.isDuck && nft.isFarming).toList().length;
+    statsProvider.jediDucksCount = nftProvider.nfts.where((nft) => nft.isDuck && nft.isDjedi).toList().length;
 }
 
 Future<String> fetchAddrByAlias(String alias) async{

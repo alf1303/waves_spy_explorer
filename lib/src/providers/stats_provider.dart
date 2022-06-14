@@ -17,6 +17,7 @@ class StatsProvider extends ChangeNotifier{
 
   int freeDucksCount = 0;
   int stakedDucksCount = 0;
+  int jediDucksCount = 0;
   Map<String, int> calls = {};
 
   //hatch, breed, reborn, perch buy
@@ -47,6 +48,7 @@ class StatsProvider extends ChangeNotifier{
     calls.clear();
     freeDucksCount = 0;
     stakedDucksCount = 0;
+    jediDucksCount = 0;
   }
 
   void addCall(String call) {
