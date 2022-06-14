@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:waves_spy/src/charts/puzzle/eagle_earnings.dart';
 import 'package:waves_spy/src/helpers/helpers.dart';
 import 'package:waves_spy/src/main_page.dart';
 import 'package:waves_spy/src/models/chart_item.dart';
@@ -28,13 +29,27 @@ class PuzzleEarnings extends StatelessWidget {
                 onTap: () {
                   Navigator.of(context).pushNamedAndRemoveUntil(MainPage.mainPageRoute, (route) => false);
                 },
-                child: Row(children: [
-                  SizedBox(height: iconSize, child: Image.asset('assets/images/logo.png', fit: BoxFit.scaleDown,)),
-                  Text(AppLocalizations.of(context)!.headerTitle + "     ", style: TextStyle(fontSize: fontSize)),
-                ],),
+                child: Tooltip(
+                  message: "go to ${AppLocalizations.of(context)!.headerTitle}",
+                  child: Row(children: [
+                    SizedBox(height: iconSize, child: Image.asset('assets/images/logo.png', fit: BoxFit.scaleDown,)),
+                    Text(AppLocalizations.of(context)!.headerTitle + "     ", style: TextStyle(fontSize: fontSize)),
+                  ],),
+                ),
+              ),
+              SizedBox(width: 10,),
+              SizedBox(
+                height: fontSize*2,
+                child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.cyan), ),
+                  child: Text("View Eagle Chart", style: TextStyle(fontSize: fontSize*0.8, color: Colors.cyanAccent),),
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(EagleEarnings.routeName);
+                  },
+                ),
               ),
               const SizedBox(width: 10,),
-              Expanded(child: Text("Puzzle Earnings", style: TextStyle(fontSize: fontSize*1.3),)),
+              Expanded(child: Text("Puzzle Earnings Chart", style: TextStyle(fontSize: fontSize*1.1, fontWeight: FontWeight.bold),)),
             ],
           ),
         ),
@@ -53,7 +68,7 @@ class PuzzleEarnings extends StatelessWidget {
               firstDate = snapshot.data!.first.date;
             }
             DateTime curDate = DateTime.now();
-            int diff = curDate.difference(firstDate).inDays;
+            int diff = curDate.subtract(Duration(days: 1)).difference(firstDate).inDays;
             widget = Column(
               mainAxisSize: MainAxisSize.min,
               children: [

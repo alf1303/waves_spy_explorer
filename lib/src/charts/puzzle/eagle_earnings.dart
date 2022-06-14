@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:waves_spy/src/charts/puzzle/puzzle_earnings.dart';
 import 'package:waves_spy/src/helpers/helpers.dart';
 import 'package:waves_spy/src/main_page.dart';
 import 'package:waves_spy/src/models/chart_item.dart';
@@ -22,19 +23,33 @@ class EagleEarnings extends StatelessWidget {
         preferredSize: Size.fromHeight(fontSize*3.5),
         child: AppBar(
           title: Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              InkWell(
-                radius: 15,
+              InkWell(// radius: 15,
                 onTap: () {
                   Navigator.of(context).pushNamedAndRemoveUntil(MainPage.mainPageRoute, (route) => false);
                 },
-                child: Row(children: [
-                  SizedBox(height: iconSize, child: Image.asset('assets/images/logo.png', fit: BoxFit.scaleDown,)),
-                  Text(AppLocalizations.of(context)!.headerTitle + "     ", style: TextStyle(fontSize: fontSize),),
-                ],),
+                child: Tooltip(
+                  message: "go to ${AppLocalizations.of(context)!.headerTitle}",
+                  child: Row(children: [
+                    SizedBox(height: iconSize, child: Image.asset('assets/images/logo.png', fit: BoxFit.scaleDown,)),
+                    Text(AppLocalizations.of(context)!.headerTitle + "     ", style: TextStyle(fontSize: fontSize),),
+                  ],),
+                ),
               ),
               const SizedBox(width: 10,),
-              Expanded(child: Text("Aggregator Earnings", style: TextStyle(fontSize: fontSize*1.3),)),
+              SizedBox(
+                height: fontSize*2,
+                child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.cyan), ),
+                  child: Text("View Puzzles Chart", style: TextStyle(fontSize: fontSize*0.8, color: Colors.cyanAccent),),
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(PuzzleEarnings.routeName);
+                  },
+                ),
+              ),
+              SizedBox(width: 10,),
+              Expanded(child: Text("Aggregator Earnings Chart", style: TextStyle(fontSize: fontSize*1.1, fontWeight: FontWeight.bold),)),
             ],
           ),
         ),
@@ -54,7 +69,8 @@ class EagleEarnings extends StatelessWidget {
               firstDate = snapshot.data!.first.date;
             }
             DateTime curDate = DateTime.now();
-            int diff = curDate.difference(firstDate).inDays;
+            int diff = curDate.subtract(Duration(days: 1)).difference(firstDate).inDays;
+            // int diff = curDate.difference(firstDate).inDays;
             double oneEagleEarning = sum/77/diff;
             widget = Column(
               mainAxisSize: MainAxisSize.min,
