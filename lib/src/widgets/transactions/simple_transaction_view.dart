@@ -228,7 +228,7 @@ Widget transferHeader(Map<String, dynamic> p, double fontSize) {
     child: Row(
       children: [
         SizedBox(width: fontSize*0.07, child: Container(),),
-        Expanded(child: LabeledText(label: suffix, value: p["anotherAddr"], name: "", colr: fail ? disabledColor : transferColor, addrLink: true, fontSize: fontSize)),
+        Expanded(child: LabeledText(label: suffix, value: p["anotherAddr"], name: getAddrName(p["anotherAddr"]), colr: fail ? disabledColor : transferColor, addrLink: true, fontSize: fontSize)),
       ],
     ),
   );
