@@ -72,6 +72,7 @@ TEST PURPOSE:
 2) Move constant data to cloud(Firebase or git file), on starting fetch and put to local maps
 
 
+  <meta name="description" content="Waves Address Explorer(Experimental)">
 
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z71L77TRSN"></script>

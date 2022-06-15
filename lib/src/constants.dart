@@ -181,6 +181,9 @@ const publicAddr = {
   //// Duck Whales
   "3PJkFJFVZ31WAbbdDPnazhwzjZ4zMKWfNPc": "Big Duck 1",
   "3PLi9Ppb1CTU2xrHiFS1NsRkgiCwPLM8dXf": "Big Duck 2",
+
+  //// Community
+  "3P2CinDgUX5fuck5fyRw1vfPTj8u1N67V7H": "Farm Gudok"
 };
 
 const privateAddr = {
