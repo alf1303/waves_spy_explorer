@@ -22,7 +22,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import 'charts/puzzle/eagle_earnings.dart';
 
-const String version = "v_1.0.2     ";
+const String version = "v_1.0.3     ";
 final GlobalKey<ScaffoldMessengerState> messengerKey = GlobalKey<ScaffoldMessengerState>();
 class MainPage extends StatelessWidget {
   const MainPage({Key? key, this.address}) : super(key: key);
