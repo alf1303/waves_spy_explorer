@@ -171,6 +171,15 @@ class _SimpleTransViewState extends State<SimpleTransView> with AutomaticKeepAli
 
 
 Widget invokeHeader(Map<String, dynamic> p, double fontSize) {
+  void onFunctionTap() {
+    final filterProvider = FilterProvider();
+    if(!filterProvider.fType.contains(16)) {
+      filterProvider.fType.add(16);
+    }
+    if(filterProvider.functName != p["function"]) {
+      filterProvider.changeFunctionName(p["function"]);
+    }
+  }
   final fail = p["fail"];
   return Padding(
     padding: const EdgeInsets.only(right: 8.0),
@@ -179,7 +188,19 @@ Widget invokeHeader(Map<String, dynamic> p, double fontSize) {
         Expanded(
           child: Padding(
             padding: const EdgeInsets.only(right: 8.0),
-            child: SizedBox(width: 100, child: LabeledText(label: "", value: p["function"], name: "", colr: fail? disabledColor : invokeColor, fontSize: fontSize)),
+            child: SizedBox(
+                width: 100,
+                child: Row(
+                  children: [
+                    InkWell(
+                      onTap: onFunctionTap,
+                    // child: LabeledText(label: "", value: p["function"], name: "", colr: fail? disabledColor : invokeColor, fontSize: fontSize)
+                      child: Text(p["function"], style: TextStyle(color: fail? disabledColor : invokeColor, fontSize: fontSize),)
+                    ),
+                    Expanded(child: Container(),)
+                  ],
+                )
+            ),
           ),
         ),
         Expanded(child: isCurrentAddr(p["dApp"]) ?
