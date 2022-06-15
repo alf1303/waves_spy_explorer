@@ -53,7 +53,7 @@ class _AddressesStatsViewState extends State<AddressesStatsView> {
                       children: [
                         LabeledTextNoScroll("income: ", "${model.sumacum_in.toStringAsFixed(5)}, "),
                         LabeledTextNoScroll("outcome: ", "${model.sumacum_out.toStringAsFixed(5)}, "),
-                        LabeledTextNoScroll("asset: ", "${model.assetName}, "),
+                        LabeledTextNoScroll("asset: ", "${model.assetName.name}, "),
                         LabeledTextNoScroll("from: ", "${getFormattedDate(model.actualFrom)}, "),
                         LabeledTextNoScroll("to: ", "${getFormattedDate(model.actualTo)}, "),
                         LabeledTextNoScroll("addr: ", "${_trProvider.curAddr}, ", "${getAddrName(_trProvider.curAddr)}"),

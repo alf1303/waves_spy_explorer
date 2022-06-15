@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +17,8 @@ import 'package:waves_spy/src/widgets/other/progress_bar.dart';
 import 'package:waves_spy/src/widgets/transaction_details.dart';
 import 'package:waves_spy/src/widgets/transactions/transaction_view.dart';
 import 'package:waves_spy/src/widgets/transactions/transactions_list.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
 
 import 'charts/puzzle/eagle_earnings.dart';
 
@@ -47,18 +50,20 @@ class MainPage extends StatelessWidget {
                     children: [
                       SizedBox(height: iconSize, child: Image.asset('assets/images/logo.png', fit: BoxFit.scaleDown,)),
                       SelectableText(AppLocalizations.of(context)!.headerTitle + "     ", style: TextStyle(fontSize: fontSize),),
-                      IconButton(
-                        tooltip: "Show contracts",
-                          icon: Icon(Icons.list_alt_rounded, size: iconSize,),
-                          onPressed: () {
-                            showDialog(context: context,
-                                builder: (context) {
-                                  return MyDialog(
-                                    title: "Addresses:",
-                                      child: getMainAddresses(),
-                                      iconSize: iconSize);
-                                });
-                          }
+                      MyToolTip(
+                        message: "Show contracts",
+                        child: IconButton(
+                            icon: Icon(Icons.list_alt_rounded, size: iconSize,),
+                            onPressed: () {
+                              showDialog(context: context,
+                                  builder: (context) {
+                                    return MyDialog(
+                                      title: "Addresses:",
+                                        child: getMainAddresses(),
+                                        iconSize: iconSize);
+                                  });
+                            }
+                        ),
                       ),
                       Expanded(
                         child: Consumer<LabelProvider>(
@@ -132,26 +137,36 @@ class MainPage extends StatelessWidget {
 Widget getMainAddresses() {
   final fontSize = getLastFontSize();
   final style = TextStyle(fontSize: fontSize);
-  return SelectableText.rich(
-    TextSpan(
-      style: TextStyle(height: fontSize*0.1, fontSize: fontSize),
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
-        TextSpan(text: "WD - Incubator: 3PEktVux2RhchSN63DsDo4b4mz4QqzKSeDv\n", style: style),
-        TextSpan(text: "WD - Breeder: 3PDVuU45H7Eh5dmtNbnRNRStGwULA7NY6Hb\n", style: style),
-        TextSpan(text: "WD - Market: 3PEBtiSVLrqyYxGd76vXKu8FFWWsD1c5uYG\n", style: style),
-        TextSpan(text: "WD - Farming: 3PAETTtuW7aSiyKtn9GuML3RgtV1xdq1mQW\n", style: style),
-        TextSpan(text: "WD - Rebirth: 3PCC6fVHNa6289DTDmcUo3RuLaFmteZZsmQ\n", style: style),
-        TextSpan(text: "WD - Game: 3PR87TwfWio6HVUScSaHGMnFYkGyaVdFeqT\n", style: style),
-        TextSpan(text: "WD - Ducklings: 3PKmLiGEfqLWMC1H9xhzqvAZKUXfFm8uoeg\n", style: style),
+        AddrWidget(text: "WD - Incubator: 3PEktVux2RhchSN63DsDo4b4mz4QqzKSeDv", style: style),
+        AddrWidget(text: "WD - Breeder: 3PDVuU45H7Eh5dmtNbnRNRStGwULA7NY6Hb", style: style),
+        AddrWidget(text: "WD - Market: 3PEBtiSVLrqyYxGd76vXKu8FFWWsD1c5uYG", style: style),
+        AddrWidget(text: "WD - Farming: 3PAETTtuW7aSiyKtn9GuML3RgtV1xdq1mQW", style: style),
+        AddrWidget(text: "WD - Rebirth: 3PCC6fVHNa6289DTDmcUo3RuLaFmteZZsmQ", style: style),
+        AddrWidget(text: "WD - Game: 3PR87TwfWio6HVUScSaHGMnFYkGyaVdFeqT", style: style),
+        AddrWidget(text: "WD - Ducklings: 3PKmLiGEfqLWMC1H9xhzqvAZKUXfFm8uoeg", style: style),
       ]
-    )
+    );
+}
+
+Widget AddrWidget({required String text, required TextStyle style}) {
+  final spaceIndex = text.lastIndexOf(" ");
+  final addr = text.substring(spaceIndex, text.length);
+  return Row(
+    crossAxisAlignment: CrossAxisAlignment.center,
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      SelectableText(text, style: style,),
+      TextButton(onPressed: () {
+        Clipboard.setData(ClipboardData(text: addr));
+        // showSnackMsg("copied");
+      },
+          child: Text("copy"))
+    ],
   );
-  // return
-  //   SelectableText("WD - Incubator: ", style: style,),
-  //   SelectableText("WD - Breeder: ", style: style),
-  //   SelectableText("WD - Farming: ", style: style),
-  //   SelectableText("WD - Market Place: ", style: style),
-  // ];
 }
 
 
