@@ -389,8 +389,8 @@ final bool ali = alias ?? false;
         scrollDirection: Axis.horizontal,
         child: Row(
           children: [
-            nam == "" ? Text("") : SelectableText("($nam)", style: TextStyle(fontSize: fontSize, color: col)),
-            SelectableText(val + " ", style: TextStyle(fontSize: fontSize, color: col),),
+            nam == "" ? Text("") : Text("($nam)", style: TextStyle(fontSize: fontSize, color: col)),
+            Text(val + " ", style: TextStyle(fontSize: fontSize, color: col),),
           ],
         ),
       ),

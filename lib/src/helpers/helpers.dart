@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:waves_spy/src/constants.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/services.dart';
 import 'package:waves_spy/src/main_page.dart';
 import 'package:waves_spy/src/models/stats_item.dart';
 import 'package:waves_spy/src/providers/asset_provider.dart';
@@ -420,11 +421,12 @@ showSnackError(String msg) {
     ));
 }
 
-showSnackMsg(String msg) {
+showSnackMsg({required String msg, int? duration}) {
+    final dur = duration ?? 6;
     messengerKey.currentState?.showSnackBar(SnackBar(
         // backgroundColor: Colors.red.shade200,
         content: Text(msg),
-        duration: const Duration(seconds: 7),
+        duration: Duration(seconds: dur),
         action: SnackBarAction(
             textColor: Colors.black,
             label: 'CLOSE',
@@ -609,5 +611,10 @@ double getLastSmallFontSize() {
 
 bool lastIsNarrow() {
     return isNarr;
+}
+
+void copyToClipboard(String str) {
+    Clipboard.setData(ClipboardData(text: str));
+    showSnackMsg(msg: "copied: $str", duration: 3);
 }
 

@@ -21,7 +21,7 @@ addPrvtAddr() {
   addAdditionalToTransactionDetails();
   dAppsDict.addAll(privateAddr);
   setHighliteFlag();
-  showSnackMsg("Prvt addr added");
+  showSnackMsg(msg: "Prvt addr added");
 }
 
 const publicAddr = {
@@ -53,6 +53,7 @@ const publicAddr = {
   "3PB7nt6z1wviR5AUm4SokTuJR8X8xq4rYnF": "PZ WX WAVES POOL",
 
   //SWOPFI POOLS
+  "3PPH7x7iqobW5ziyiRCic19rQqKr6nPYaK1": "SWOP.FI USDN/USDT",
   "3P3Z8Gn665CJr14bTLv4d5USDBUQCTeeCaT": "SWOP.FI RACE/EGG",
   "3PHTDdjz8Kb5JcAkhzfR57MCUYoe73pyxxK": "SWOP.FI WEST/EAST",
   "3PBHyEwmERR1CEkrTNbPj2bgyisTfPRqfee": "SWOP.FI PUZZLE/USDN",

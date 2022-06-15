@@ -25,6 +25,11 @@ class _SimpleTransViewState extends State<SimpleTransView> with AutomaticKeepAli
     _trDetailsProvider.setTransaction(widget.td);
   }
 
+  void addTypeToFilter() {
+    final filterProvider = FilterProvider();
+    filterProvider.changeType(widget.td["type"]);
+  }
+
   @override
   Widget build(BuildContext context) {
     final height = getHeight(context);
@@ -113,7 +118,9 @@ class _SimpleTransViewState extends State<SimpleTransView> with AutomaticKeepAli
           child: Row(
             children: [
               SizedBox(width: width*0.09, child: LabeledText(label: "", value: dateStr, name: "", colr: color.withOpacity(0.5), fontSize: fontSize)),
-              SizedBox(width: width*0.09, child: LabeledText(label: "", value: typeName, name: "$typeNumber", colr: color, fontSize: fontSize), ),
+              SizedBox(width: width*0.09, child: InkWell(
+                  onTap: addTypeToFilter,
+                  child: LabeledText(label: "", value: typeName, name: "$typeNumber", colr: color, fontSize: fontSize)), ),
               !isNarr ? Padding(
                 padding: const EdgeInsets.only(right: 8.0),
                 child: SizedBox(width: 100, child: LabeledText(label: "", value: widget.td["id"], name: "", colr: Colors.grey, fontSize: fontSize)),
@@ -171,13 +178,21 @@ class _SimpleTransViewState extends State<SimpleTransView> with AutomaticKeepAli
 
 
 Widget invokeHeader(Map<String, dynamic> p, double fontSize) {
+  final filterProvider = FilterProvider();
   void onFunctionTap() {
-    final filterProvider = FilterProvider();
     if(!filterProvider.fType.contains(16)) {
       filterProvider.fType.add(16);
     }
     if(filterProvider.functName != p["function"]) {
       filterProvider.changeFunctionName(p["function"]);
+    }
+  }
+
+  void addAddressToFilter() {
+    if(isCurrentAddr(p["dApp"])) {
+      filterProvider.changeAddressName(p["sender"]);
+    } else {
+      filterProvider.changeAddressName(p["dApp"]);
     }
   }
   final fail = p["fail"];
@@ -204,8 +219,14 @@ Widget invokeHeader(Map<String, dynamic> p, double fontSize) {
           ),
         ),
         Expanded(child: isCurrentAddr(p["dApp"]) ?
-          LabeledText(label: "sender:", value: p["sender"], name: getAddrName(p["sender"]), colr: fail? disabledColor : invokeColor, addrLink: true, fontSize: fontSize) :
-            LabeledText(label: "dApp:", value: p["dApp"], name: getAddrName(p["dApp"]), colr: fail? disabledColor : invokeColor, addrLink: true, fontSize: fontSize)),
+          InkWell(
+              onLongPress: () {copyToClipboard(p["sender"]);},
+              onTap: addAddressToFilter,
+              child: LabeledText(label: "sender:", value: p["sender"], name: getAddrName(p["sender"]), colr: fail? disabledColor : invokeColor, addrLink: true, fontSize: fontSize)) :
+            InkWell(
+                onLongPress:  () {copyToClipboard(p["dApp"]);},
+                onTap: addAddressToFilter,
+                child: LabeledText(label: "dApp:", value: p["dApp"], name: getAddrName(p["dApp"]), colr: fail? disabledColor : invokeColor, addrLink: true, fontSize: fontSize))),
       ],
     ),
   );
@@ -237,6 +258,10 @@ Widget exchangeHeader(Map<String, dynamic> p, double fontSize) {
 }
 
 Widget transferHeader(Map<String, dynamic> p, double fontSize) {
+  void addAddressToFilter() {
+      filterProvider.changeAddressName(p["anotherAddr"]);
+  }
+
   final fail = p["fail"];
   String suffix = "";
   if(p["direction"] == "IN") {
@@ -249,13 +274,20 @@ Widget transferHeader(Map<String, dynamic> p, double fontSize) {
     child: Row(
       children: [
         SizedBox(width: fontSize*0.07, child: Container(),),
-        Expanded(child: LabeledText(label: suffix, value: p["anotherAddr"], name: getAddrName(p["anotherAddr"]), colr: fail ? disabledColor : transferColor, addrLink: true, fontSize: fontSize)),
+        Expanded(child: InkWell(
+            onLongPress: () {copyToClipboard(p["anotherAddr"]);},
+            onTap: addAddressToFilter,
+            child: LabeledText(label: suffix, value: p["anotherAddr"], name: getAddrName(p["anotherAddr"]), colr: fail ? disabledColor : transferColor, addrLink: true, fontSize: fontSize))),
       ],
     ),
   );
 }
 
 Widget massTransferHeader(Map<String, dynamic> p, double fontSize) {
+  void addAddressToFilter() {
+    filterProvider.changeAddressName(p["anotherAddr"]);
+  }
+
   final fail = p["fail"];
   String lbl = "from";
   if(isCurrentAddr(p["sender"])) {
@@ -266,7 +298,10 @@ Widget massTransferHeader(Map<String, dynamic> p, double fontSize) {
     child: Row(
       children: [
         SizedBox(width: fontSize*0.07, child: Container(),),
-        Expanded(child: SizedBox(width: 740, child: LabeledText(label: lbl, value: p["anotherAddr"], name: p["name"], colr: fail ? disabledColor : massTransferColor, addrLink: true, fontSize: fontSize),)),
+        Expanded(child: SizedBox(width: 740, child: InkWell(
+            onLongPress: () {copyToClipboard(p["anotherAddr"]);},
+            onTap: addAddressToFilter,
+            child: LabeledText(label: lbl, value: p["anotherAddr"], name: p["name"], colr: fail ? disabledColor : massTransferColor, addrLink: true, fontSize: fontSize)),)),
       ],
     ),
   );
