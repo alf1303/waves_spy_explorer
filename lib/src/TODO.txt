@@ -39,22 +39,22 @@
 
 ** 1) place NFT loading as last item
 ** 2) place telegram group link
-3) find bug with transactions order when multiple filtering
+** 3) find bug with transactions order when multiple filtering
+** 3) add link to telegramm group(create it before)
+** 1) Draw icon and add it to app
+** 24) Implement getting ducks in DuckWars and mantle level
 
+TODO
+2) Move publicAddr to google sheets and create script for fetch, on starting fetch and put to local maps
 
-0) show all transfers in outs(MarketPlace as example)
-2) Add DuckStats view:
-    - ducks in battle + mantle lvl (check how it change loading speed) Parse artefact dApp data (3PR87TwfWio6HVUScSaHGMnFYkGyaVdFeqT)
+2) In DuckStats view:
+**    - ducks in battle + mantle lvl (check how it change loading speed) Parse artefact dApp data (3PR87TwfWio6HVUScSaHGMnFYkGyaVdFeqT)
     - ducklings count ?
     - mantles count ( + spent on mantles and upgrade)
 
-3) add link to telegramm group(create it before)
 
 20.1) and data for filtering into address string
 22) Implement changing node_url address in app header
-10) Implement button for collapsing/hiding addresses in stats view
-19) Implement one row view for transaction and button in app bar to switch views
-24) Implement getting ducks in DuckWars and mantle level
 25) Implement toolbar for nft tab with filtering nfts/ducks
 25.2) Implement indicating Puzzle Eagle an Bored Ania nfts(staked/unstaked)
 25.1) Implement showing staked amount for tokens (Farm Tokens, Puzzle, )
@@ -65,11 +65,6 @@
     - parseTransactionType
     - look where else
 
-
-TEST PURPOSE:
-
-1) Draw icon and add it to app
-2) Move constant data to cloud(Firebase or git file), on starting fetch and put to local maps
 
 
   <meta name="description" content="Waves Address Explorer(Experimental)">
