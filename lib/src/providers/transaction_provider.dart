@@ -13,6 +13,8 @@ import 'package:waves_spy/src/providers/filter_provider.dart';
 import 'package:waves_spy/src/providers/nft_provider.dart';
 import 'package:waves_spy/src/providers/progress_bars_provider.dart';
 import 'package:waves_spy/src/providers/stats_provider.dart';
+import 'package:fast_base58/fast_base58.dart';
+
 import 'package:waves_spy/src/widgets/transactions/transaction_view.dart';
 
 import '../models/asset.dart';
@@ -249,6 +251,15 @@ class TransactionProvider extends ChangeNotifier {
       final bool fail = tr["applicationStatus"] != "succeeded";
       tr["additional"] = <String, dynamic>{};
       tr["additional"]["tradeAddrCount"] = 0;
+      if (tr.containsKey("attachment")) {
+        var raw;
+        try {
+          raw = Base58Decode(tr["attachment"]);
+          tr["attachment"] = utf8.decode(raw);
+        } catch(err) {
+          print("Attachement decode error");
+        }
+      }
       final transAssetsMap = <String, String>{};
       final trAddressesMap = <String, String>{};
       final Map<String, double> inAssetsIds = {};

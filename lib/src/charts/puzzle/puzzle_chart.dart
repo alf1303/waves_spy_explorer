@@ -47,8 +47,12 @@ class _PuzzleChartState extends State<PuzzleChart> {
     Widget text;
     // print(value);
     String val = "";
+    double tmpval = widget.data.length - value - 1;
     final module = !lastIsNarrow() ? 2 : 4;
-    if (value < widget.data.length && value%module == 0) {
+    final bool startend = tmpval == 0 || tmpval == widget.data.length - 1;
+    final bool others = tmpval < widget.data.length && tmpval%module == 0 && tmpval != widget.data.length - 2;
+    bool flag = startend || others;
+    if (flag) {
       DateTime date = widget.data[value.toInt()].date;
       String month = date.month.toString().length == 1 ? "0" + date.month.toString() : date.month.toString();
       String day = date.day.toString().length == 1 ? "0" + date.day.toString() : date.day.toString();
