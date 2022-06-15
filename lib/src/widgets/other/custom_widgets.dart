@@ -35,14 +35,15 @@ class MyToolTip extends StatelessWidget {
 }
 
 class MyDialog extends StatelessWidget {
-  MyDialog({Key? key, required this.child, required this.iconSize}) : super(key: key);
+  MyDialog({Key? key, required this.child, required this.iconSize, this.title}) : super(key: key);
   final iconSize;
   Widget child;
+  final title;
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-
+      title: title == null ? title : Text(title),
       actions: [
         OutlinedButton(onPressed: () {Navigator.pop(context);}, child: Text("Close", style: TextStyle(fontSize: iconSize*0.7),),)
       ],

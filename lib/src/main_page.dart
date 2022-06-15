@@ -11,6 +11,7 @@ import 'package:waves_spy/src/providers/transaction_provider.dart';
 import 'package:waves_spy/src/widgets/filter_widger.dart';
 import 'package:waves_spy/src/widgets/input_widget.dart';
 import 'package:waves_spy/src/widgets/main_area.dart';
+import 'package:waves_spy/src/widgets/other/custom_widgets.dart';
 import 'package:waves_spy/src/widgets/other/progress_bar.dart';
 import 'package:waves_spy/src/widgets/transaction_details.dart';
 import 'package:waves_spy/src/widgets/transactions/transaction_view.dart';
@@ -46,6 +47,19 @@ class MainPage extends StatelessWidget {
                     children: [
                       SizedBox(height: iconSize, child: Image.asset('assets/images/logo.png', fit: BoxFit.scaleDown,)),
                       SelectableText(AppLocalizations.of(context)!.headerTitle + "     ", style: TextStyle(fontSize: fontSize),),
+                      IconButton(
+                        tooltip: "Show contracts",
+                          icon: Icon(Icons.list_alt_rounded, size: iconSize,),
+                          onPressed: () {
+                            showDialog(context: context,
+                                builder: (context) {
+                                  return MyDialog(
+                                    title: "Addresses:",
+                                      child: getMainAddresses(),
+                                      iconSize: iconSize);
+                                });
+                          }
+                      ),
                       Expanded(
                         child: Consumer<LabelProvider>(
                             builder: (context, model, child) {
@@ -56,7 +70,7 @@ class MainPage extends StatelessWidget {
                                 ],
                               );
                             }),
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -113,6 +127,31 @@ class MainPage extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget getMainAddresses() {
+  final fontSize = getLastFontSize();
+  final style = TextStyle(fontSize: fontSize);
+  return SelectableText.rich(
+    TextSpan(
+      style: TextStyle(height: fontSize*0.1, fontSize: fontSize),
+      children: [
+        TextSpan(text: "WD - Incubator: 3PEktVux2RhchSN63DsDo4b4mz4QqzKSeDv\n", style: style),
+        TextSpan(text: "WD - Breeder: 3PDVuU45H7Eh5dmtNbnRNRStGwULA7NY6Hb\n", style: style),
+        TextSpan(text: "WD - Market: 3PEBtiSVLrqyYxGd76vXKu8FFWWsD1c5uYG\n", style: style),
+        TextSpan(text: "WD - Farming: 3PAETTtuW7aSiyKtn9GuML3RgtV1xdq1mQW\n", style: style),
+        TextSpan(text: "WD - Rebirth: 3PCC6fVHNa6289DTDmcUo3RuLaFmteZZsmQ\n", style: style),
+        TextSpan(text: "WD - Game: 3PR87TwfWio6HVUScSaHGMnFYkGyaVdFeqT\n", style: style),
+        TextSpan(text: "WD - Ducklings: 3PKmLiGEfqLWMC1H9xhzqvAZKUXfFm8uoeg\n", style: style),
+      ]
+    )
+  );
+  // return
+  //   SelectableText("WD - Incubator: ", style: style,),
+  //   SelectableText("WD - Breeder: ", style: style),
+  //   SelectableText("WD - Farming: ", style: style),
+  //   SelectableText("WD - Market Place: ", style: style),
+  // ];
 }
 
 
