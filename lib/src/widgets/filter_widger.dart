@@ -178,13 +178,15 @@ class FilterWidget extends StatelessWidget {
     return DropdownSearch<Asset>(
       dropdownSearchTextStyle: TextStyle(fontSize: fontSize),
       showClearButton: true,
-      popupProps: PopupProps.menu(showSearchBox: true, textStyle: TextStyle(fontSize: fontSize)),
+      popupProps: PopupProps.menu(showSearchBox: true, searchFieldProps: TextFieldProps(decoration: InputDecoration(icon: Icon(Icons.search))),
+          textStyle: TextStyle(fontSize: fontSize)),
       dropdownSearchDecoration: InputDecoration(border: const OutlineInputBorder(),
           labelStyle: TextStyle(fontSize: fontSize),
           isDense: true,
           labelText: "asset name or id",
           suffixIcon: IconButton(onPressed: clearAsset, icon: Icon(Icons.close, size: iconSize,), tooltip: apploc?.clearAsset,)),
       asyncItems: (String filter) => getData(filter),
+
       itemAsString: (Asset u) => "${u.name} - ${u.id}",
       onChanged: (Asset? data) => assetChanged(data),
     );
