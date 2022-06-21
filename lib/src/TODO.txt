@@ -53,7 +53,7 @@ TODO First
 1) All free spaces in transaction view on clicking should open transaction in details
 2) All important text elements(addresses, function name) should be copyable by long tap
 3) Filtering by clicking should work in opposite way also
-4) Delete first space while copying addresses from contracts dialog
+** 4) Delete first space while copying addresses from contracts dialog
 
 TODO
 2) Move publicAddr to google sheets and create script for fetch, on starting fetch and put to local maps

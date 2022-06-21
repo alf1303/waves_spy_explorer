@@ -148,23 +148,48 @@ Widget getMainAddresses() {
         AddrWidget(text: "WD - Rebirth: 3PCC6fVHNa6289DTDmcUo3RuLaFmteZZsmQ", style: style),
         AddrWidget(text: "WD - Game: 3PR87TwfWio6HVUScSaHGMnFYkGyaVdFeqT", style: style),
         AddrWidget(text: "WD - Ducklings: 3PKmLiGEfqLWMC1H9xhzqvAZKUXfFm8uoeg", style: style),
+        AddrWidget(text: "WD - Eggs Treasury: 3PLkyPruTTLt2JfeHekaz7vHG2CWyBnwXDM", style: style),
+        AddrWidget(text: "PUZZLE Aggregator: 3PGFHzVGT4NTigwCKP1NcwoXkodVZwvBuuU", style: style),
+        AddrWidget(text: "SWOP.FI Router: 3P4v7QaMk6us7PdxSuoR5LmZmemv5ruD6oj", style: style),
+        AddrWidget(text: "KEEPER Aggregator: 3P5UKXpQbom7GB2WGdPG5yGQPeQQuM3hFmw", style: style),
       ]
     );
 }
 
 Widget AddrWidget({required String text, required TextStyle style}) {
   final spaceIndex = text.lastIndexOf(" ");
+  final fontSize = getLastFontSize();
   final addr = text.substring(spaceIndex, text.length);
+  final label = text.substring(0, spaceIndex);
+
+  const copy = "copy";
+  const copied = "copied";
+  bool isCopied = false;
   return Row(
     crossAxisAlignment: CrossAxisAlignment.center,
     mainAxisSize: MainAxisSize.min,
     children: [
-      SelectableText(text, style: style,),
-      TextButton(onPressed: () {
-        Clipboard.setData(ClipboardData(text: addr));
-        // showSnackMsg("copied");
-      },
-          child: Text("copy"))
+      // SelectableText(text, style: style,),
+      SelectableText.rich(
+        TextSpan(
+          children: [
+            TextSpan(text: label, style: TextStyle(color: Colors.cyanAccent)),
+            TextSpan(text: addr)
+          ]
+        ),
+        style: TextStyle(fontSize: fontSize),
+      ),
+      StatefulBuilder(
+          builder: (context, setStat) {
+            return TextButton(onPressed: () {
+              Clipboard.setData(ClipboardData(text: addr));
+              setStat(() {
+                isCopied = true;
+              });
+              // showSnackMsg("copied");
+            },
+                child: Text(isCopied ? copied : copy, style: TextStyle(fontSize: fontSize, color: isCopied ? Colors.orange : null)),);
+          })
     ],
   );
 }

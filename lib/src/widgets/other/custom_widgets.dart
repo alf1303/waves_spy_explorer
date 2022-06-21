@@ -44,6 +44,7 @@ class MyDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: title == null ? title : Text(title),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(iconSize*0.5))),
       actions: [
         OutlinedButton(onPressed: () {Navigator.pop(context);}, child: Text("Close", style: TextStyle(fontSize: iconSize*0.7),),)
       ],
