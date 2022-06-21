@@ -44,6 +44,17 @@
 ** 1) Draw icon and add it to app
 ** 24) Implement getting ducks in DuckWars and mantle level
 
+get dAppsAddressses: https://script.google.com/macros/s/AKfycbyWkPTqRwfGtPPXRGkKk_bHQ2ann3Y50iIAMjfRpQe9LusZ6FsKXKXb6O9y_aik34g/exec
+get private Addresses: https://script.google.com/macros/s/AKfycbw6UhQfES37fQjoEJKIDtLrwZG7P0ymM4ac0nqcwRjTTUd7_y-lcspyd-Z-GHDCVIg/exec
+
+TODO First
+ - fix duck in wars incorrect number in stats
+  - fix show failed transactions to only if status is failed
+1) All free spaces in transaction view on clicking should open transaction in details
+2) All important text elements(addresses, function name) should be copyable by long tap
+3) Filtering by clicking should work in opposite way also
+4) Delete first space while copying addresses from contracts dialog
+
 TODO
 2) Move publicAddr to google sheets and create script for fetch, on starting fetch and put to local maps
 
