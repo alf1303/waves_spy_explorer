@@ -251,13 +251,13 @@ class TransactionProvider extends ChangeNotifier {
       final bool fail = tr["applicationStatus"] == "script_execution_failed";
       tr["additional"] = <String, dynamic>{};
       tr["additional"]["tradeAddrCount"] = 0;
-      if (tr.containsKey("attachment")) {
+      if (tr.containsKey("attachment") && tr["attachment"].length > 0) {
         var raw;
         try {
           raw = Base58Decode(tr["attachment"]);
           tr["attachment"] = utf8.decode(raw);
         } catch(err) {
-          print("Attachement decode error");
+          print("Attachement decode error, ${tr["attachment"]}, " + err.toString());
         }
       }
       final transAssetsMap = <String, String>{};

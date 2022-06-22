@@ -306,7 +306,7 @@ Widget transferHeader(Map<String, dynamic> p, double fontSize) {
   }
   final flexSpace = (350/p["anotherAddr"].length).round();
   final flexAddr = 350 - flexSpace;
-  print("$flexAddr, $flexSpace");
+  // print("$flexAddr, $flexSpace");
   return Padding(
     padding: const EdgeInsets.only(right: 8.0),
     child: Row(

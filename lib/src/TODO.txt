@@ -49,9 +49,10 @@ get private Addresses: https://script.google.com/macros/s/AKfycbw6UhQfES37fQjoEJ
 
 TODO First
  - fix duck in wars incorrect number in stats
-  - fix show failed transactions to only if status is failed
   - add by-click filtering functionality to assets names in transactions views
+  - add copying for data keys and values
 
+** fix show failed transactions to only if status is failed
 ** 1) All free spaces in transaction view on clicking should open transaction in details
 ** 2) All important text elements(addresses, function name) should be copyable by long tap
 ** 3) Filtering by clicking should work in opposite way also

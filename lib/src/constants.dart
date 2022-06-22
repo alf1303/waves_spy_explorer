@@ -214,6 +214,25 @@ const privateAddr = {
   "3PKgDvqufeSQDcbsP8VrCvZXcA4GVviLPCY": "Whale1"
 };
 
+const farmStakingDapps = {
+  "3P9d7k1FvWhahnSdyk5tb4kU33Fmee6NHKF": "Stake Latina",
+  "3PPtUf3rhHYiHfsERX6qzXP3j5spqdrVrRm": "Stake EggsAggerated",
+  "3PE2feY8CpBtWBRPxtLS7dt3YJkSt4Kme6U": "Stake Kolkhoz",
+  "3PFdu9Kc2sUzLGjSv4axwr6Fe7dxqoYwkKR": "Stake Forklog",
+  "3PBTLkeAM1HUEMExwJGeYwEGfuocg563zeg": "Stake Mathematical",
+  "3P5zfgXtcjJxyMZves2sfSqGoabhzaMuPpZ": "Stake Marvin Favis",
+  "3PJs4poBWAMFUM1Vn7T87mvNoZrts4esQbt": "Stake Duxplorer",
+  "3P8968LuSXboHgKi94PHvc6c17duA6i8Hw8": "Stake Duck Street",
+  "3P3L6F3yMiXkdMMXovdMrAP96FLYW7cg2Xq": "Stake Eggpoint",
+  "3PJHPDM6kH8fGkPLkzwZ7SrNqc9JDXtMiPB": "Stake Endo World",
+  "3PB6dcUYwDt6WHq6sma4ed7iUvEKvuP4b6B": "Stake Insiders by GP",
+  "3PDMQbvFVLyxBnkwzbFEYokEda4EE7ZfdgS": "Stake CGU",
+  "3PMZEydczD7NkUD45AY2kqvQRd2mTK8uqz1": "Stake Mundocrypto",
+  "3P2bbfbAf2Ddc6cMgQfkt22fqmoE1AmALmN": "Stake FOMO",
+  "3P48GkhK94aDgsavHhhsHGcYwcuLYQenWk4": "Stake Turtle",
+  "3P79Pu5NmNv7REyWN78uZLiqVVb6WSpAg1d": "Stake IDO",
+};
+
 // "INCUBATOR_DAPP_ADDRESS": "3PEktVux2RhchSN63DsDo4b4mz4QqzKSeDv",
 // "AUCTION_DAPP_ADDRESS": "3PEBtiSVLrqyYxGd76vXKu8FFWWsD1c5uYG",
 // "BREEDER_DAPP_ADDRESS": "3PDVuU45H7Eh5dmtNbnRNRStGwULA7NY6Hb",
