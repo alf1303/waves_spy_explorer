@@ -116,11 +116,19 @@ class _SimpleTransViewState extends State<SimpleTransView> with AutomaticKeepAli
             // color: fail ? Colors.white12 : null,
               border: Border.all(color: borderColor), borderRadius: const BorderRadius.all(Radius.circular(5))),
           child: Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
               SizedBox(width: width*0.09, child: LabeledText(label: "", value: dateStr, name: "", colr: color.withOpacity(0.5), fontSize: fontSize)),
-              SizedBox(width: width*0.09, child: InkWell(
-                  onTap: addTypeToFilter,
-                  child: LabeledText(label: "", value: typeName, name: "$typeNumber", colr: color, fontSize: fontSize)), ),
+              SizedBox(width: width*0.09, child: Row(
+                children: [
+                  InkWell(
+                      onTap: addTypeToFilter,
+                      child: Text("($typeNumber)$typeName", style: TextStyle(fontSize: fontSize, color: color),)),
+                      // child: LabeledText(label: "", value: typeName, name: "$typeNumber", colr: color, fontSize: fontSize)),
+                
+                  Expanded(child: Container())
+                ],
+              ), ),
               !isNarr ? Padding(
                 padding: const EdgeInsets.only(right: 8.0),
                 child: SizedBox(width: 100, child: LabeledText(label: "", value: widget.td["id"], name: "", colr: Colors.grey, fontSize: fontSize)),
@@ -182,13 +190,21 @@ Widget invokeHeader(Map<String, dynamic> p, double fontSize) {
   void onFunctionTap() {
     if(!filterProvider.fType.contains(16)) {
       filterProvider.fType.add(16);
+    } else {
+      filterProvider.fType.clear(); // need to call notify after this direct set, now it is called in clearFunc(), later
     }
     if(filterProvider.functName != p["function"]) {
       filterProvider.changeFunctionName(p["function"]);
+    } else {
+      filterProvider.clearFunc();
     }
   }
 
   void addAddressToFilter() {
+    if (p["sender"] == filterProvider.addrName || p["dApp"] == filterProvider.addrName) {
+      filterProvider.clearAddress();
+      return;
+    }
     if(isCurrentAddr(p["dApp"])) {
       filterProvider.changeAddressName(p["sender"]);
     } else {
@@ -259,7 +275,11 @@ Widget exchangeHeader(Map<String, dynamic> p, double fontSize) {
 
 Widget transferHeader(Map<String, dynamic> p, double fontSize) {
   void addAddressToFilter() {
+    if(p["anotherAddr"] == filterProvider.addrName) {
+      filterProvider.clearAddress();
+    } else {
       filterProvider.changeAddressName(p["anotherAddr"]);
+    }
   }
 
   final fail = p["fail"];
@@ -285,8 +305,11 @@ Widget transferHeader(Map<String, dynamic> p, double fontSize) {
 
 Widget massTransferHeader(Map<String, dynamic> p, double fontSize) {
   void addAddressToFilter() {
-    filterProvider.changeAddressName(p["anotherAddr"]);
-  }
+    if(p["anotherAddr"] == filterProvider.addrName) {
+      filterProvider.clearAddress();
+    } else {
+      filterProvider.changeAddressName(p["anotherAddr"]);
+    }  }
 
   final fail = p["fail"];
   String lbl = "from";
