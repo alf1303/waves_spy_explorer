@@ -304,15 +304,25 @@ Widget transferHeader(Map<String, dynamic> p, double fontSize) {
   } else {
     suffix = "to: ";
   }
+  final flexSpace = (350/p["anotherAddr"].length).round();
+  final flexAddr = 350 - flexSpace;
+  print("$flexAddr, $flexSpace");
   return Padding(
     padding: const EdgeInsets.only(right: 8.0),
     child: Row(
       children: [
         SizedBox(width: fontSize*0.07, child: Container(),),
-        Expanded(child: InkWell(
+        Flexible(
+            flex: 8,
+            fit: FlexFit.tight,
+            child: InkWell(
             onLongPress: () {copyToClipboard(p["anotherAddr"]);},
             onTap: addAddressToFilter,
-            child: LabeledText(label: suffix, value: p["anotherAddr"], name: getAddrName(p["anotherAddr"]), colr: fail ? disabledColor : transferColor, addrLink: true, fontSize: fontSize))),
+            child: LabeledText(label: suffix, value: p["anotherAddr"], name: getAddrName(p["anotherAddr"]), colr: fail ? disabledColor : transferColor, addrLink: true, fontSize: fontSize)
+        )),
+        Flexible(
+            flex: 1,
+            child: Container())
       ],
     ),
   );

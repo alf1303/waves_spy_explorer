@@ -120,7 +120,9 @@ Widget ResultWidget(AddressesStatsItem? it, String assName, double fontSize) {
             return Row(
               children: [
                 // SizedBox(width: 350, child: LinkToAddress(val: val, label: val, color: Colors.white,)),
-                SizedBox(width: fontSize*26, child: LabeledText(label: "view: ", value: val, addrLink: true, colr: it.tradeAddrCount >= 1 ? Colors.yellow : null, fontSize: fontSize)),
+                SizedBox(width: fontSize*26, child: InkWell(
+                    onLongPress: () {copyToClipboard(val);},
+                    child: LabeledText(label: "view: ", value: val, addrLink: true, colr: it.tradeAddrCount >= 1 ? Colors.yellow : null, fontSize: fontSize))),
                 // GestureDetector(
                 //   onTap: () {
                 //     setStat(() => hidden = !hidden);
