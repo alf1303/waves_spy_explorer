@@ -187,16 +187,21 @@ class _SimpleTransViewState extends State<SimpleTransView> with AutomaticKeepAli
 
 Widget invokeHeader(Map<String, dynamic> p, double fontSize) {
   final filterProvider = FilterProvider();
+  
   void onFunctionTap() {
+    if(filterProvider.fType.contains(16) && filterProvider.functName == p["function"]) {
+      filterProvider.fType.clear();
+      filterProvider.clearFunc();
+      return;
+    }
+    if(filterProvider.fType.contains(16) && filterProvider.functName != p["function"]) {
+      // filterProvider.fType.clear();
+      filterProvider.changeFunctionName(p["function"]);
+      return;
+    }
     if(!filterProvider.fType.contains(16)) {
       filterProvider.fType.add(16);
-    } else {
-      filterProvider.fType.clear(); // need to call notify after this direct set, now it is called in clearFunc(), later
-    }
-    if(filterProvider.functName != p["function"]) {
       filterProvider.changeFunctionName(p["function"]);
-    } else {
-      filterProvider.clearFunc();
     }
   }
 
@@ -212,6 +217,8 @@ Widget invokeHeader(Map<String, dynamic> p, double fontSize) {
     }
   }
   final fail = p["fail"];
+  final flexSpace = (25/(p["function"].length)).round();
+  final flexFunc = 25 - flexSpace;
   return Padding(
     padding: const EdgeInsets.only(right: 8.0),
     child: Row(
@@ -220,15 +227,21 @@ Widget invokeHeader(Map<String, dynamic> p, double fontSize) {
           child: Padding(
             padding: const EdgeInsets.only(right: 8.0),
             child: SizedBox(
-                width: 100,
+                // width: fontSize*10000,
                 child: Row(
                   children: [
-                    InkWell(
-                      onTap: onFunctionTap,
-                    // child: LabeledText(label: "", value: p["function"], name: "", colr: fail? disabledColor : invokeColor, fontSize: fontSize)
-                      child: Text(p["function"], style: TextStyle(color: fail? disabledColor : invokeColor, fontSize: fontSize),)
+                    Flexible(
+                    flex: flexFunc,
+                      child: InkWell(
+                        onTap: onFunctionTap,
+                      // child: LabeledText(label: "", value: p["function"], name: "", colr: fail? disabledColor : invokeColor, fontSize: fontSize)
+                        child: SingleChildScrollView(scrollDirection: Axis.horizontal, child: Text(p["function"], style: TextStyle(color: fail? disabledColor : invokeColor, fontSize: fontSize),))
+                      ),
                     ),
-                    Expanded(child: Container(),)
+                    Flexible(
+                      flex: flexSpace,
+                      fit: FlexFit.loose,
+                      child: Container(),)
                   ],
                 )
             ),

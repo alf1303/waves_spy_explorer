@@ -228,19 +228,19 @@ Widget burnHeader(Map<String, dynamic> p) {
   return Container();
 }
 
-Widget assetBuilder(String id, val, exop, String amountId, String dir, [String? receiver, bool? fail]) {
-  String rec = receiver == null ? "" : " to $receiver";
-  String tmpAss = id + ".|." + amountId;
-  List<Asset?>? assets= getAssetInfoLabelLocal(tmpAss);
-  // print("${assets![0]}, ${assets![1]}");
-  if(assets![0] == null || assets[1] == null && exop) {
-    return assetBuilderFetch(id, val, exop, amountId, dir, receiver, fail);
-  } else {
-    return assetBuilderLocal(id, val, exop, amountId, dir, receiver, fail);
-  }
-}
+// Widget assetBuilder2(String id, val, exop, String amountId, String dir, [String? receiver, bool? fail]) {
+//   String rec = receiver == null ? "" : " to $receiver";
+//   String tmpAss = id + ".|." + amountId;
+//   List<Asset?>? assets= getAssetInfoLabelLocal(tmpAss);
+//   // print("${assets![0]}, ${assets![1]}");
+//   if(assets![0] == null || assets[1] == null && exop) {
+//     return assetBuilderFetch(id, val, exop, amountId, dir, receiver, fail);
+//   } else {
+//     return assetBuilderLocal(id, val, exop, amountId, dir, receiver, fail);
+//   }
+// }
 
-Widget assetBuilderFetch(String id, val, exop, String amountId, String dir, [String? receiver, bool? fail]) {
+Widget assetBuilder(String id, val, exop, String amountId, String dir, [String? receiver, bool? fail]) {
   String rec = receiver == null ? "" : " to $receiver";
   String tmpAss = id + ".|." + amountId;
   // print("$id, $val, $exop, $amountId, $dir, $receiver");
@@ -301,8 +301,8 @@ Widget assetBuilderLocal(String id, val, exop, String amountId, String dir, [Str
     double value = val / pow(10, decimals);
     //TODO some strange things with null value
     if (exop) {
-      if (assets![1] != null) {
-        int exchDecimals = assets![1]!.decimals;
+      if (assets[1] != null) {
+        int exchDecimals = assets[1]!.decimals;
         if (id != amountId) {
           value = value / pow(10, 8);
         }
@@ -313,7 +313,7 @@ Widget assetBuilderLocal(String id, val, exop, String amountId, String dir, [Str
     }
     // print(snapshot.data);
     String vvv = !isNarr ? value.truncat(decimals).toString() : value.truncat(decimals).toStringAsFixed(2);
-    widget = value != 0 ?Text("$vvv ${assets![0]!.name}$rec", style: TextStyle(fontSize: fontSize, color: failure ? disabledColor : dir == "in" ? inAssetsColor : outAssetsColor),) : Container();
+    widget = value != 0 ?Text("$vvv ${assets[0]!.name}$rec", style: TextStyle(fontSize: fontSize, color: failure ? disabledColor : dir == "in" ? inAssetsColor : outAssetsColor),) : Container();
     if(value == 555) {
       widget = Container(color: Colors.yellow, child: Text("Alarm", style: TextStyle(fontSize: fontSize),),);
     }

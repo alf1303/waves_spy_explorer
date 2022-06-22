@@ -217,7 +217,9 @@ Future<List<dynamic>> getMassAssets(Map<String, dynamic> ids) async{
             assetDetails.addAll(jsonDecode(resp.body));
         }
       } else {
-          throw("Failed to load assets details: " + resp.body);
+          print("Failed to load assests details: " + resp.body);
+          print("Input tmpstr: " + tmpstr);
+          // throw("Failed to load assets details: " + resp.body);
       }
     }
     return assetDetails;
