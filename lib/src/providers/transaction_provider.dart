@@ -609,7 +609,7 @@ class TransactionProvider extends ChangeNotifier {
     }
     print("filter2");
     if(filterProvider.addrName.isNotEmpty) {
-      filteredTransactions = filteredTransactions.where((tr) => tr["additional"]["addressesIds"].contains(filterProvider.addrName)).toList();
+      filteredTransactions = filteredTransactions.where((tr) => tr["additional"]["addressesIds"].toLowerCase().contains(filterProvider.addrName.toLowerCase())).toList();
     }
 
     if(filterProvider.fType.contains(16) && filterProvider.functName.isNotEmpty) {
