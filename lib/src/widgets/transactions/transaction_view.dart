@@ -404,11 +404,14 @@ final bool ali = alias ?? false;
     Expanded(
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
-            nam == "" ? Text("") : Text("($nam)", style: TextStyle(fontSize: fontSize, color: col)),
-            Text(val + " ", style: TextStyle(fontSize: fontSize, color: col),),
-          ],
+        child: InkWell(
+          onLongPress: () {copyToClipboard(val);},
+          child: Row(
+            children: [
+              nam == "" ? Text("") : Text("($nam)", style: TextStyle(fontSize: fontSize, color: col)),
+              Text(val + " ", style: TextStyle(fontSize: fontSize, color: col),),
+            ],
+          ),
         ),
       ),
     ),
