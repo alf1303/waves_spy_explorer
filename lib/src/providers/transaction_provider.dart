@@ -248,7 +248,7 @@ class TransactionProvider extends ChangeNotifier {
     final assetsLocalIds = <String, String>{};
     for (var tr in transactions) {
       // print(tr["id"]);
-      final bool fail = tr["applicationStatus"] != "succeeded";
+      final bool fail = tr["applicationStatus"] == "script_execution_failed";
       tr["additional"] = <String, dynamic>{};
       tr["additional"]["tradeAddrCount"] = 0;
       if (tr.containsKey("attachment")) {
