@@ -228,39 +228,19 @@ Widget burnHeader(Map<String, dynamic> p) {
   return Container();
 }
 
-Widget assetBuilderLocal(String id, val, exop, String amountId, String dir, [String? receiver]) {
-  print("id: $id");
+Widget assetBuilder(String id, val, exop, String amountId, String dir, [String? receiver, bool? fail]) {
   String rec = receiver == null ? "" : " to $receiver";
   String tmpAss = id + ".|." + amountId;
-  print("1");
-  List<Asset?>? res = getAssetInfoLabelLocal(tmpAss);
-  print("2 $tmpAss");
-  print(res);
-  int decimals = res![0]!.decimals;
-  double value = val / pow(10, decimals);
-  //TODO some strange things with null value
-  print("3");
-  if (exop) {
-    if (res[1] != null) {
-      int exchDecimals = res[1]!.decimals;
-      if (id != amountId) {
-        value = value / pow(10, 8);
-      }
-    } else {
-      // print("Alarm: ${snapshot.data![0]!.name}");
-      // value = 555;
-    }
+  List<Asset?>? assets= getAssetInfoLabelLocal(tmpAss);
+  // print("${assets![0]}, ${assets![1]}");
+  if(assets![0] == null || assets[1] == null && exop) {
+    return assetBuilderFetch(id, val, exop, amountId, dir, receiver, fail);
+  } else {
+    return assetBuilderLocal(id, val, exop, amountId, dir, receiver, fail);
   }
-  print("4");
-  double fontSize = getLastSmallFontSize();
-  bool isNarr = lastIsNarrow();
-  String vvv = !isNarr ? value.truncat(decimals).toString() : value.truncat(decimals).toStringAsFixed(2);
-  Widget widget = value != 0 ?Text("${vvv} ${res[0]!.name}$rec", style: TextStyle(fontSize: fontSize, color: dir == "in" ? inAssetsColor : outAssetsColor),) : Container();
-  print("end");
-  return widget;
 }
 
-Widget assetBuilder(String id, val, exop, String amountId, String dir, [String? receiver, bool? fail]) {
+Widget assetBuilderFetch(String id, val, exop, String amountId, String dir, [String? receiver, bool? fail]) {
   String rec = receiver == null ? "" : " to $receiver";
   String tmpAss = id + ".|." + amountId;
   // print("$id, $val, $exop, $amountId, $dir, $receiver");
@@ -303,6 +283,43 @@ Widget assetBuilder(String id, val, exop, String amountId, String dir, [String? 
         return widget;
       }
   );
+}
+
+Widget assetBuilderLocal(String id, val, exop, String amountId, String dir, [String? receiver, bool? fail]) {
+  String rec = receiver == null ? "" : " to $receiver";
+  String tmpAss = id + ".|." + amountId;
+  // print("$id, $val, $exop, $amountId, $dir, $receiver");
+  // return Text("fhefsdk");
+  bool isNarr = lastIsNarrow();
+  double fontSize = !isNarr ? getLastSmallFontSize() : getLastFontSize();
+  bool failure = fail ?? false;
+
+  List<Asset?>? assets = getAssetInfoLabelLocal(tmpAss);
+  Widget widget;
+    // print("${snapshot.data![1]} - $exop, $id, $amountId, $val");
+    int decimals = assets![0]!.decimals;
+    double value = val / pow(10, decimals);
+    //TODO some strange things with null value
+    if (exop) {
+      if (assets![1] != null) {
+        int exchDecimals = assets![1]!.decimals;
+        if (id != amountId) {
+          value = value / pow(10, 8);
+        }
+      } else {
+        // print("Alarm: ${snapshot.data![0]!.name}");
+        // value = 555;
+      }
+    }
+    // print(snapshot.data);
+    String vvv = !isNarr ? value.truncat(decimals).toString() : value.truncat(decimals).toStringAsFixed(2);
+    widget = value != 0 ?Text("$vvv ${assets![0]!.name}$rec", style: TextStyle(fontSize: fontSize, color: failure ? disabledColor : dir == "in" ? inAssetsColor : outAssetsColor),) : Container();
+    if(value == 555) {
+      widget = Container(color: Colors.yellow, child: Text("Alarm", style: TextStyle(fontSize: fontSize),),);
+    }
+  return widget;
+
+
 }
 
 class OutWidget extends StatelessWidget {
