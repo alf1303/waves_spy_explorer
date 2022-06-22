@@ -122,6 +122,7 @@ class _SimpleTransViewState extends State<SimpleTransView> with AutomaticKeepAli
               SizedBox(width: width*0.09, child: Row(
                 children: [
                   InkWell(
+                    onLongPress: () {copyToClipboard(typeName);},
                       onTap: addTypeToFilter,
                       child: Text("($typeNumber)$typeName", style: TextStyle(fontSize: fontSize, color: color),)),
                       // child: LabeledText(label: "", value: typeName, name: "$typeNumber", colr: color, fontSize: fontSize)),
@@ -233,7 +234,8 @@ Widget invokeHeader(Map<String, dynamic> p, double fontSize) {
                     Flexible(
                     flex: flexFunc,
                       child: InkWell(
-                        onTap: onFunctionTap,
+                          onLongPress: () {copyToClipboard(p["function"]);},
+                          onTap: onFunctionTap,
                       // child: LabeledText(label: "", value: p["function"], name: "", colr: fail? disabledColor : invokeColor, fontSize: fontSize)
                         child: SingleChildScrollView(scrollDirection: Axis.horizontal, child: Text(p["function"], style: TextStyle(color: fail? disabledColor : invokeColor, fontSize: fontSize),))
                       ),
