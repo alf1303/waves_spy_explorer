@@ -22,7 +22,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import 'charts/puzzle/eagle_earnings.dart';
 
-const String version = "v_1.0.3     ";
+const String version = "v_1.0.4     ";
 final GlobalKey<ScaffoldMessengerState> messengerKey = GlobalKey<ScaffoldMessengerState>();
 class MainPage extends StatelessWidget {
   const MainPage({Key? key, this.address}) : super(key: key);
@@ -81,6 +81,7 @@ class MainPage extends StatelessWidget {
                 ),
                 Row(
                   children: [
+                    helpWidget(context),
                     SizedBox(
                       height: fontSize*2,
                       child: OutlinedButton(
@@ -192,6 +193,26 @@ Widget AddrWidget({required String text, required TextStyle style}) {
           })
     ],
   );
+}
+
+Widget helpWidget(BuildContext context) {
+  final fontSize = getFontSize(context);
+  final style = TextStyle(fontSize: fontSize);
+  return IconButton(
+      onPressed: () {
+        showDialog(context: context,
+            builder: (context) {
+          return MyDialog(child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("- Single click adds/removes element(address, function name, transaction type) to filters", style: style,),
+              Text("- Long press on element copies it to clipboard", style: style,)
+            ],
+          ), iconSize: 16);
+            });
+      },
+      icon: Icon(Icons.help_outline));
 }
 
 
