@@ -620,3 +620,15 @@ void copyToClipboard(String str) {
     showSnackMsg(msg: "copied: $str", duration: 3);
 }
 
+Future<String> decodeScript(String script) async{
+    String ftf = script.toString().substring(7);
+    var decoded = await http.post(Uri.parse("$nodeUrl/utils/script/decompile"), body: ftf);
+    if(decoded.statusCode == 200) {
+        final jsn = jsonDecode(decoded.body);
+        return jsn["script"];
+    } else {
+        return "Error";
+        // throw("Cant fetch decompiled script: " + decoded.body);
+    }
+}
+

@@ -9,6 +9,7 @@ import 'package:waves_spy/src/providers/filter_provider.dart';
 import 'package:waves_spy/src/providers/transaction_details_provider.dart';
 import 'package:waves_spy/src/providers/transaction_provider.dart';
 import 'package:waves_spy/src/styles.dart';
+import 'package:waves_spy/src/widgets/other/custom_widgets.dart';
 import 'package:waves_spy/src/widgets/transactions/transaction_view.dart';
 
 class SimpleTransView extends StatefulWidget {
@@ -140,6 +141,7 @@ class _SimpleTransViewState extends State<SimpleTransView> with AutomaticKeepAli
                   widget.td["type"] == 4 ? SizedBox(width: 350, child: transferHeader(p, fontSize)) :
                       widget.td["type"] == 11 ? SizedBox(width: 350, child: massTransferHeader(p, fontSize)) :
                           widget.td["type"] == 3 || widget.td["type"] == 5 ? issueHeader(p, fontSize) :
+                              widget.td["type"] == 13 ? scriptHeader(widget.td, fontSize, context) :
                             Container(),
               ),
               widget.td["type"] == 3 || widget.td["type"] == 5 ? Container() : Expanded(
@@ -377,6 +379,47 @@ Widget issueHeader(Map<String, dynamic> p, double fontSize) {
     ),
   );
 }
+
+Widget scriptHeader(dynamic t, double fontSize, BuildContext context) {
+  final fail = t["additional"]["fail"];
+  final fontSize = getFontSize(context);
+  final iconSize = getIconSize(context);
+  TextStyle textStyle = TextStyle(fontSize: fontSize);
+  return Padding(
+    padding: const EdgeInsets.only(right: 8.0),
+    child: Row(
+      children: [
+        // SizedBox(width: 150, child: Container(),),
+        // Expanded(child: SizedBox(child: LabeledText(label: lbl, value: "${quantity.toString()} $name (${p["assetId"]})", colr: fail ? disabledColor : Colors.white, fontSize: fontSize),)),
+        TextButton(onPressed: () {
+          final script = t["script"];
+          showDialog(context: context, 
+              builder: (context) {
+            return MyDialog(
+                child: FutureBuilder<String>(
+                  future: decodeScript(script),
+                  builder: (context, snapshot) {
+                    Widget widget;
+                    if(snapshot.hasData) {
+                      widget = Text(snapshot.data!);
+                    } else if(snapshot.hasError) {
+                      widget = Text("Error: ${snapshot.error}", style: textStyle,);
+                    } else {
+                      widget = SizedBox(width: fontSize*50, height: fontSize*50, child: Center(child: CircularProgressIndicator()));
+                    }
+                    return widget;
+                  },
+                ), 
+                iconSize: 16);
+              });
+        },
+            child: Text("View Script"))
+      ],
+    ),
+  );
+}
+
+
 
 // TODO
 Widget burnHeader(Map<String, dynamic> p) {

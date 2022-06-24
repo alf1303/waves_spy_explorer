@@ -164,6 +164,7 @@ class FilterWidget extends StatelessWidget {
         CustomGroupRadio(label: "Exchanges", value: 7, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor, fontSize: fontSize),
         CustomGroupRadio(label: "Issues", value: 3, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor, fontSize: fontSize),
         CustomGroupRadio(label: "Burns", value: 6, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor, fontSize: fontSize),
+        CustomGroupRadio(label: "Script", value: 13, groupValue: model.fType, onChanged: onTypeChanged, enabled: true, color: selectedColor, fontSize: fontSize),
         MyToolTip(
             message: "clear type",
             child: IconButton(onPressed: clearType, icon: Icon(Icons.close, size: iconSize,)))
