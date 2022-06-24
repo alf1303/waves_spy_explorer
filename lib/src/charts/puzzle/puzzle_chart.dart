@@ -143,6 +143,8 @@ class _PuzzleChartState extends State<PuzzleChart> {
         LineChartBarData(
           spots: getFlSpotsFromList(),
           isCurved: true,
+          preventCurveOverShooting: true,
+          preventCurveOvershootingThreshold: 1,
           gradient: LinearGradient(
             colors: gradientColors,
             begin: Alignment.centerLeft,
