@@ -11,6 +11,7 @@ import 'package:waves_spy/src/providers/filter_provider.dart';
 import 'package:waves_spy/src/providers/label_provider.dart';
 import 'package:waves_spy/src/providers/nft_provider.dart';
 import 'package:waves_spy/src/providers/progress_bars_provider.dart';
+import 'package:waves_spy/src/providers/puzzle_provider.dart';
 import 'package:waves_spy/src/providers/stats_provider.dart';
 import 'package:waves_spy/src/providers/transaction_details_provider.dart';
 import 'package:waves_spy/src/providers/transaction_provider.dart';
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
       ChangeNotifierProvider<DataScriptProvider>(create: (_) => DataScriptProvider()),
       ChangeNotifierProvider<StatsProvider>(create: (_) => StatsProvider()),
       ChangeNotifierProvider<LabelProvider>(create: (_) => LabelProvider()),
+      ChangeNotifierProvider<PuzzleProvider>(create: (_) => PuzzleProvider()),
     ],
       child: MaterialApp(
         // Providing a restorationScopeId allows the Navigator built by the

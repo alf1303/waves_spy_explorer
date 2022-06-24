@@ -19,10 +19,12 @@ import 'package:waves_spy/src/widgets/transaction_details.dart';
 import 'package:waves_spy/src/widgets/transactions/transaction_view.dart';
 import 'package:waves_spy/src/widgets/transactions/transactions_list.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get_it/get_it.dart';
+
 
 
 import 'charts/puzzle/eagle_earnings.dart';
-
+GetIt getIt = GetIt.instance;
 const String version = "v_1.0.4     ";
 final GlobalKey<ScaffoldMessengerState> messengerKey = GlobalKey<ScaffoldMessengerState>();
 class MainPage extends StatelessWidget {

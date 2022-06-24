@@ -2,7 +2,10 @@ import 'package:waves_spy/src/models/chart_item.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:waves_spy/src/providers/puzzle_provider.dart';
+
 Future<Map<String, List<dynamic>>> getBurnMachine() async{
+  final puzzleProvider = PuzzleProvider();
   const reqDaily = "https://script.google.com/macros/s/AKfycbz3e9UcAzJPk-TZgfkptIW_bhqvUKiqKPeksJuMtbdLbYxOokkEHkkXSSglimJjdUQ/exec";
   const reqDapp = "https://script.google.com/macros/s/AKfycbxcguqxGA9Az1wEvahT1NXDqCL-VfIsWVStgooNWDL5fu_3WMyvzMnlBhvVdnkcvmw/exec";
   const reqUsers = "https://script.google.com/macros/s/AKfycbz24uBx0AuBStNXBnGvowND8mS1SKcDGwoF3S1Fq3sesaQJwFc7uV3rmumI7y-_N6k/exec";
@@ -14,7 +17,7 @@ Future<Map<String, List<dynamic>>> getBurnMachine() async{
   var respDaily = await http.get(Uri.parse(reqDaily));
   if (respDaily.statusCode == 200) {
     final json = jsonDecode(respDaily.body);
-    print(json);
+    // print(json);
     dailyResult = json.map<ChartItem>((js) => ChartItem.fromMap(js)).toList();
   } else {
     print("Some error loading daily burns: " + respDaily.body);
@@ -36,6 +39,8 @@ Future<Map<String, List<dynamic>>> getBurnMachine() async{
   } else {
     print("Some error loading daily burns: " + respUser.body);
   }
+  puzzleProvider.setDappList(dappResult);
+  puzzleProvider.setUserList(userResult);
   Map<String, List<dynamic>> res = {};
   res["daily"] = dailyResult;
   res["dapp"] = dappResult;

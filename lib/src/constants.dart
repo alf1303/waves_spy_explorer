@@ -25,7 +25,6 @@ addPrvtAddr() {
 }
 
 const publicAddr = {
-
   ///// Puzzle and Swop pools,
   "3P4v7QaMk6us7PdxSuoR5LmZmemv5ruD6oj": "SWOP.FI Router",
   "3P5UKXpQbom7GB2WGdPG5yGQPeQQuM3hFmw": "Keeper Aggregator",

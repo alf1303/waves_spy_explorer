@@ -1,16 +1,21 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:provider/provider.dart';
 import 'package:waves_spy/src/charts/puzzle/eagle_earnings.dart';
 import 'package:waves_spy/src/charts/puzzle/puzzle_earnings.dart';
+import 'package:waves_spy/src/constants.dart';
 import 'package:waves_spy/src/helpers/helpers.dart';
 import 'package:waves_spy/src/main_page.dart';
 import 'package:waves_spy/src/models/chart_item.dart';
+import 'package:waves_spy/src/providers/puzzle_provider.dart';
+import 'package:waves_spy/src/widgets/filter_widger.dart';
 //https://script.google.com/macros/s/AKfycbzPF4gGSCKDedr_WVB9xGGG8V-rkYtEyU87CtZr8TriBTd_JQhoi61j8uyh_6_k-kI/exec
 import 'charts_helper.dart';
 import 'puzzle_chart.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
+final GlobalKey<ScaffoldMessengerState> messengerKeyPuz = GlobalKey<ScaffoldMessengerState>();
 class PuzzleBurn extends StatelessWidget {
   PuzzleBurn({Key? key}) : super(key: key);
 
@@ -21,6 +26,7 @@ class PuzzleBurn extends StatelessWidget {
     final fontSize = getFontSize(context);
     final iconSize = getIconSize(context);
     return Scaffold(
+      key: messengerKeyPuz,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(fontSize*3.5),
         child: AppBar(
@@ -46,7 +52,7 @@ class PuzzleBurn extends StatelessWidget {
                   children: [
                     OutlinedButton(
                       style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.cyan), ),
-                      child: Text("View Eagle Chart", style: TextStyle(fontSize: fontSize*0.8, color: Colors.cyanAccent),),
+                      child: Text("Eagle Chart", style: TextStyle(fontSize: fontSize*0.8, color: Colors.cyanAccent),),
                       onPressed: () {
                         Navigator.of(context).pushNamed(EagleEarnings.routeName);
                       },
@@ -54,7 +60,7 @@ class PuzzleBurn extends StatelessWidget {
                     const SizedBox(width: 10,),
                     OutlinedButton(
                       style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.cyan), ),
-                      child: Text("View Puzzle Chart", style: TextStyle(fontSize: fontSize*0.8, color: Colors.cyanAccent),),
+                      child: Text("Puzzle Chart", style: TextStyle(fontSize: fontSize*0.8, color: Colors.cyanAccent),),
                       onPressed: () {
                         Navigator.of(context).pushNamed(PuzzleEarnings.routeName);
                       },
@@ -71,11 +77,12 @@ class PuzzleBurn extends StatelessWidget {
       body: Center(child: FutureBuilder<Map<String, List<dynamic>>>(
         future: getBurnMachine(),
         builder: (context, snapshot) {
+          final puzzleProvider = PuzzleProvider();
           Widget widget;
           if(snapshot.hasData) {
             List<ChartItem> daily = snapshot.data!["daily"]!.cast<ChartItem>();
-            List<DataItem> dapps = snapshot.data!["dapp"]!.cast<DataItem>();
-            List<DataItem> users = snapshot.data!["user"]!.cast<DataItem>();
+            // List<DataItem> dapps = snapshot.data!["dapp"]!.cast<DataItem>();
+            // List<DataItem> users = snapshot.data!["user"]!.cast<DataItem>();
             double sum = 0;
             for(ChartItem it in daily) {
               sum += it.value;
@@ -89,8 +96,8 @@ class PuzzleBurn extends StatelessWidget {
                 Expanded(
                   child: Row(
                     children: [
-                      Expanded(child: AddressWidget(list: dapps)),
-                      Expanded(child: AddressWidget(list: users))
+                      Expanded(child: AddressWidget(list: puzzleProvider.filteredDappList, label: "Pool address/name",)),
+                      Expanded(child: AddressWidget(list: puzzleProvider.filteredUserList, label: "Trader address",))
                     ],
                   ),
                 )
@@ -109,11 +116,90 @@ class PuzzleBurn extends StatelessWidget {
 }
 
 class AddressWidget extends StatelessWidget {
-  const AddressWidget({Key? key, required this.list}) : super(key: key);
+  const AddressWidget({Key? key, required this.list, required this.label}) : super(key: key);
   final List<DataItem> list;
+  final String label;
+
+  void addressChanged(str) {
+    final puzzleProvider = PuzzleProvider();
+    if(label == "Pool address/name") {
+      puzzleProvider.changePoolName(str);
+    } else {
+      puzzleProvider.changeUserName(str);
+    }
+  }
+
+  void clearAddress() {
+    final puzzleProvider = PuzzleProvider();
+    if(label == "Pool address/name") {
+      puzzleProvider.clearPool();
+    } else {
+      puzzleProvider.clearUser();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text("${list.length}"));
+    final fontSize = getFontSize(context);
+    final iconSize = getIconSize(context);
+    final puzzleprovider = PuzzleProvider();
+    return Consumer<PuzzleProvider>(builder: (context, model, child) {
+      final ll = label == "Pool address/name" ? model.filteredDappList : model.filteredUserList;
+      final addressController = TextEditingController();
+      addressController.text = label == "Pool address/name" ? puzzleprovider.poolName : puzzleprovider.userName;
+      addressController.selection = TextSelection.fromPosition(TextPosition(offset: addressController.text.length));
+      return Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: fontSize*0.3),
+            child: InputWidgetFilter(controller: addressController, onchanged: addressChanged, clearFunc: clearAddress, label: label, hint: "", fontSize: fontSize, iconSize: iconSize),
+          ),
+          Expanded(
+            child: ListView.builder(
+              shrinkWrap: true,
+                primary: false,
+                itemCount: ll.length,
+                itemBuilder: (context, index) {
+                  return AddrItem(item: ll[index]);
+                }),
+          )
+        ],
+      );
+    });
   }
 }
+
+class AddrItem extends StatelessWidget {
+  const AddrItem({Key? key, required this.item}) : super(key: key);
+  final DataItem item;
+
+  @override
+  Widget build(BuildContext context) {
+    final fontSize = getFontSize(context);
+    final width = getWidth(context);
+    final style = TextStyle(fontSize: fontSize);
+    final address = item.address;
+    final name = getAddrName(address);
+    final namestr = name.isEmpty ? "" : "($name)";
+    final s = "$address$namestr";
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: fontSize*0.6, vertical: fontSize*0.2),
+      margin: EdgeInsets.symmetric(horizontal: fontSize*0.6),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey),
+        borderRadius: BorderRadius.circular(fontSize*0.2)
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          SizedBox(
+              width: width*0.3,
+              child: SelectableText(s, style: style,)
+          ),
+          SelectableText(item.value.toString(), style: style,)
+        ],
+      ),
+    );
+  }
+}
+

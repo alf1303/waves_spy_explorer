@@ -3,6 +3,7 @@ import 'dart:html';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:waves_spy/src/charts/puzzle/puzzle_burn.dart';
 import 'package:waves_spy/src/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
@@ -423,9 +424,40 @@ showSnackError(String msg) {
     ));
 }
 
+showSnackErrorPuz(String msg) {
+    messengerKeyPuz.currentState?.showSnackBar(SnackBar(
+        backgroundColor: Colors.red.shade200,
+        content: Text(msg),
+        duration: const Duration(seconds: 7),
+        action: SnackBarAction(
+            textColor: Colors.black,
+            label: 'CLOSE',
+            onPressed: () {
+
+            },
+        ),
+    ));
+}
+
 showSnackMsg({required String msg, int? duration}) {
     final dur = duration ?? 6;
     messengerKey.currentState?.showSnackBar(SnackBar(
+        // backgroundColor: Colors.red.shade200,
+        content: Text(msg),
+        duration: Duration(seconds: dur),
+        action: SnackBarAction(
+            textColor: Colors.black,
+            label: 'CLOSE',
+            onPressed: () {
+
+            },
+        ),
+    ));
+}
+
+showSnackMsgPuz({required String msg, int? duration}) {
+    final dur = duration ?? 6;
+    messengerKeyPuz.currentState?.showSnackBar(SnackBar(
         // backgroundColor: Colors.red.shade200,
         content: Text(msg),
         duration: Duration(seconds: dur),
@@ -618,6 +650,11 @@ bool lastIsNarrow() {
 void copyToClipboard(String str) {
     Clipboard.setData(ClipboardData(text: str));
     showSnackMsg(msg: "copied: $str", duration: 3);
+}
+
+void copyToClipboardPuz(String str) {
+    Clipboard.setData(ClipboardData(text: str));
+    showSnackMsgPuz(msg: "copied: $str", duration: 3);
 }
 
 Future<String> decodeScript(String script) async{

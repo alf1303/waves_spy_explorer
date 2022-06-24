@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:waves_spy/src/charts/puzzle/eagle_earnings.dart';
+import 'package:waves_spy/src/charts/puzzle/puzzle_burn.dart';
 import 'package:waves_spy/src/helpers/helpers.dart';
 import 'package:waves_spy/src/main_page.dart';
 import 'package:waves_spy/src/models/chart_item.dart';
@@ -42,9 +43,20 @@ class PuzzleEarnings extends StatelessWidget {
                 height: fontSize*2,
                 child: OutlinedButton(
                   style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.cyan), ),
-                  child: Text("View Eagle Chart", style: TextStyle(fontSize: fontSize*0.8, color: Colors.cyanAccent),),
+                  child: Text("Eagle Chart", style: TextStyle(fontSize: fontSize*0.8, color: Colors.cyanAccent),),
                   onPressed: () {
                     Navigator.of(context).pushNamed(EagleEarnings.routeName);
+                  },
+                ),
+              ),
+              SizedBox(width: 10,),
+              SizedBox(
+                height: fontSize*2,
+                child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.cyan), ),
+                  child: Text("Burn Machine", style: TextStyle(fontSize: fontSize*0.8, color: Colors.cyanAccent),),
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(PuzzleBurn.routeName);
                   },
                 ),
               ),
