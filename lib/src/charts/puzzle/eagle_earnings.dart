@@ -77,7 +77,7 @@ class EagleEarnings extends StatelessWidget {
               children: [
                 Text("Total rewards for Eagles staking for $diff days: ${sum.toStringAsFixed(2)} USDN", style: TextStyle(fontSize: fontSize*1.3),),
                 Text("~ ${oneEagleEarning.toStringAsFixed(2)} USDN/day for 1 Early Eagle, ${(sum/77).toStringAsFixed(2)} USDN total", style: TextStyle(fontSize: fontSize*1.3),),
-                Expanded(child: PuzzleChart(data: snapshot.data!, gridSize: 2.5,)),
+                Expanded(child: PuzzleChart(data: snapshot.data!, gridSize: 2.5, full: false,)),
               ],
             );
           } else if (snapshot.hasError) {

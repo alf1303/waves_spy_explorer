@@ -5,9 +5,10 @@ import 'package:waves_spy/src/models/chart_item.dart';
 
 
 class PuzzleChart extends StatefulWidget {
-  PuzzleChart({Key? key, required this.data, required this.gridSize}) : super(key: key);
+  PuzzleChart({Key? key, required this.data, required this.gridSize, required this.full}) : super(key: key);
   List<ChartItem> data;
   double gridSize;
+  bool full;
 
   @override
   _PuzzleChartState createState() => _PuzzleChartState();
@@ -48,7 +49,7 @@ class _PuzzleChartState extends State<PuzzleChart> {
     // print(value);
     String val = "";
     double tmpval = widget.data.length - value - 1;
-    final module = !lastIsNarrow() ? 2 : 4;
+    final module = widget.full ? 1 : !lastIsNarrow() ? 2 : 4;
     final bool startend = tmpval == 0 || tmpval == widget.data.length - 1;
     final bool others = tmpval < widget.data.length && tmpval%module == 0 && tmpval != widget.data.length - 2;
     bool flag = startend || others;

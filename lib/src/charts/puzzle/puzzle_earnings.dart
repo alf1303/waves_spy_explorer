@@ -73,7 +73,7 @@ class PuzzleEarnings extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text("Total rewards for Puzzle staking for $diff days: ${sum.toStringAsFixed(2)} USDN", style: TextStyle(fontSize: fontSize*1.3),),
-                Expanded(child: PuzzleChart(data: snapshot.data!, gridSize: 200,)),
+                Expanded(child: PuzzleChart(data: snapshot.data!, gridSize: 200, full: false,)),
               ],
             );
           } else if (snapshot.hasError) {

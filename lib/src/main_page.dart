@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:waves_spy/src/app.dart';
+import 'package:waves_spy/src/charts/puzzle/puzzle_burn.dart';
 import 'package:waves_spy/src/charts/puzzle/puzzle_earnings.dart';
 import 'package:waves_spy/src/constants.dart';
 import 'package:waves_spy/src/helpers/helpers.dart';
@@ -82,6 +83,17 @@ class MainPage extends StatelessWidget {
                 Row(
                   children: [
                     helpWidget(context),
+                    SizedBox(
+                      height: fontSize*2,
+                      child: OutlinedButton(
+                        style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.cyan), ),
+                        child: Text("Burn Machine", style: TextStyle(fontSize: fontSize*0.9, color: Colors.cyanAccent),),
+                        onPressed: () {
+                          Navigator.of(context).pushNamed(PuzzleBurn.routeName);
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 10,),
                     SizedBox(
                       height: fontSize*2,
                       child: OutlinedButton(
