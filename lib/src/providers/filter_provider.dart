@@ -33,6 +33,7 @@ class FilterProvider extends ChangeNotifier{
   bool onlyTraders = false; // addresses, created for trading activity
   String minValue = "0";
   bool highlightTradeAccs = false;
+  bool hideFailed = false;
 
   Map<String, AddressesStatsItem> finalList = {};
   double sumacum_in = 0;
@@ -140,6 +141,12 @@ class FilterProvider extends ChangeNotifier{
 
   void changeOnlyTraders() {
     onlyTraders = !onlyTraders;
+    notifyAll();
+    _transactionProvider.filterTransactions();
+  }
+
+  void changeHideFailed() {
+    hideFailed = !hideFailed;
     notifyAll();
     _transactionProvider.filterTransactions();
   }

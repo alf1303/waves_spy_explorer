@@ -88,7 +88,8 @@ class PuzzleBurn extends StatelessWidget {
             for(ChartItem it in daily) {
               sum += it.value;
             }
-            final diff = daily.length;
+            // final diff = daily.length;
+            final diff = daily.last.date.difference(daily.first.date).inDays;
             widget = Column(
               mainAxisSize: MainAxisSize.min,
               children: [

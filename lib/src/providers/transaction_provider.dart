@@ -623,6 +623,10 @@ class TransactionProvider extends ChangeNotifier {
       filteredTransactions = filteredTransactions.where((tr) => tr["additional"] != null && tr["additional"]["tradeAddrCount"] != null && tr["additional"]["tradeAddrCount"] >= 1).toList();
     }
 
+    if(filterProvider.hideFailed) {
+      filteredTransactions = filteredTransactions.where((tr) => tr["additional"] != null && tr["additional"]["fail"] != null && !tr["additional"]["fail"]).toList();
+    }
+
     final trToFilter = filterProvider.isFiltered() ? filteredTransactions : datedTransactions;
     double minval = double.parse(filterProvider.minValue);
     if(minval > 0) {

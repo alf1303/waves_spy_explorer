@@ -80,6 +80,9 @@ class FilterWidget extends StatelessWidget {
                           message: "Show only strange accounts, \n yellow - trades between strange acc",
                           child: Checkbox(value: _filterProvider.onlyTraders, onChanged: changeOnlyTraders,)),
                     ),
+                    MyToolTip(
+                        message: "Hide failed transactions",
+                        child: Checkbox(value: _filterProvider.hideFailed, onChanged: changeHideFailed,)),
                     !isNarr ? Expanded(child: InputFields(apploc, fontSize, iconSize)) : Container()
                 ]),
               ),
@@ -286,6 +289,11 @@ class FilterWidget extends StatelessWidget {
   void changeOnlyTraders(val) {
     final _filterProvider = FilterProvider();
     _filterProvider.changeOnlyTraders();
+  }
+
+  void changeHideFailed(val) {
+    final _filterProvider = FilterProvider();
+    _filterProvider.changeHideFailed();
   }
 
   void onReverseChange() {
