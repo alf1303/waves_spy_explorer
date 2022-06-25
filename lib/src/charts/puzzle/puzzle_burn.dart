@@ -144,6 +144,7 @@ class AddressWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final fontSize = getFontSize(context);
     final iconSize = getIconSize(context);
+    final isPortrt = isPortrait(context);
     final puzzleprovider = PuzzleProvider();
     return Consumer<PuzzleProvider>(builder: (context, model, child) {
       final ll = label == "Pool address/name" ? model.filteredDappList : model.filteredUserList;
@@ -154,7 +155,9 @@ class AddressWidget extends StatelessWidget {
         children: [
           Padding(
             padding: EdgeInsets.symmetric(horizontal: fontSize*0.3),
-            child: InputWidgetFilter(controller: addressController, onchanged: addressChanged, clearFunc: clearAddress, label: label, hint: "", fontSize: fontSize, iconSize: iconSize),
+            child: SizedBox(
+                height: fontSize*4,
+                child: InputWidgetFilter(controller: addressController, onchanged: addressChanged, clearFunc: clearAddress, label: label, hint: "", fontSize: fontSize, iconSize: iconSize)),
           ),
           Expanded(
             child: ListView.builder(
@@ -162,7 +165,7 @@ class AddressWidget extends StatelessWidget {
                 primary: false,
                 itemCount: ll.length,
                 itemBuilder: (context, index) {
-                  return AddrItem(item: ll[index]);
+                  return AddrItem(item: ll[index], isPortrait: isPortrt);
                 }),
           )
         ],
@@ -172,8 +175,9 @@ class AddressWidget extends StatelessWidget {
 }
 
 class AddrItem extends StatelessWidget {
-  const AddrItem({Key? key, required this.item}) : super(key: key);
+  const AddrItem({Key? key, required this.item, required this.isPortrait}) : super(key: key);
   final DataItem item;
+  final bool isPortrait;
 
   @override
   Widget build(BuildContext context) {
@@ -202,17 +206,19 @@ class AddrItem extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SizedBox(
-              width: width*0.3,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SelectableText(a, style: style,),
-                  LinkToAddress(val: a, label: n, alias: false, fontSize: fontSize*0.8, color: Colors.lightGreenAccent,)
-                  // Expanded(child: LabeledText(label: n, value: a, name: "", colr: Colors.lightGreenAccent, addrLink: true, fontSize: fontSize))
-                  // SelectableText(n, style: TextStyle(fontSize: fontSize*0.9, color: Colors.lightGreenAccent),),
-                ],
-              )
+          Expanded(
+            child: SizedBox(
+                width: width*0.3,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Expanded(child: SelectableText(a, style: style,)),
+                    LinkToAddress(val: a, label: n, alias: false, fontSize: fontSize*0.8, color: Colors.lightGreenAccent,)
+                    // Expanded(child: LabeledText(label: n, value: a, name: "", colr: Colors.lightGreenAccent, addrLink: true, fontSize: fontSize))
+                    // SelectableText(n, style: TextStyle(fontSize: fontSize*0.9, color: Colors.lightGreenAccent),),
+                  ],
+                )
+            ),
           ),
           SelectableText(item.value.toString(), style: style,)
         ],
