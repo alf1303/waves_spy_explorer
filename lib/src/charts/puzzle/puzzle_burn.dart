@@ -212,8 +212,13 @@ class AddrItem extends StatelessWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Expanded(child: SelectableText(a, style: style,)),
-                    LinkToAddress(val: a, label: n, alias: false, fontSize: fontSize*0.8, color: Colors.lightGreenAccent,)
+                    Visibility(
+                      visible: isPortrait ? n.isEmpty : true,
+                      child: Expanded(
+                        child: SelectableText(a, style: style,),
+                      ),
+                    ),
+                    Expanded(child: LinkToAddress(val: a, label: n, alias: false, fontSize: fontSize*0.8, color: Colors.lightGreenAccent,))
                     // Expanded(child: LabeledText(label: n, value: a, name: "", colr: Colors.lightGreenAccent, addrLink: true, fontSize: fontSize))
                     // SelectableText(n, style: TextStyle(fontSize: fontSize*0.9, color: Colors.lightGreenAccent),),
                   ],
