@@ -40,7 +40,7 @@ class PuzzleEarnings extends StatelessWidget {
               ),
               SizedBox(width: 10,),
               SizedBox(
-                height: fontSize*2,
+                // height: fontSize*2,
                 child: OutlinedButton(
                   style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.cyan), ),
                   child: Text("Eagle Chart", style: TextStyle(fontSize: fontSize*0.8, color: Colors.cyanAccent),),
@@ -51,7 +51,7 @@ class PuzzleEarnings extends StatelessWidget {
               ),
               SizedBox(width: 10,),
               SizedBox(
-                height: fontSize*2,
+                // height: fontSize*2,
                 child: OutlinedButton(
                   style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.cyan), ),
                   child: Text("Burn Machine", style: TextStyle(fontSize: fontSize*0.8, color: Colors.cyanAccent),),
@@ -61,7 +61,7 @@ class PuzzleEarnings extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 10,),
-              Expanded(child: Text("Puzzle Earnings Chart", style: TextStyle(fontSize: fontSize*1.1, fontWeight: FontWeight.bold),)),
+              Expanded(child: Text("Puzzle Chart", style: TextStyle(fontSize: fontSize*1.1, fontWeight: FontWeight.bold),)),
             ],
           ),
         ),

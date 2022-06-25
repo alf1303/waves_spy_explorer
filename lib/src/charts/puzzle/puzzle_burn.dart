@@ -10,6 +10,7 @@ import 'package:waves_spy/src/main_page.dart';
 import 'package:waves_spy/src/models/chart_item.dart';
 import 'package:waves_spy/src/providers/puzzle_provider.dart';
 import 'package:waves_spy/src/widgets/filter_widger.dart';
+import 'package:waves_spy/src/widgets/transactions/transaction_view.dart';
 //https://script.google.com/macros/s/AKfycbzPF4gGSCKDedr_WVB9xGGG8V-rkYtEyU87CtZr8TriBTd_JQhoi61j8uyh_6_k-kI/exec
 import 'charts_helper.dart';
 import 'puzzle_chart.dart';
@@ -175,13 +176,21 @@ class AddrItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // print(item.address);
     final fontSize = getFontSize(context);
     final width = getWidth(context);
     final style = TextStyle(fontSize: fontSize);
     final address = item.address;
-    final name = getAddrName(address);
-    final namestr = name.isEmpty ? "" : "($name)";
-    final s = "$address$namestr";
+    // final name = getAddrName(address);
+    // final namestr = name.isEmpty ? "" : "($name)";
+    // final s = "$address$namestr";
+    final ind = address.indexOf("(");
+    String a = address;
+    String n = "";
+    if(ind != -1) {
+      a = address.substring(0, ind);
+      n = address.substring(ind, address.length);
+    }
     return Container(
       padding: EdgeInsets.symmetric(horizontal: fontSize*0.6, vertical: fontSize*0.2),
       margin: EdgeInsets.symmetric(horizontal: fontSize*0.6),
@@ -194,7 +203,15 @@ class AddrItem extends StatelessWidget {
         children: [
           SizedBox(
               width: width*0.3,
-              child: SelectableText(s, style: style,)
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SelectableText(a, style: style,),
+                  LinkToAddress(val: a, label: n, alias: false, fontSize: fontSize*0.8, color: Colors.lightGreenAccent,)
+                  // Expanded(child: LabeledText(label: n, value: a, name: "", colr: Colors.lightGreenAccent, addrLink: true, fontSize: fontSize))
+                  // SelectableText(n, style: TextStyle(fontSize: fontSize*0.9, color: Colors.lightGreenAccent),),
+                ],
+              )
           ),
           SelectableText(item.value.toString(), style: style,)
         ],

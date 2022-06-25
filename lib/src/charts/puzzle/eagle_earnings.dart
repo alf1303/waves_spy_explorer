@@ -40,10 +40,10 @@ class EagleEarnings extends StatelessWidget {
               ),
               const SizedBox(width: 10,),
               SizedBox(
-                height: fontSize*2,
+                // height: fontSize*2,
                 child: OutlinedButton(
                   style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.cyan), ),
-                  child: Text("View Puzzles Chart", style: TextStyle(fontSize: fontSize*0.8, color: Colors.cyanAccent),),
+                  child: Text("Puzzles Chart", style: TextStyle(fontSize: fontSize*0.8, color: Colors.cyanAccent),),
                   onPressed: () {
                     Navigator.of(context).pushNamed(PuzzleEarnings.routeName);
                   },
@@ -51,7 +51,7 @@ class EagleEarnings extends StatelessWidget {
               ),
               SizedBox(width: 10,),
               SizedBox(
-                height: fontSize*2,
+                // height: fontSize*2,
                 child: OutlinedButton(
                   style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.cyan), ),
                   child: Text("Burn Machine", style: TextStyle(fontSize: fontSize*0.8, color: Colors.cyanAccent),),
