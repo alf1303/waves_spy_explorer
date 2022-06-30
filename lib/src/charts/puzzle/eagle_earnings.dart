@@ -5,6 +5,7 @@ import 'package:waves_spy/src/charts/puzzle/puzzle_burn.dart';
 import 'package:waves_spy/src/helpers/helpers.dart';
 import 'package:waves_spy/src/main_page.dart';
 import 'package:waves_spy/src/models/chart_item.dart';
+import 'package:waves_spy/src/providers/puzzle_provider.dart';
 //https://script.google.com/macros/s/AKfycbzPF4gGSCKDedr_WVB9xGGG8V-rkYtEyU87CtZr8TriBTd_JQhoi61j8uyh_6_k-kI/exec
 import 'charts_helper.dart';
 import 'puzzle_chart.dart';
@@ -19,6 +20,7 @@ class EagleEarnings extends StatelessWidget {
   Widget build(BuildContext context) {
     final fontSize = getFontSize(context);
     final iconSize = getIconSize(context);
+    final puzzleProvider = PuzzleProvider();
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(fontSize*3.5),
@@ -66,16 +68,34 @@ class EagleEarnings extends StatelessWidget {
           ),
         ),
       ),
-      body: Center(child: FutureBuilder<List<ChartItem>>(
+      body: Center(child: FutureBuilder<List<AggregatorItem>>(
         future: getEagleEarnings(),
         builder: (context, snapshot) {
           Widget widget;
           if(snapshot.hasData) {
-            double sum = 0;
-            for (ChartItem element in snapshot.data!) {
-              sum += element.value;
-              element.value = double.parse((element.value/77).toStringAsFixed(2));
+            DateTime aniasStart = DateTime(2022, 06, 30);
+            double sumEagle = 0;
+            double sumAnia = 0;
+            int lastEagleStaked = 0;
+            int lastAniaStaked = 0;
+            List<ChartItem> eagles = List.empty(growable: true);
+            List<ChartItem> anias = List.empty(growable: true);
+            // int totalStakedGenerics = aniasStaked + eaglesStaked*5;
+            for (AggregatorItem el in snapshot.data!) {
+              int totalStakedGenerics = el.aniasStaked + el.eaglesStaked*5;
+              double val = el.value;
+              double genericEarn = val/totalStakedGenerics;
+              sumEagle += genericEarn*5*el.eaglesStaked;
+              sumAnia += genericEarn*el.aniasStaked;
+              eagles.add(ChartItem(date: el.date, value: double.parse((genericEarn*5).toStringAsFixed(2))));
+              // element.value = double.parse((element.value/77).toStringAsFixed(2));
+              lastEagleStaked = el.eaglesStaked;
+              lastAniaStaked = el.aniasStaked;
+              if(el.date.isAfter(aniasStart.subtract(const Duration(days: 0)))) {
+                anias.add(ChartItem(date: el.date, value: double.parse((genericEarn).toStringAsFixed(2))));
+              }
             }
+
             DateTime firstDate = DateTime.now();
             if(snapshot.data!.isNotEmpty) {
               firstDate = snapshot.data!.first.date;
@@ -83,13 +103,14 @@ class EagleEarnings extends StatelessWidget {
             DateTime curDate = DateTime.now();
             int diff = curDate.subtract(Duration(days: 1)).difference(firstDate).inDays;
             // int diff = curDate.difference(firstDate).inDays;
-            double oneEagleEarning = sum/77/diff;
+            double oneEagleEarning = sumEagle/77/diff;
             widget = Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text("Total rewards for Eagles staking for $diff days: ${sum.toStringAsFixed(2)} USDN", style: TextStyle(fontSize: fontSize*1.3),),
-                Text("~ ${oneEagleEarning.toStringAsFixed(2)} USDN/day for 1 Early Eagle, ${(sum/77).toStringAsFixed(2)} USDN total", style: TextStyle(fontSize: fontSize*1.3),),
-                Expanded(child: PuzzleChart(data: snapshot.data!, gridSize: 2.5, full: false,)),
+                Text("Total rewards for Eagles staking for $diff days: ${sumEagle.toStringAsFixed(2)} USDN", style: TextStyle(fontSize: fontSize*1.3),),
+                Text("~ ${oneEagleEarning.toStringAsFixed(2)} USDN/day for 1 Early Eagle, ${(sumEagle/77).toStringAsFixed(2)} USDN total", style: TextStyle(fontSize: fontSize*1.3),),
+                Text("Eagles staked: $lastEagleStaked", style: TextStyle(fontSize: fontSize*1.3),),
+                Expanded(child: PuzzleChart(data: eagles, gridSize: 2.5, full: false,)),
               ],
             );
           } else if (snapshot.hasError) {

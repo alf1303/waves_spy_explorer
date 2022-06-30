@@ -9,6 +9,24 @@ class ChartItem {
   }
 }
 
+class AggregatorItem {
+  DateTime date;
+  double value;
+  int eaglesStaked;
+  int aniasStaked;
+
+  AggregatorItem({required this.date, required this.value, required this.eaglesStaked, required this.aniasStaked});
+
+  factory AggregatorItem.fromMap(Map<String, dynamic> json) {
+    return AggregatorItem(
+        date: DateTime.parse(json["date"]),
+        value: double.parse(json["value"]),
+          eaglesStaked: (json["eaglesStaked"]),
+          aniasStaked: (json["aniasStaked"])
+        );
+  }
+}
+
 class DataItem {
   String address;
   double value;

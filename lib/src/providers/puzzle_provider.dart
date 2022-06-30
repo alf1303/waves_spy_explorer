@@ -15,6 +15,8 @@ class PuzzleProvider extends ChangeNotifier{
   List<DataItem> userList = List.empty(growable: true);
   List<DataItem> filteredDappList = List.empty(growable: true);
   List<DataItem> filteredUserList = List.empty(growable: true);
+  int lastEaglesStaked = 0;
+  int lastAniasStaked = 0;
 
   void setDappList(List<DataItem> list) {
     for(DataItem item in list) {

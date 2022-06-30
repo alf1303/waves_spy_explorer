@@ -63,14 +63,18 @@ Future<List<ChartItem>> getPuzzleEarnings() async{
   return result;
 }
 
-Future<List<ChartItem>> getEagleEarnings() async{
+Future<List<AggregatorItem>> getEagleEarnings() async{
+  final puzzleProvider = PuzzleProvider();
   const reqStr = "https://script.google.com/macros/s/AKfycbzybJQqxDGSuVg6XaJY6ydLjqH2nkvRIa5OJuuAkqu3M0PjL5B1dyK4S0IV6T7uT7S4/exec";
   var resp = await http.get(Uri.parse(reqStr));
   // print(resp);
-  List<ChartItem> result = List.empty(growable: true);
+  List<AggregatorItem> result = List.empty(growable: true);
   if (resp.statusCode == 200) {
     final json = jsonDecode(resp.body);
-    result = json.map<ChartItem>((js) => ChartItem.fromMap(js)).toList();
+    result = json.map<AggregatorItem>((js) => AggregatorItem.fromMap(js)).toList();
+    dynamic semiLastItem = (json[json.length-2]);
+    puzzleProvider.lastEaglesStaked = semiLastItem["eaglesStaked"];
+    puzzleProvider.lastAniasStaked = semiLastItem["aniasStaked"];
   } else {
     print("Some error: " + resp.body);
   }
