@@ -401,7 +401,7 @@ Widget scriptHeader(dynamic t, double fontSize, BuildContext context) {
                   builder: (context, snapshot) {
                     Widget widget;
                     if(snapshot.hasData) {
-                      widget = SingleChildScrollView(scrollDirection: Axis.vertical, child: Text(snapshot.data!));
+                      widget = SingleChildScrollView(scrollDirection: Axis.vertical, child: SelectableText(snapshot.data!));
                     } else if(snapshot.hasError) {
                       widget = Text("Error: ${snapshot.error}", style: textStyle,);
                     } else {

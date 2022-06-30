@@ -49,7 +49,7 @@ Future<Map<String, List<dynamic>>> getBurnMachine() async{
 }
 
 Future<List<ChartItem>> getPuzzleEarnings() async{
-  const reqStr = "https://script.google.com/macros/s/AKfycbzPF4gGSCKDedr_WVB9xGGG8V-rkYtEyU87CtZr8TriBTd_JQhoi61j8uyh_6_k-kI/exec";
+  const reqStr = "https://script.google.com/macros/s/AKfycby9igo7gRssoZXrSgnWw1kphYMHJCS8zmYtlF0aWKqhQ4vYnMG1Mt34WO9kpcqDsQHr/exec";
   var resp = await http.get(Uri.parse(reqStr));
   // print(resp);
   List<ChartItem> result = List.empty(growable: true);
@@ -64,7 +64,7 @@ Future<List<ChartItem>> getPuzzleEarnings() async{
 }
 
 Future<List<ChartItem>> getEagleEarnings() async{
-  const reqStr = "https://script.google.com/macros/s/AKfycbystU3sYJ0QpFdfXwtUMbPoHDxvuXGJB580A0-zTD9Vc90lsPdDx8-mtIyUh7MYDNfU/exec";
+  const reqStr = "https://script.google.com/macros/s/AKfycbzybJQqxDGSuVg6XaJY6ydLjqH2nkvRIa5OJuuAkqu3M0PjL5B1dyK4S0IV6T7uT7S4/exec";
   var resp = await http.get(Uri.parse(reqStr));
   // print(resp);
   List<ChartItem> result = List.empty(growable: true);
