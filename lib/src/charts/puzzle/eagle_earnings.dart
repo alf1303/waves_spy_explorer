@@ -11,10 +11,17 @@ import 'charts_helper.dart';
 import 'puzzle_chart.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class EagleEarnings extends StatelessWidget {
+TabController? puzzleTabController;
+class EagleEarnings extends StatefulWidget {
   EagleEarnings({Key? key}) : super(key: key);
 
   static const routeName = "aggregator_earnings";
+
+  @override
+  State<EagleEarnings> createState() => _EagleEarningsState();
+}
+
+class _EagleEarningsState extends State<EagleEarnings> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
@@ -101,16 +108,50 @@ class EagleEarnings extends StatelessWidget {
               firstDate = snapshot.data!.first.date;
             }
             DateTime curDate = DateTime.now();
-            int diff = curDate.subtract(Duration(days: 1)).difference(firstDate).inDays;
+            int diff = curDate.subtract(Duration(days: 0)).difference(firstDate).inDays;
+            int diffAnia = curDate.subtract(Duration(days: 0)).difference(aniasStart).inDays;
             // int diff = curDate.difference(firstDate).inDays;
-            double oneEagleEarning = sumEagle/77/diff;
+            double oneEagleEarning = sumEagle/lastEagleStaked/diff;
+            double oneAniaEarning = sumAnia/lastAniaStaked/diffAnia;
             widget = Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text("Total rewards for Eagles staking for $diff days: ${sumEagle.toStringAsFixed(2)} USDN", style: TextStyle(fontSize: fontSize*1.3),),
-                Text("~ ${oneEagleEarning.toStringAsFixed(2)} USDN/day for 1 Early Eagle, ${(sumEagle/77).toStringAsFixed(2)} USDN total", style: TextStyle(fontSize: fontSize*1.3),),
-                Text("Eagles staked: $lastEagleStaked", style: TextStyle(fontSize: fontSize*1.3),),
-                Expanded(child: PuzzleChart(data: eagles, gridSize: 2.5, full: false,)),
+                TabBar(
+                    controller: puzzleTabController,
+                    tabs: [
+                      Padding(
+                        padding: EdgeInsets.all(fontSize*0.8),
+                        child: Text("Eagles", style: TextStyle(fontSize: fontSize),),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(fontSize*0.8),
+                        child: Text("Bored Anias", style: TextStyle(fontSize: fontSize),),
+                      )
+                    ]
+                ),
+                Expanded(
+                  child: TabBarView(
+                    controller: puzzleTabController,
+                    children: [
+                      Column(
+                        children: [
+                          Text("Total rewards for Eagles staking for $diff days: ${sumEagle.toStringAsFixed(2)} USDN", style: TextStyle(fontSize: fontSize*1.3),),
+                          Text("~ ${oneEagleEarning.toStringAsFixed(2)} USDN/day for 1 Early Eagle, ${(sumEagle/lastEagleStaked).toStringAsFixed(2)} USDN total", style: TextStyle(fontSize: fontSize*1.3),),
+                          Text("Eagles staked quantity: $lastEagleStaked", style: TextStyle(fontSize: fontSize*1.3),),
+                          Expanded(child: PuzzleChart(data: eagles, gridSize: 2.5, full: false,)),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Text("Total rewards for Bored Anias staking for $diffAnia days: ${sumAnia.toStringAsFixed(2)} USDN", style: TextStyle(fontSize: fontSize*1.3),),
+                          Text("~ ${oneAniaEarning.toStringAsFixed(2)} USDN/day for 1 Bored Ania, ${(sumAnia/lastAniaStaked).toStringAsFixed(2)} USDN total", style: TextStyle(fontSize: fontSize*1.3),),
+                          Text("Bored Anias staked quantity: $lastAniaStaked", style: TextStyle(fontSize: fontSize*1.3),),
+                          Expanded(child: PuzzleChart(data: anias, gridSize: 0.1, full: false,)),
+                        ],
+                      ),
+                    ],
+                  ),
+                )
               ],
             );
           } else if (snapshot.hasError) {
@@ -122,5 +163,10 @@ class EagleEarnings extends StatelessWidget {
         },
       )),
     );
+  }
+
+  @override
+  void initState() {
+    puzzleTabController = TabController(length: 2, vsync: this);
   }
 }
