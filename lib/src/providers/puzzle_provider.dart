@@ -18,6 +18,19 @@ class PuzzleProvider extends ChangeNotifier{
   int lastEaglesStaked = 0;
   int lastAniasStaked = 0;
 
+  //charts data
+  Map<String, List<dynamic>> burnData = {};
+  List<ChartItem> puzzleData = List.empty(growable: true);
+  List<AggregatorItem> aggregatorData = List.empty(growable: true);
+
+  double getPuzzleEarningsSum() {
+    double sum = 0;
+    for(ChartItem it in puzzleData) {
+      sum += it.value;
+    }
+    return sum;
+  }
+
   void setDappList(List<DataItem> list) {
     for(DataItem item in list) {
       final name = getAddrName(item.address);

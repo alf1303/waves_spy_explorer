@@ -13,7 +13,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 TabController? puzzleTabController;
 class EagleEarnings extends StatefulWidget {
-  EagleEarnings({Key? key}) : super(key: key);
+  EagleEarnings({Key? key, this.tabNum}) : super(key: key);
+
+  int? tabNum;
 
   static const routeName = "aggregator_earnings";
 
@@ -48,35 +50,35 @@ class _EagleEarningsState extends State<EagleEarnings> with SingleTickerProvider
                 ),
               ),
               const SizedBox(width: 10,),
-              SizedBox(
-                // height: fontSize*2,
-                child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.cyan), ),
-                  child: Text("Puzzles Chart", style: TextStyle(fontSize: fontSize*0.8, color: Colors.cyanAccent),),
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(PuzzleEarnings.routeName);
-                  },
-                ),
-              ),
+              // SizedBox(
+              //   height: fontSize*2,
+              //   child: OutlinedButton(
+              //     style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.cyan), ),
+              //     child: Text("Puzzles Chart", style: TextStyle(fontSize: fontSize*0.8, color: Colors.cyanAccent),),
+              //     onPressed: () {
+              //       Navigator.of(context).pushNamed(PuzzleEarnings.routeName);
+              //     },
+              //   ),
+              // ),
+              // SizedBox(width: 10,),
+              // SizedBox(
+              //   height: fontSize*2,
+              //   child: OutlinedButton(
+              //     style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.cyan), ),
+              //     child: Text("Burn Machine", style: TextStyle(fontSize: fontSize*0.8, color: Colors.cyanAccent),),
+              //     onPressed: () {
+              //       Navigator.of(context).pushNamed(PuzzleBurn.routeName);
+              //     },
+              //   ),
+              // ),
               SizedBox(width: 10,),
-              SizedBox(
-                // height: fontSize*2,
-                child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.cyan), ),
-                  child: Text("Burn Machine", style: TextStyle(fontSize: fontSize*0.8, color: Colors.cyanAccent),),
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(PuzzleBurn.routeName);
-                  },
-                ),
-              ),
-              SizedBox(width: 10,),
-              Expanded(child: Text("Aggregator Earnings Chart", style: TextStyle(fontSize: fontSize*1.1, fontWeight: FontWeight.bold),)),
+              Expanded(child: Text("Puzzle World Charts", style: TextStyle(fontSize: fontSize*1.1, fontWeight: FontWeight.bold),)),
             ],
           ),
         ),
       ),
-      body: Center(child: FutureBuilder<List<AggregatorItem>>(
-        future: getEagleEarnings(),
+      body: Center(child: FutureBuilder<dynamic>(
+        future: loadChartsData("aggregator"),
         builder: (context, snapshot) {
           Widget widget;
           if(snapshot.hasData) {
@@ -110,7 +112,7 @@ class _EagleEarningsState extends State<EagleEarnings> with SingleTickerProvider
             DateTime curDate = DateTime.now();
             int diff = curDate.subtract(Duration(days: 0)).difference(firstDate).inDays;
             int diffAnia = curDate.subtract(Duration(days: 0)).difference(aniasStart).inDays;
-            // int diff = curDate.difference(firstDate).inDays;
+            int diffPuzzle = curDate.difference(puzzleProvider.puzzleData.first.date).inDays;
             double oneEagleEarning = sumEagle/lastEagleStaked/diff;
             double oneAniaEarning = sumAnia/lastAniaStaked/diffAnia;
             widget = Column(
@@ -121,11 +123,19 @@ class _EagleEarningsState extends State<EagleEarnings> with SingleTickerProvider
                     tabs: [
                       Padding(
                         padding: EdgeInsets.all(fontSize*0.8),
-                        child: Text("Eagles", style: TextStyle(fontSize: fontSize),),
+                        child: Text("EAGLES", style: TextStyle(fontSize: fontSize*1.1),),
                       ),
                       Padding(
                         padding: EdgeInsets.all(fontSize*0.8),
-                        child: Text("Bored Anias", style: TextStyle(fontSize: fontSize),),
+                        child: Text("BORED ANIAS", style: TextStyle(fontSize: fontSize*1.1),),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(fontSize*0.8),
+                        child: Text("PUZZLES", style: TextStyle(fontSize: fontSize*1.1),),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(fontSize*0.8),
+                        child: Text("BURN MACHINE", style: TextStyle(fontSize: fontSize*1.1),),
                       )
                     ]
                 ),
@@ -135,20 +145,31 @@ class _EagleEarningsState extends State<EagleEarnings> with SingleTickerProvider
                     children: [
                       Column(
                         children: [
-                          Text("Total rewards for Eagles staking for $diff days: ${sumEagle.toStringAsFixed(2)} USDN", style: TextStyle(fontSize: fontSize*1.3),),
-                          Text("~ ${oneEagleEarning.toStringAsFixed(2)} USDN/day for 1 Early Eagle, ${(sumEagle/lastEagleStaked).toStringAsFixed(2)} USDN total", style: TextStyle(fontSize: fontSize*1.3),),
-                          Text("Eagles staked quantity: $lastEagleStaked", style: TextStyle(fontSize: fontSize*1.3),),
+                          SizedBox(height: fontSize*0.3,),
+                          Text("Total rewards for Eagles staking for $diff days: ${sumEagle.toStringAsFixed(2)} USDN", style: TextStyle(fontSize: fontSize),),
+                          Text("~ ${oneEagleEarning.toStringAsFixed(2)} USDN/day for 1 Early Eagle, ${(sumEagle/lastEagleStaked).toStringAsFixed(2)} USDN total", style: TextStyle(fontSize: fontSize),),
+                          Text("Eagles staked quantity: ${puzzleProvider.lastEaglesStaked}", style: TextStyle(fontSize: fontSize),),
                           Expanded(child: PuzzleChart(data: eagles, gridSize: 2.5, full: false,)),
                         ],
                       ),
                       Column(
                         children: [
-                          Text("Total rewards for Bored Anias staking for $diffAnia days: ${sumAnia.toStringAsFixed(2)} USDN", style: TextStyle(fontSize: fontSize*1.3),),
-                          Text("~ ${oneAniaEarning.toStringAsFixed(2)} USDN/day for 1 Bored Ania, ${(sumAnia/lastAniaStaked).toStringAsFixed(2)} USDN total", style: TextStyle(fontSize: fontSize*1.3),),
-                          Text("Bored Anias staked quantity: $lastAniaStaked", style: TextStyle(fontSize: fontSize*1.3),),
+                          SizedBox(height: fontSize*0.3,),
+                          Text("Total rewards for Bored Anias staking for $diffAnia days: ${sumAnia.toStringAsFixed(2)} USDN", style: TextStyle(fontSize: fontSize),),
+                          Text("~ ${oneAniaEarning.toStringAsFixed(2)} USDN/day for 1 Bored Ania, ${(sumAnia/lastAniaStaked).toStringAsFixed(2)} USDN total", style: TextStyle(fontSize: fontSize),),
+                          Text("Bored Anias staked quantity: ${puzzleProvider.lastAniasStaked}", style: TextStyle(fontSize: fontSize),),
                           Expanded(child: PuzzleChart(data: anias, gridSize: 0.1, full: false,)),
                         ],
                       ),
+                      Column(
+                        children: [
+                          SizedBox(height: fontSize*0.3,),
+                          Text("Total rewards for Puzzle staking for $diffPuzzle days: ${puzzleProvider.getPuzzleEarningsSum().toStringAsFixed(2)} USDN", style: TextStyle(fontSize: fontSize),),
+                          Expanded(child: PuzzleChart(data: puzzleProvider.puzzleData, gridSize: 200, full: false,)),
+                        ],
+                      ),
+                      // PuzzleEarnings(showBar: false,),
+                      PuzzleBurn(showBar: false)
                     ],
                   ),
                 )
@@ -167,6 +188,6 @@ class _EagleEarningsState extends State<EagleEarnings> with SingleTickerProvider
 
   @override
   void initState() {
-    puzzleTabController = TabController(length: 2, vsync: this);
+    puzzleTabController = TabController(length: 4, vsync: this, initialIndex: widget.tabNum ?? 0);
   }
 }

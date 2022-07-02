@@ -12,16 +12,17 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 class PuzzleEarnings extends StatelessWidget {
-  PuzzleEarnings({Key? key}) : super(key: key);
-
+  PuzzleEarnings({Key? key, this.showBar}) : super(key: key);
+  bool? showBar;
   static const routeName = "puzzle_earnings";
 
   @override
   Widget build(BuildContext context) {
+    bool showBar_t = showBar ?? true;
     final fontSize = getFontSize(context);
     final iconSize = getIconSize(context);
     return Scaffold(
-      appBar: PreferredSize(
+      appBar: showBar_t ? PreferredSize(
         preferredSize: Size.fromHeight(fontSize*3.5),
         child: AppBar(
           title: Row(
@@ -40,7 +41,7 @@ class PuzzleEarnings extends StatelessWidget {
               ),
               SizedBox(width: 10,),
               SizedBox(
-                // height: fontSize*2,
+                height: fontSize*2,
                 child: OutlinedButton(
                   style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.cyan), ),
                   child: Text("Eagle Chart", style: TextStyle(fontSize: fontSize*0.8, color: Colors.cyanAccent),),
@@ -51,7 +52,7 @@ class PuzzleEarnings extends StatelessWidget {
               ),
               SizedBox(width: 10,),
               SizedBox(
-                // height: fontSize*2,
+                height: fontSize*2,
                 child: OutlinedButton(
                   style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.cyan), ),
                   child: Text("Burn Machine", style: TextStyle(fontSize: fontSize*0.8, color: Colors.cyanAccent),),
@@ -65,9 +66,9 @@ class PuzzleEarnings extends StatelessWidget {
             ],
           ),
         ),
-      ),
-      body: Center(child: FutureBuilder<List<ChartItem>>(
-        future: getPuzzleEarnings(),
+      ) : null,
+      body: Center(child: FutureBuilder<dynamic>(
+        future: loadChartsData("puzzle"),
         builder: (context, snapshot) {
           Widget widget;
           if(snapshot.hasData) {
@@ -84,7 +85,7 @@ class PuzzleEarnings extends StatelessWidget {
             widget = Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text("Total rewards for Puzzle staking for $diff days: ${sum.toStringAsFixed(2)} USDN", style: TextStyle(fontSize: fontSize*1.3),),
+                Text("Total rewards for Puzzle staking for $diff days: ${sum.toStringAsFixed(2)} USDN", style: TextStyle(fontSize: fontSize),),
                 Expanded(child: PuzzleChart(data: snapshot.data!, gridSize: 200, full: false,)),
               ],
             );

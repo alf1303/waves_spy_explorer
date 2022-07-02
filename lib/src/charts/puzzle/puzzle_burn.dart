@@ -18,17 +18,19 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 final GlobalKey<ScaffoldMessengerState> messengerKeyPuz = GlobalKey<ScaffoldMessengerState>();
 class PuzzleBurn extends StatelessWidget {
-  PuzzleBurn({Key? key}) : super(key: key);
+  PuzzleBurn({Key? key, this.showBar}) : super(key: key);
 
+  bool? showBar;
   static const routeName = "puzzle_burn";
 
   @override
   Widget build(BuildContext context) {
+    bool showBar_t = showBar ?? true;
     final fontSize = getFontSize(context);
     final iconSize = getIconSize(context);
     return Scaffold(
       key: messengerKeyPuz,
-      appBar: PreferredSize(
+      appBar: showBar_t ? PreferredSize(
         preferredSize: Size.fromHeight(fontSize*3.5),
         child: AppBar(
           title: Row(
@@ -74,9 +76,9 @@ class PuzzleBurn extends StatelessWidget {
             ],
           ),
         ),
-      ),
-      body: Center(child: FutureBuilder<Map<String, List<dynamic>>>(
-        future: getBurnMachine(),
+      ) : null,
+      body: Center(child: FutureBuilder<dynamic>(
+        future: loadChartsData("burn"),
         builder: (context, snapshot) {
           final puzzleProvider = PuzzleProvider();
           Widget widget;
@@ -93,7 +95,8 @@ class PuzzleBurn extends StatelessWidget {
             widget = Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text("Total Puzzles burned by Burn Machine for $diff days: ${sum.toStringAsFixed(2)} Puzzle", style: TextStyle(fontSize: fontSize*1.3),),
+                SizedBox(height: fontSize*0.3,),
+                Text("Total Puzzles burned by Burn Machine for $diff days: ${sum.toStringAsFixed(2)} Puzzle", style: TextStyle(fontSize: fontSize),),
                 Expanded(child: PuzzleChart(data: daily, gridSize: 2, full: true,)),
                 Expanded(
                   child: Row(

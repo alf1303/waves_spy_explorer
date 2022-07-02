@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:waves_spy/src/providers/puzzle_provider.dart';
+final puzzleProvider = PuzzleProvider();
 
 Future<Map<String, List<dynamic>>> getBurnMachine() async{
   final puzzleProvider = PuzzleProvider();
@@ -71,8 +72,10 @@ Future<List<AggregatorItem>> getEagleEarnings() async{
   List<AggregatorItem> result = List.empty(growable: true);
   if (resp.statusCode == 200) {
     final json = jsonDecode(resp.body);
+    // print(json);
     result = json.map<AggregatorItem>((js) => AggregatorItem.fromMap(js)).toList();
-    dynamic semiLastItem = (json[json.length-2]);
+    dynamic semiLastItem = (json[json.length-1]);
+    print(semiLastItem);
     puzzleProvider.lastEaglesStaked = semiLastItem["eaglesStaked"];
     puzzleProvider.lastAniasStaked = semiLastItem["aniasStaked"];
   } else {
@@ -80,4 +83,26 @@ Future<List<AggregatorItem>> getEagleEarnings() async{
   }
   result.removeLast();
   return result;
+}
+
+Future<dynamic> loadChartsData(String target) async {
+  if(puzzleProvider.aggregatorData.isEmpty) {
+    puzzleProvider.aggregatorData = await getEagleEarnings();
+  }
+  if(puzzleProvider.puzzleData.isEmpty) {
+    puzzleProvider.puzzleData = await getPuzzleEarnings();
+  }
+  if(puzzleProvider.burnData.isEmpty) {
+    puzzleProvider.burnData = await getBurnMachine();
+  }
+  switch(target) {
+    case "puzzle":
+      return puzzleProvider.puzzleData;
+    case "burn":
+      return puzzleProvider.burnData;
+    case "aggregator":
+      return puzzleProvider.aggregatorData;
+    default:
+      return puzzleProvider.aggregatorData;
+  }
 }

@@ -88,11 +88,13 @@ class MyApp extends StatelessWidget {
             builder: (BuildContext context) {
               switch (routeSettings.name) {
                 case PuzzleEarnings.routeName:
-                  return PuzzleEarnings();
+                  // return PuzzleEarnings();
+                  return EagleEarnings(tabNum: 2);
                 case EagleEarnings.routeName:
                   return EagleEarnings();
                 case PuzzleBurn.routeName:
-                  return PuzzleBurn();
+                  // return PuzzleBurn();
+                  return EagleEarnings(tabNum: 3,);
                 default:
                   return MainPage(address: address);
               }

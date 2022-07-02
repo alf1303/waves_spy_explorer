@@ -85,33 +85,33 @@ class MainPage extends StatelessWidget {
                 Row(
                   children: [
                     helpWidget(context),
+                    // SizedBox(
+                    //   height: fontSize*2,
+                    //   child: OutlinedButton(
+                    //     style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.cyan), ),
+                    //     child: Text("Burn Machine", style: TextStyle(fontSize: fontSize*0.9, color: Colors.cyanAccent),),
+                    //     onPressed: () {
+                    //       Navigator.of(context).pushNamed(PuzzleBurn.routeName);
+                    //     },
+                    //   ),
+                    // ),
+                    // const SizedBox(width: 10,),
+                    // SizedBox(
+                    //   height: fontSize*2,
+                    //   child: OutlinedButton(
+                    //     style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.cyan), ),
+                    //     child: Text("Puzzles Chart", style: TextStyle(fontSize: fontSize*0.9, color: Colors.cyanAccent),),
+                    //     onPressed: () {
+                    //       Navigator.of(context).pushNamed(PuzzleEarnings.routeName);
+                    //     },
+                    //   ),
+                    // ),
+                    // const SizedBox(width: 10,),
                     SizedBox(
                       height: fontSize*2,
                       child: OutlinedButton(
                         style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.cyan), ),
-                        child: Text("Burn Machine", style: TextStyle(fontSize: fontSize*0.9, color: Colors.cyanAccent),),
-                        onPressed: () {
-                          Navigator.of(context).pushNamed(PuzzleBurn.routeName);
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 10,),
-                    SizedBox(
-                      height: fontSize*2,
-                      child: OutlinedButton(
-                        style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.cyan), ),
-                        child: Text("Puzzles Chart", style: TextStyle(fontSize: fontSize*0.9, color: Colors.cyanAccent),),
-                        onPressed: () {
-                          Navigator.of(context).pushNamed(PuzzleEarnings.routeName);
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 10,),
-                    SizedBox(
-                      height: fontSize*2,
-                      child: OutlinedButton(
-                        style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.cyan), ),
-                        child: Text("Eagle Chart", style: TextStyle(fontSize: fontSize*0.9, color: Colors.cyanAccent),),
+                        child: Text("Puzzle World Charts", style: TextStyle(fontSize: fontSize*0.9, color: Colors.cyanAccent),),
                         onPressed: () {
                           Navigator.of(context).pushNamed(EagleEarnings.routeName);
                         },
