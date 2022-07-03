@@ -52,7 +52,7 @@ class _PuzzleChartState extends State<PuzzleChart> {
     final module = widget.full ? 1 : !lastIsNarrow() ? 2 : 4;
     final bool startend = tmpval == 0 || tmpval == widget.data.length - 1;
     final bool others = tmpval < widget.data.length && tmpval%module == 0 && tmpval != widget.data.length - 2;
-    bool flag = startend || others;
+    bool flag = startend || others || widget.data.length < 60;
     if (flag) {
       DateTime date = widget.data[value.toInt()].date;
       String month = date.month.toString().length == 1 ? "0" + date.month.toString() : date.month.toString();
@@ -70,6 +70,7 @@ class _PuzzleChartState extends State<PuzzleChart> {
   }
 
   Widget leftTitleWidgets(double value, TitleMeta meta) {
+    print(value);
     final fontSize = getLastFontSize();
     final isNarr = lastIsNarrow();
     final style = TextStyle(
@@ -79,10 +80,14 @@ class _PuzzleChartState extends State<PuzzleChart> {
     );
     String text;
     double module = !isNarr ? widget.gridSize : widget.gridSize*4;
-    if(value.toInt()%module == 0) {
-      text = value.toInt().toString();
+    if (value > 1) {
+      if(value.toInt()%module == 0) {
+        text = value.toInt().toString();
+      } else {
+        return Container();
+      }
     } else {
-      return Container();
+      text = value.toStringAsFixed(2);
     }
 
     return Text(text, style: style, textAlign: TextAlign.left);
@@ -93,8 +98,9 @@ class _PuzzleChartState extends State<PuzzleChart> {
       gridData: FlGridData(
         show: true,
         drawVerticalLine: true,
+        drawHorizontalLine: true,
         horizontalInterval: widget.gridSize,
-        verticalInterval: 5,
+        verticalInterval: widget.data.length > 100 ? 4 : 1,
         getDrawingHorizontalLine: (value) {
           return FlLine(
             color: Colors.blueGrey,
