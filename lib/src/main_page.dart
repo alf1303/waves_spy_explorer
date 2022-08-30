@@ -25,7 +25,7 @@ import 'package:get_it/get_it.dart';
 
 import 'charts/puzzle/eagle_earnings.dart';
 GetIt getIt = GetIt.instance;
-const String version = "v_1.0.6     ";
+const String version = "v_1.0.7     ";
 final GlobalKey<ScaffoldMessengerState> messengerKey = GlobalKey<ScaffoldMessengerState>();
 class MainPage extends StatelessWidget {
   const MainPage({Key? key, this.address}) : super(key: key);
