@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:html';
+import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -46,6 +47,25 @@ String getFormattedDate(DateTime? dt) {
 }
 
 Map<String, Asset> assetsGlobal = {};
+
+String calcExchPrice(Map<String, dynamic> tr) {
+    String result = "----";
+    Map<String, double> assets = {
+    ...tr["additional"]["inAssetsIds"],
+        ...tr["additional"]["outAssetsIds"]
+  };
+    String amount_id = tr["order1"]["assetPair"]["amountAsset"];
+    String base_id = tr["order1"]["assetPair"]["priceAsset"];
+    Asset? amAss = getAssetFromLoaded(amount_id);
+    Asset? baseAss = getAssetFromLoaded(base_id);
+    int am_decimals = amAss == null ? 0 : amAss.decimals;
+    int base_decimals = baseAss == null ? 0 : baseAss.decimals;
+    double amount_amount = assets[amount_id] ?? 1;
+    double base_amount = assets[base_id] ?? 0;
+    double price = (base_amount / pow(10, base_decimals)) / (amount_amount / pow(10, am_decimals));
+
+    return "${price.toStringAsFixed(2)} ${tr["additional"]["assetsIds"][base_id]}/${tr["additional"]["assetsIds"][amount_id]}";
+}
 
 DateTime timestampToDate(int timestamp) {
     final date = DateTime.fromMillisecondsSinceEpoch(timestamp);

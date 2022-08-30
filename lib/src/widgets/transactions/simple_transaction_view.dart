@@ -67,7 +67,7 @@ class _SimpleTransViewState extends State<SimpleTransView> with AutomaticKeepAli
         header = burnHeader(p);
         break;
       case "exchange":
-        header = exchangeHeader(p, fontSize);
+        header = exchangeHeader(p, widget.td, fontSize);
         break;
     // TODO implement:
       case "setScript":
@@ -142,6 +142,7 @@ class _SimpleTransViewState extends State<SimpleTransView> with AutomaticKeepAli
                       widget.td["type"] == 11 ? SizedBox(width: 350, child: massTransferHeader(p, fontSize)) :
                           widget.td["type"] == 3 || widget.td["type"] == 5 ? issueHeader(p, fontSize) :
                               widget.td["type"] == 13 ? scriptHeader(widget.td, fontSize, context) :
+                                  widget.td["type"] == 7 ? SizedBox(width: 350, child: exchangeHeader(p, widget.td, fontSize)) :
                             Container(),
               ),
               widget.td["type"] == 3 || widget.td["type"] == 5 ? Container() : Expanded(
@@ -265,27 +266,50 @@ Widget invokeHeader(Map<String, dynamic> p, double fontSize) {
   );
 }
 
-Widget exchangeHeader(Map<String, dynamic> p, double fontSize) {
-  final fail = p["fail"];
+Widget exchangeHeader(Map<String, dynamic> p, Map<String, dynamic> tr, double fontSize) {
+  final fail = p["fail"] ?? false;
+  // print(p);
+  print("befCalc");
+  final price = calcExchPrice(tr);
+  print("afterCalc");
+  void addSellerToFilter() {
+    if(p["seller"] == filterProvider.addrName) {
+      filterProvider.clearAddress();
+    } else {
+      filterProvider.changeAddressName(p["seller"]);
+    }
+  }
+
+  void addBuyerToFilter() {
+    if(p["buyer"] == filterProvider.addrName) {
+      filterProvider.clearAddress();
+    } else {
+      filterProvider.changeAddressName(p["buyer"]);
+    }
+  }
+
   return Row(
     children: [
-      SizedBox(width: 600,
-          child: Row(
-            children: [
-              LabeledText(label: "sellOrder:", value: "", name: "", colr: fail ? disabledColor : exchangeColor, fontSize: fontSize),
-              Expanded(child: assetBuilder(p['amountAsset'], p['sellOrder'], false, p['amountAsset'], "out", null, fail))
-            ],
-          )
-      ),
-      SizedBox(width: 300,
-          child: Row(
-            children: [
-              LabeledText(label: "buyOrder:", value: "", name: "", colr: fail ? disabledColor : exchangeColor, fontSize: fontSize),
-              Expanded(child: assetBuilder(p['amountAsset'], p['buyOrder'], false, p['amountAsset'], "in", null, fail))
-            ],
-          )
-      ),
+      Expanded(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            InkWell(
+                onLongPress: () {copyToClipboard(p["seller"]);},
+                onTap: addSellerToFilter,
+                child: SizedBox(width: fontSize*10, child: LabeledText(label: "seller", value: p["seller"], name: getAddrName(p["seller"]), colr: fail ? disabledColor : const Color.fromARGB(255, 255, 150, 150), addrLink: true, fontSize: fontSize))
+            ),
+            InkWell(
+                onLongPress: () {copyToClipboard(p["buyer"]);},
+                onTap: addBuyerToFilter,
+                child: SizedBox(width: fontSize*10, child: LabeledText(label: "buyer", value: p["buyer"], name: getAddrName(p["buyer"]), colr: fail ? disabledColor : const Color.fromARGB(255, 150, 255, 150), addrLink: true, fontSize: fontSize))
+            ),
 
+          ],
+        ),
+      ),
+      Text("$price", style: TextStyle(fontSize: fontSize, color: Colors.yellowAccent),),
+      SizedBox(width: fontSize/3,)
     ],
   );
 }
