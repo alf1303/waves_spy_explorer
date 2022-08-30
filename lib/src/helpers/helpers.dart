@@ -54,12 +54,13 @@ String calcExchPrice(Map<String, dynamic> tr) {
     ...tr["additional"]["inAssetsIds"],
         ...tr["additional"]["outAssetsIds"]
   };
-    String amount_id = tr["order1"]["assetPair"]["amountAsset"];
-    String base_id = tr["order1"]["assetPair"]["priceAsset"];
-    Asset? amAss = getAssetFromLoaded(amount_id);
-    Asset? baseAss = getAssetFromLoaded(base_id);
-    int am_decimals = amAss == null ? 0 : amAss.decimals;
-    int base_decimals = baseAss == null ? 0 : baseAss.decimals;
+  // print("Whatt");
+    String amount_id = tr["order1"]["assetPair"]["amountAsset"] ?? "WAVES";
+    String base_id = tr["order1"]["assetPair"]["priceAsset"] ?? "WAVES";
+    // Asset? amAss = getAssetFromLoaded(amount_id);
+    // Asset? baseAss = getAssetFromLoaded(base_id);
+    int am_decimals = getAssetDecimals(amount_id);
+    int base_decimals = getAssetDecimals(base_id);
     double amount_amount = assets[amount_id] ?? 1;
     double base_amount = assets[base_id] ?? 0;
     double price = (base_amount / pow(10, base_decimals)) / (amount_amount / pow(10, am_decimals));
@@ -77,6 +78,19 @@ Asset? getAssetFromLoaded(String id) {
         return assetsGlobal[id];
     } else {
         return null;
+    }
+}
+
+int getAssetDecimals(String id) {
+    if (id == "WAVES") {
+        return 8;
+    } else {
+        Asset? ass = getAssetFromLoaded(id);
+        if (ass == null) {
+            return 1;
+        } else {
+            return ass.decimals;
+        }
     }
 }
 

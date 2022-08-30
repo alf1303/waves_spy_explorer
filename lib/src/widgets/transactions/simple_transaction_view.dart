@@ -269,9 +269,9 @@ Widget invokeHeader(Map<String, dynamic> p, double fontSize) {
 Widget exchangeHeader(Map<String, dynamic> p, Map<String, dynamic> tr, double fontSize) {
   final fail = p["fail"] ?? false;
   // print(p);
-  print("befCalc");
+  // print("befCalc ${tr["id"]}");
   final price = calcExchPrice(tr);
-  print("afterCalc");
+  // print("afterCalc");
   void addSellerToFilter() {
     if(p["seller"] == filterProvider.addrName) {
       filterProvider.clearAddress();
@@ -292,6 +292,7 @@ Widget exchangeHeader(Map<String, dynamic> p, Map<String, dynamic> tr, double fo
     children: [
       Expanded(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
             InkWell(
@@ -308,7 +309,7 @@ Widget exchangeHeader(Map<String, dynamic> p, Map<String, dynamic> tr, double fo
           ],
         ),
       ),
-      Text("$price", style: TextStyle(fontSize: fontSize, color: Colors.yellowAccent),),
+      Expanded(child: Text("$price", style: TextStyle(fontSize: fontSize*0.8, color: Colors.yellowAccent),)),
       SizedBox(width: fontSize/3,)
     ],
   );
