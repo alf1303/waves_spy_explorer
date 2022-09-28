@@ -90,7 +90,7 @@ class PuzzleEarnings extends StatelessWidget {
               ],
             );
           } else if (snapshot.hasError) {
-            widget = Text("Some error: " + snapshot.error.toString(), style: TextStyle(fontSize: fontSize),);
+            widget = Text("Some error_5: " + snapshot.error.toString(), style: TextStyle(fontSize: fontSize),);
           } else {
             widget = CircularProgressIndicator();
           }

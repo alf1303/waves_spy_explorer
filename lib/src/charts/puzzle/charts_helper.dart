@@ -14,7 +14,7 @@ Future<Map<String, List<dynamic>>> getBurnMachine() async{
   List<ChartItem> dailyResult = List.empty(growable: true);
   List<DataItem> dappResult = List.empty(growable: true);
   List<DataItem> userResult = List.empty(growable: true);
-
+print("In");
   var respDaily = await http.get(Uri.parse(reqDaily));
   if (respDaily.statusCode == 200) {
     final json = jsonDecode(respDaily.body);
@@ -24,7 +24,7 @@ Future<Map<String, List<dynamic>>> getBurnMachine() async{
     print("Some error loading daily burns: " + respDaily.body);
   }
   dailyResult.removeLast();
-
+print("Daily made");
   var respDapp = await http.get(Uri.parse(reqDapp));
   if (respDapp.statusCode == 200) {
     final json = jsonDecode(respDapp.body);
@@ -32,14 +32,16 @@ Future<Map<String, List<dynamic>>> getBurnMachine() async{
   } else {
     print("Some error loading daily burns: " + respDapp.body);
   }
-
+print("dApp made");
   var respUser = await http.get(Uri.parse(reqUsers));
   if (respUser.statusCode == 200) {
     final json = jsonDecode(respUser.body);
+    // print(json);
     userResult = json.map<DataItem>((js) => DataItem.fromMap(js)).toList();
   } else {
     print("Some error loading daily burns: " + respUser.body);
   }
+  print("User made");
   puzzleProvider.setDappList(dappResult);
   puzzleProvider.setUserList(userResult);
   Map<String, List<dynamic>> res = {};
@@ -58,7 +60,7 @@ Future<List<ChartItem>> getPuzzleEarnings() async{
     final json = jsonDecode(resp.body);
     result = json.map<ChartItem>((js) => ChartItem.fromMap(js)).toList();
   } else {
-    print("Some error: " + resp.body);
+    print("Some error_1: " + resp.body);
   }
   result.removeLast();
   return result;
@@ -79,7 +81,7 @@ Future<List<AggregatorItem>> getEagleEarnings() async{
     puzzleProvider.lastEaglesStaked = semiLastItem["eaglesStaked"];
     puzzleProvider.lastAniasStaked = semiLastItem["aniasStaked"];
   } else {
-    print("Some error: " + resp.body);
+    print("Some error_2: " + resp.body);
   }
   result.removeLast();
   return result;
@@ -88,12 +90,15 @@ Future<List<AggregatorItem>> getEagleEarnings() async{
 Future<dynamic> loadChartsData(String target) async {
   if(puzzleProvider.aggregatorData.isEmpty) {
     puzzleProvider.aggregatorData = await getEagleEarnings();
+    print("Eagle got");
   }
   if(puzzleProvider.puzzleData.isEmpty) {
     puzzleProvider.puzzleData = await getPuzzleEarnings();
+    print("Puzzle got");
   }
   if(puzzleProvider.burnData.isEmpty) {
     puzzleProvider.burnData = await getBurnMachine();
+    print("Burn got");
   }
   switch(target) {
     case "puzzle":

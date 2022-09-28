@@ -109,7 +109,7 @@ class PuzzleBurn extends StatelessWidget {
               ],
             );
           } else if (snapshot.hasError) {
-            widget = Text("Some error: " + snapshot.error.toString(), style: TextStyle(fontSize: fontSize),);
+            widget = Text("Some error_4: " + snapshot.error.toString(), style: TextStyle(fontSize: fontSize),);
           } else {
             widget = CircularProgressIndicator();
           }
