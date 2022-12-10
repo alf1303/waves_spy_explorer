@@ -20,6 +20,10 @@ Check it: [Waves Spy Explorer](https://wavesspy-2abc7.web.app/?address=3PGFHzVGT
 
 Explorer was made for private usage, during learning Waves Blockchain and for learning it
 
+## Puzzle Network
+
+Also in Puzzle World Charts section are collected some statistical data for project on Waves blockchain, PuzzleSwap
+
 
 
 
