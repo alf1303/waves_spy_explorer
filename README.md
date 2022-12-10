@@ -1,30 +1,26 @@
-# waves_spy
+# Waves Spy Explorer
 
-A new Flutter project.
+It is a custom explorer for Waves Blockchain, made for learning transactions, data storages of smartcontracts, addresses balances and others. It don't use any databases, all data is parsed result of  
+Waves Node API requests, so loading big amount of transactions or NFTs can be slow.
+Check it: [Waves Spy Explorer](https://wavesspy-2abc7.web.app/?address=3PGFHzVGT4NTigwCKP1NcwoXkodVZwvBuuU)
 
-## Getting Started
+## Main features
 
-This project is a starting point for a Flutter application that follows the
-[simple app state management
-tutorial](https://flutter.dev/docs/development/data-and-backend/state-mgmt/simple).
+1) Filtering transactions by date, type, included addresses, included assets
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+2) By pressing on transaction item you can see raw transaction json in right tab
 
-## Assets
+3) Viewing current assets, nfts, entries in data storage, deployed script for entered address
 
-The `assets` directory houses images, fonts, and any other files you want to
-include with your application.
+4) Filtering entries from address data storage (for combining filters/words use '|||' for OR, '&&&' for AND )
 
-The `assets/images` directory contains [resolution-aware
-images](https://flutter.dev/docs/development/ui/assets-and-images#resolution-aware).
+5) Aggregating some data, related to Waves Ducks Game (Stats tab)
 
-## Localization
+6) Aggregating addresses, related to entered address (asset should be selected in filter tab)  (Stats tab)
 
-This project generates localized messages based on arb files found in
-the `lib/src/localization` directory.
+Explorer was made for private usage, during learning Waves Blockchain and for learning it
 
-To support additional languages, please visit the tutorial on
-[Internationalizing Flutter
-apps](https://flutter.dev/docs/development/accessibility-and-localization/internationalization)
+
+
+
+
