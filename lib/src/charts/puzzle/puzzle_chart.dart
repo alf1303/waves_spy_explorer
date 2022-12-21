@@ -98,6 +98,7 @@ class _PuzzleChartState extends State<PuzzleChart> {
     return LineChartData(
       lineTouchData: LineTouchData(
         touchTooltipData: LineTouchTooltipData(
+          fitInsideHorizontally: true,
           tooltipBgColor: const Color(0xff23b6e6),
           tooltipRoundedRadius: 8,
           getTooltipItems: (List<LineBarSpot> lineBarsSpot) {
