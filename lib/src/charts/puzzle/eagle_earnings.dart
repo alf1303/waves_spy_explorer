@@ -158,7 +158,7 @@ class _EagleEarningsState extends State<EagleEarnings> with SingleTickerProvider
                           Text("Total rewards for Bored Anias staking for $diffAnia days: ${sumAnia.toStringAsFixed(2)} USDN", style: TextStyle(fontSize: fontSize),),
                           Text("~ ${oneAniaEarning.toStringAsFixed(2)} USDN/day for 1 Bored Ania, ${(sumAnia/lastAniaStaked).toStringAsFixed(2)} USDN total", style: TextStyle(fontSize: fontSize),),
                           Text("Bored Anias staked quantity: ${puzzleProvider.lastAniasStaked}", style: TextStyle(fontSize: fontSize),),
-                          Expanded(child: PuzzleChart(data: anias, gridSize: 0.02, full: true,)),
+                          Expanded(child: PuzzleChart(data: anias, gridSize: 0.02, full: false,)),
                         ],
                       ),
                       Column(

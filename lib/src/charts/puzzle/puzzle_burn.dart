@@ -97,7 +97,7 @@ class PuzzleBurn extends StatelessWidget {
               children: [
                 SizedBox(height: fontSize*0.3,),
                 Text("Total Puzzles burned by Burn Machine for $diff days: ${sum.toStringAsFixed(2)} Puzzle", style: TextStyle(fontSize: fontSize),),
-                Expanded(child: PuzzleChart(data: daily, gridSize: 2, full: true,)),
+                Expanded(child: PuzzleChart(data: daily, gridSize: 2, full: false,)),
                 Expanded(
                   child: Row(
                     children: [

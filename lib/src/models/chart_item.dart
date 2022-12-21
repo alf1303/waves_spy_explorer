@@ -33,14 +33,20 @@ class DataItem {
 
   DataItem({required this.address, required this.value});
 
-  factory DataItem.fromMap(Map<String, dynamic> json) {
+  factory DataItem.fromMap(Map<dynamic, dynamic> json) {
     // print(json);
+    double valu = 0;
     try {
-      double value = double.parse(json["value"]);
+      dynamic ite_repl = json["value"];
+      try {
+        valu = double.parse(ite_repl);
+      } on Error catch(_, e) {
+        valu = ite_repl;
+      }
     } on Exception catch (_, e) {
       print(json["address"] + ", " + json["value"]);
     }
 
-    return DataItem(address: json["address"], value: double.parse(json["value"]));
+    return DataItem(address: json["address"], value: valu);
   }
 }

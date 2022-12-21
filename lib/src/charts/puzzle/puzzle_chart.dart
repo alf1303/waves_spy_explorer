@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:waves_spy/src/helpers/helpers.dart';
 import 'package:waves_spy/src/models/chart_item.dart';
+import 'package:intl/intl.dart';
 
 
 class PuzzleChart extends StatefulWidget {
@@ -49,7 +50,7 @@ class _PuzzleChartState extends State<PuzzleChart> {
     // print(value);
     String val = "";
     double tmpval = widget.data.length - value - 1;
-    final module = widget.full ? 1 : !lastIsNarrow() ? 2 : 4;
+    final module = widget.full ? 1 : !lastIsNarrow() ? 4 : 8;
     final bool startend = tmpval == 0 || tmpval == widget.data.length - 1;
     final bool others = tmpval < widget.data.length && tmpval%module == 0 && tmpval != widget.data.length - 2;
     bool flag = startend || others || widget.data.length < 60;
@@ -95,6 +96,25 @@ class _PuzzleChartState extends State<PuzzleChart> {
 
   LineChartData mainData() {
     return LineChartData(
+      lineTouchData: LineTouchData(
+        touchTooltipData: LineTouchTooltipData(
+          tooltipBgColor: const Color(0xff23b6e6),
+          tooltipRoundedRadius: 8,
+          getTooltipItems: (List<LineBarSpot> lineBarsSpot) {
+            return lineBarsSpot.map((lineBarSpot) {
+              final ddd = widget.data[lineBarSpot.x.toInt()].date;
+              String fddd = DateFormat('yyyy-MM-dd').format(ddd);
+              return LineTooltipItem(
+                "${fddd}\n${lineBarSpot.y} \$",
+                const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              );
+            }).toList();
+          },
+        ),
+      ),
       gridData: FlGridData(
         show: true,
         drawVerticalLine: true,
