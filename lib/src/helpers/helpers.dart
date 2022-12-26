@@ -63,8 +63,8 @@ String calcExchPrice(Map<String, dynamic> tr) {
     int base_decimals = getAssetDecimals(base_id);
     double amount_amount = assets[amount_id] ?? 1;
     double base_amount = assets[base_id] ?? 0;
-    double price = (base_amount / pow(10, base_decimals)) / (amount_amount / pow(10, am_decimals));
-
+    final decims = 8 + base_decimals - am_decimals;
+    double price = ((base_amount / pow(10, base_decimals)) / (amount_amount / pow(10, am_decimals)))/pow(10, (6-decims).abs());
     return "${price.toStringAsFixed(2)} ${tr["additional"]["assetsIds"][base_id]}/${tr["additional"]["assetsIds"][amount_id]}";
 }
 
