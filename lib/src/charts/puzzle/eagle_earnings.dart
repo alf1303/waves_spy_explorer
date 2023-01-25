@@ -115,6 +115,7 @@ class _EagleEarningsState extends State<EagleEarnings> with SingleTickerProvider
             int diffPuzzle = curDate.difference(puzzleProvider.puzzleData.first.date).inDays;
             double oneEagleEarning = sumEagle/lastEagleStaked/diff;
             double oneAniaEarning = sumAnia/lastAniaStaked/diffAnia;
+            List<ChartItem> zoomedEagles = eagles;
             widget = Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -146,26 +147,28 @@ class _EagleEarningsState extends State<EagleEarnings> with SingleTickerProvider
                       Column(
                         children: [
                           SizedBox(height: fontSize*0.3,),
-                          Text("Total rewards for Eagles staking for $diff days: ${sumEagle.toStringAsFixed(2)} USDN", style: TextStyle(fontSize: fontSize),),
-                          Text("~ ${oneEagleEarning.toStringAsFixed(2)} USDN/day for 1 Early Eagle, ${(sumEagle/lastEagleStaked).toStringAsFixed(2)} USDN total", style: TextStyle(fontSize: fontSize),),
-                          Text("Eagles staked quantity: ${puzzleProvider.lastEaglesStaked}", style: TextStyle(fontSize: fontSize),),
-                          Expanded(child: PuzzleChart(data: eagles, gridSize: 2.5, full: false,)),
+                          SelectableText("Total rewards for Eagles staking for $diff days: ${sumEagle.toStringAsFixed(2)} USDN", style: TextStyle(fontSize: fontSize),),
+                          SelectableText("~ ${oneEagleEarning.toStringAsFixed(2)} USDN/day for 1 Early Eagle, ${(sumEagle/lastEagleStaked).toStringAsFixed(2)} USDN total", style: TextStyle(fontSize: fontSize),),
+                          SelectableText("Eagles staked quantity: ${puzzleProvider.lastEaglesStaked}", style: TextStyle(fontSize: fontSize),),
+                          Expanded(
+                            child: ChartView(data: eagles, gridSize: 5, full: false,)
+                          ),
                         ],
                       ),
                       Column(
                         children: [
                           SizedBox(height: fontSize*0.3,),
-                          Text("Total rewards for Bored Anias staking for $diffAnia days: ${sumAnia.toStringAsFixed(2)} USDN", style: TextStyle(fontSize: fontSize),),
-                          Text("~ ${oneAniaEarning.toStringAsFixed(2)} USDN/day for 1 Bored Ania, ${(sumAnia/lastAniaStaked).toStringAsFixed(2)} USDN total", style: TextStyle(fontSize: fontSize),),
-                          Text("Bored Anias staked quantity: ${puzzleProvider.lastAniasStaked}", style: TextStyle(fontSize: fontSize),),
-                          Expanded(child: PuzzleChart(data: anias, gridSize: 0.02, full: false,)),
+                          SelectableText("Total rewards for Bored Anias staking for $diffAnia days: ${sumAnia.toStringAsFixed(2)} USDN", style: TextStyle(fontSize: fontSize),),
+                          SelectableText("~ ${oneAniaEarning.toStringAsFixed(2)} USDN/day for 1 Bored Ania, ${(sumAnia/lastAniaStaked).toStringAsFixed(2)} USDN total", style: TextStyle(fontSize: fontSize),),
+                          SelectableText("Bored Anias staked quantity: ${puzzleProvider.lastAniasStaked}", style: TextStyle(fontSize: fontSize),),
+                          Expanded(child: ChartView(data: anias, gridSize: 0.02, full: false,)),
                         ],
                       ),
                       Column(
                         children: [
                           SizedBox(height: fontSize*0.3,),
-                          Text("Total rewards for Puzzle staking for $diffPuzzle days: ${puzzleProvider.getPuzzleEarningsSum().toStringAsFixed(2)} USDN", style: TextStyle(fontSize: fontSize),),
-                          Expanded(child: PuzzleChart(data: puzzleProvider.puzzleData, gridSize: 200, full: false,)),
+                          SelectableText("Total rewards for Puzzle staking for $diffPuzzle days: ${puzzleProvider.getPuzzleEarningsSum().toStringAsFixed(2)} USDN", style: TextStyle(fontSize: fontSize),),
+                          Expanded(child: ChartView(data: puzzleProvider.puzzleData, gridSize: 200, full: false,)),
                         ],
                       ),
                       // PuzzleEarnings(showBar: false,),
@@ -176,7 +179,7 @@ class _EagleEarningsState extends State<EagleEarnings> with SingleTickerProvider
               ],
             );
           } else if (snapshot.hasError) {
-            widget = Text("Some error_3: " + snapshot.error.toString(), style: TextStyle(fontSize: fontSize),);
+            widget = SelectableText("Some error_3: " + snapshot.error.toString(), style: TextStyle(fontSize: fontSize),);
           } else {
             widget = CircularProgressIndicator();
           }
@@ -189,5 +192,56 @@ class _EagleEarningsState extends State<EagleEarnings> with SingleTickerProvider
   @override
   void initState() {
     puzzleTabController = TabController(length: 4, vsync: this, initialIndex: widget.tabNum ?? 0);
+  }
+}
+
+class ChartView extends StatelessWidget {
+  final List<ChartItem> data;
+  final double gridSize;
+  final bool full;
+
+  const ChartView({Key? key, required this.data, required this.gridSize, required this.full}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    List<ChartItem> zoomedData = data;
+    return StatefulBuilder(
+        builder: (context, setState) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  OutlinedButton(onPressed: () {
+                    setState(() {
+                      zoomedData = data;
+                    });
+                  }, child: const Text("ALL")),
+                  OutlinedButton(onPressed: () {
+                    setState(() {
+                      int len = data.length;
+                      zoomedData = data.getRange(len-120, len).toList();
+                    });
+                  }, child: const Text("120D")),
+                  OutlinedButton(onPressed: () {
+                    setState(() {
+                      int len = data.length;
+                      zoomedData = data.getRange(len-30, len).toList();
+                    });
+                  }, child: const Text("30D")),
+                  OutlinedButton(onPressed: () {
+                    setState(() {
+                      int len = data.length;
+                      zoomedData = data.getRange(len-7, len).toList();
+                    });
+                  }, child: const Text("7D")),
+                ],
+              ),
+              Expanded(child: PuzzleChart(data: zoomedData, gridSize: gridSize, full: full,)),
+            ],
+          );
+        }
+    );
   }
 }

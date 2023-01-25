@@ -25,9 +25,20 @@ class _PuzzleChartState extends State<PuzzleChart> {
   @override
   void initState() {
     super.initState();
+    maxY = getMaxValue();
+  }
+
+  double getMaxValue() {
     List<ChartItem> tmplist = [...widget.data];
     tmplist.sort((a, b) => a.value.compareTo(b.value));
-    maxY = tmplist.last.value;
+    final max = tmplist.last.value;
+    return max;
+  }
+
+  double getGridSize() {
+    final max = getMaxValue();
+    final gridSize = max/20;
+    return gridSize;
   }
 
   @override
@@ -71,7 +82,7 @@ class _PuzzleChartState extends State<PuzzleChart> {
   }
 
   Widget leftTitleWidgets(double value, TitleMeta meta) {
-    print(value);
+    // print(value);
     final fontSize = getLastFontSize();
     final isNarr = lastIsNarrow();
     final style = TextStyle(
@@ -80,7 +91,8 @@ class _PuzzleChartState extends State<PuzzleChart> {
       fontSize: fontSize,
     );
     String text;
-    double module = !isNarr ? widget.gridSize : widget.gridSize*4;
+    double module = !isNarr ? getGridSize() : getGridSize()*4;
+    print("$module, $value");
     if (value > 1) {
       if(value.toInt()%module == 0) {
         text = value.toInt().toString();
@@ -90,7 +102,6 @@ class _PuzzleChartState extends State<PuzzleChart> {
     } else {
       text = value.toStringAsFixed(2);
     }
-
     return Text(text, style: style, textAlign: TextAlign.left);
   }
 
@@ -120,7 +131,7 @@ class _PuzzleChartState extends State<PuzzleChart> {
         show: true,
         drawVerticalLine: true,
         drawHorizontalLine: true,
-        horizontalInterval: widget.gridSize,
+        horizontalInterval: getGridSize(), // widget.gridSize,
         verticalInterval: widget.data.length > 100 ? 4 : 1,
         getDrawingHorizontalLine: (value) {
           return FlLine(
@@ -154,9 +165,9 @@ class _PuzzleChartState extends State<PuzzleChart> {
         leftTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
-            interval: 1,
-            getTitlesWidget: leftTitleWidgets,
-            reservedSize: 42,
+            interval: getGridSize() > 1 ? getGridSize()*2 : getGridSize()*4,
+            // getTitlesWidget: leftTitleWidgets,
+            reservedSize: getLastFontSize()*3,
           ),
         ),
       ),
@@ -166,7 +177,7 @@ class _PuzzleChartState extends State<PuzzleChart> {
       minX: 0,
       maxX: widget.data.length.toDouble() - 1,
       minY: 0,
-      maxY: maxY*1.2,
+      maxY: getMaxValue()*1.2,
       lineBarsData: [
         LineChartBarData(
           spots: getFlSpotsFromList(),
