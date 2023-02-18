@@ -285,9 +285,9 @@ String getNftType(dynamic nft) {
   return result;
 }
 
-const priorityThree = ["WAVES", "USDT", "USD-N", "USDC", "Puzzle", "Duck Egg"];
-const priorityTwo = ["TEAM DUXPLORER", "TEAM EGGPOINT", "TEAM EGGSEGGS", "TEAM FOMO", "TEAM LATAM", "TEAM MATH", "TEAM MUNDOCRYPTO", "TEAM TURTLE", "TEM CGU", "TEAM ENDO", "TEAM FORK", "TEAM IDO", "TEAM KOLKHOZ", "TEAM MARVIN", "TEAM STREET"];
-const priorityOne = ["VIRES", "Waves.Exchange", "WBTC", "WETH", "SWOP", "NSBT", "sNSBT"];
+const priorityThree = ["WAVES", "USDT", "XTN.", "USD Coin"];
+const priorityTwo = ["Puzzle", "Duck Egg", "POWER", "SWOP", "PLUTO", "SURF", "VIRES", "Waves.Exchange"]; // ["TEAM DUXPLORER", "TEAM EGGPOINT", "TEAM EGGSEGGS", "TEAM FOMO", "TEAM LATAM", "TEAM MATH", "TEAM MUNDOCRYPTO", "TEAM TURTLE", "TEM CGU", "TEAM ENDO", "TEAM FORK", "TEAM IDO", "TEAM KOLKHOZ", "TEAM MARVIN", "TEAM STREET"];
+const priorityOne = ["WBTC", "WETH", "NSBT", "sNSBT"];
 
 final traders = [
   "3PJkFJFVZ31WAbbdDPnazhwzjZ4zMKWfNPc",
