@@ -95,11 +95,12 @@ class TransactionProvider extends ChangeNotifier {
     // print("Aliases: ");
     // print(aliases);
     print("** Start loading transactions");
-    bool result = await getTransactions(address: curAddr);
-    if (result) {
-      print("** Transactions loaded");
+    // bool result = await getTransactions(address: curAddr);
+    if (true) { // (result) {
       await getAssets(curAddr);
       print("** Assets loaded");
+      await getTransactions(address: curAddr);
+      print("** Transactions loaded");
       await getData(curAddr); //implement
       print("** Data loaded");
       await getScript(curAddr); //implement
