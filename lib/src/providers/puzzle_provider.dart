@@ -17,6 +17,7 @@ class PuzzleProvider extends ChangeNotifier{
   List<DataItem> filteredUserList = List.empty(growable: true);
   int lastEaglesStaked = 0;
   int lastAniasStaked = 0;
+  int zoomDays = 0;
 
   //charts data
   Map<String, List<dynamic>> burnData = {};
@@ -78,6 +79,10 @@ class PuzzleProvider extends ChangeNotifier{
       filteredUserList = [...userList];
     }
     // print(filteredDappList.length);
+    notify();
+  }
+
+  void refresh() {
     notify();
   }
 

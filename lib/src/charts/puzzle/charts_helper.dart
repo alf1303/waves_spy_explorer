@@ -62,7 +62,7 @@ Future<List<ChartItem>> getPuzzleEarnings() async{
   } else {
     print("Some error_1: " + resp.body);
   }
-  result.removeLast();
+  // result.removeLast();
   return result;
 }
 
@@ -83,7 +83,7 @@ Future<List<AggregatorItem>> getEagleEarnings() async{
   } else {
     print("Some error_2: " + resp.body);
   }
-  result.removeLast();
+  // result.removeLast();
   return result;
 }
 
@@ -96,10 +96,10 @@ Future<dynamic> loadChartsData(String target) async {
     puzzleProvider.puzzleData = await getPuzzleEarnings();
     print("Puzzle got");
   }
-  if(puzzleProvider.burnData.isEmpty) {
-    puzzleProvider.burnData = await getBurnMachine();
-    print("Burn got");
-  }
+  // if(puzzleProvider.burnData.isEmpty) {
+  //   puzzleProvider.burnData = await getBurnMachine();
+  //   print("Burn got");
+  // }
   switch(target) {
     case "puzzle":
       return puzzleProvider.puzzleData;
