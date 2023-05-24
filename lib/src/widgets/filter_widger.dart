@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:waves_spy/src/helpers/helpers.dart';
 import 'package:waves_spy/src/models/asset.dart';
@@ -180,15 +179,17 @@ class FilterWidget extends StatelessWidget {
     final fontSize = getFontSize(context);
     final iconSize = getIconSize(context);
     return DropdownSearch<Asset>(
-      dropdownSearchTextStyle: TextStyle(fontSize: fontSize),
-      showClearButton: true,
-      popupProps: PopupProps.menu(showSearchBox: true, searchFieldProps: TextFieldProps(decoration: InputDecoration(icon: Icon(Icons.search))),
-          textStyle: TextStyle(fontSize: fontSize)),
-      dropdownSearchDecoration: InputDecoration(border: const OutlineInputBorder(),
-          labelStyle: TextStyle(fontSize: fontSize),
-          isDense: true,
-          labelText: "asset name or id",
-          suffixIcon: IconButton(onPressed: clearAsset, icon: Icon(Icons.close, size: iconSize,), tooltip: apploc?.clearAsset,)),
+      // dropdownSearchTextStyle: TextStyle(fontSize: fontSize),
+      dropdownDecoratorProps: DropDownDecoratorProps(),
+      clearButtonProps: const ClearButtonProps(isVisible: true),
+      // showClearButton: true,
+      // popupProps: PopupProps.menu(showSearchBox: true, searchFieldProps: TextFieldProps(decoration: InputDecoration(icon: Icon(Icons.search))),
+      //     textStyle: TextStyle(fontSize: fontSize)),
+      // dropdownSearchDecoration: InputDecoration(border: const OutlineInputBorder(),
+      //     labelStyle: TextStyle(fontSize: fontSize),
+      //     isDense: true,
+      //     labelText: "asset name or id",
+      //     suffixIcon: IconButton(onPressed: clearAsset, icon: Icon(Icons.close, size: iconSize,), tooltip: apploc?.clearAsset,)),
       asyncItems: (String filter) => getData(filter),
 
       itemAsString: (Asset u) => "${u.name} - ${u.id}",
@@ -231,8 +232,8 @@ class FilterWidget extends StatelessWidget {
   Widget dateTimePicker(funct, String initialValue, String label, String tooltip, double fontSize, double iconSize) {
     return DateTimePicker(
       type: DateTimePickerType.dateTime,
-      firstDate: DateTime(2018),
-      lastDate: DateTime(2023),
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2025),
       style: TextStyle(fontSize: fontSize),
       // dateLabelText: "from",
       decoration: InputDecoration(

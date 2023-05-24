@@ -89,7 +89,7 @@ class _EagleEarningsState extends State<EagleEarnings> with SingleTickerProvider
                 widget = CircularProgressIndicator();
               }
               if(aggrData.isNotEmpty) {
-                print("dadadadad");
+                // print("dadadadad");
                 DateTime aniasStart = DateTime(2022, 06, 30);
                 double sumEagle = 0;
                 double sumAnia = 0;
@@ -104,12 +104,12 @@ class _EagleEarningsState extends State<EagleEarnings> with SingleTickerProvider
                   double genericEarn = val/totalStakedGenerics;
                   sumEagle += genericEarn*5*el.eaglesStaked;
                   sumAnia += genericEarn*el.aniasStaked;
-                  eagles.add(ChartItem(date: el.date, value: double.parse((genericEarn*5).toStringAsFixed(2))));
+                  eagles.add(ChartItem(date: el.date, value: double.parse((genericEarn*5).toStringAsFixed(6))));
                   // element.value = double.parse((element.value/77).toStringAsFixed(2));
                   lastEagleStaked = el.eaglesStaked;
                   lastAniaStaked = el.aniasStaked;
                   if(el.date.isAfter(aniasStart.subtract(const Duration(days: 0)))) {
-                    anias.add(ChartItem(date: el.date, value: double.parse((genericEarn).toStringAsFixed(2))));
+                    anias.add(ChartItem(date: el.date, value: double.parse((genericEarn).toStringAsFixed(6))));
                   }
                 }
 
@@ -167,8 +167,14 @@ class _EagleEarningsState extends State<EagleEarnings> with SingleTickerProvider
                           Column(
                             children: [
                               SizedBox(height: fontSize*0.3,),
-                              SelectableText("Total rewards for Eagles staking for $diff days: ${sumEagle.toStringAsFixed(2)} USDN", style: TextStyle(fontSize: fontSize),),
-                              SelectableText("~ ${oneEagleEarning.toStringAsFixed(2)} USDN/day for 1 Early Eagle, ${(sumEagle/lastEagleStaked).toStringAsFixed(2)} USDN total", style: TextStyle(fontSize: fontSize),),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  PuzzleAlarm(fontSize),
+                                  SelectableText(" Total rewards for Eagles staking for $diff days: ${sumEagle.toStringAsFixed(2)} Puzzle", style: TextStyle(fontSize: fontSize),),
+                                ],
+                              ),
+                              SelectableText("~ ${oneEagleEarning.toStringAsFixed(2)} Puzzle/day for 1 Early Eagle, ${(sumEagle/lastEagleStaked).toStringAsFixed(2)} Puzzle total", style: TextStyle(fontSize: fontSize),),
                               SelectableText("Eagles staked quantity: ${puzzleProvider.lastEaglesStaked}", style: TextStyle(fontSize: fontSize),),
                               Expanded(
                                 child: ChartView(data: eagles, gridSize: 5, full: false,)
@@ -178,8 +184,14 @@ class _EagleEarningsState extends State<EagleEarnings> with SingleTickerProvider
                           Column(
                             children: [
                               SizedBox(height: fontSize*0.3,),
-                              SelectableText("Total rewards for Bored Anias staking for $diffAnia days: ${sumAnia.toStringAsFixed(2)} USDN", style: TextStyle(fontSize: fontSize),),
-                              SelectableText("~ ${oneAniaEarning.toStringAsFixed(2)} USDN/day for 1 Bored Ania, ${(sumAnia/lastAniaStaked).toStringAsFixed(2)} USDN total", style: TextStyle(fontSize: fontSize),),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  PuzzleAlarm(fontSize),
+                                  SelectableText(" Total rewards for Bored Anias staking for $diffAnia days: ${sumAnia.toStringAsFixed(2)} Puzzle", style: TextStyle(fontSize: fontSize),),
+                                ],
+                              ),
+                              SelectableText("~ ${oneAniaEarning.toStringAsFixed(2)} Puzzle/day for 1 Bored Ania, ${(sumAnia/lastAniaStaked).toStringAsFixed(2)} Puzzle total", style: TextStyle(fontSize: fontSize),),
                               SelectableText("Bored Anias staked quantity: ${puzzleProvider.lastAniasStaked}", style: TextStyle(fontSize: fontSize),),
                               Expanded(child: ChartView(data: anias, gridSize: 0.02, full: false,)),
                             ],
@@ -187,7 +199,13 @@ class _EagleEarningsState extends State<EagleEarnings> with SingleTickerProvider
                           Column(
                             children: [
                               SizedBox(height: fontSize*0.3,),
-                              SelectableText("Total rewards for Puzzle staking for $diffPuzzle days: ${puzzleProvider.getPuzzleEarningsSum().toStringAsFixed(2)} USDN", style: TextStyle(fontSize: fontSize),),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  PuzzleAlarm(fontSize),
+                                  SelectableText(" Total rewards for Puzzle staking for $diffPuzzle days: ${puzzleProvider.getPuzzleEarningsSum().toStringAsFixed(2)} Puzzle", style: TextStyle(fontSize: fontSize),),
+                                ],
+                              ),
                               Expanded(child: ChartView(data: puzzleProvider.puzzleData, gridSize: 200, full: false,)),
                             ],
                           ),
@@ -294,5 +312,15 @@ Widget loadButton(funct, String text, fontSize) {
       decoration: BoxDecoration(border: Border.all(color: Colors.greenAccent), borderRadius: BorderRadius.circular(8)),
       child: Text(text, style: TextStyle(fontSize: fontSize),),
     ),
+  );
+}
+
+Widget PuzzleAlarm(fontSize) {
+  return Tooltip(
+    // decoration: BoxDecoration(color: Colors.grey),
+    textStyle: TextStyle(fontSize: fontSize, color: Colors.black),
+    message: "Till 22.02.2023 rewards were in XTN.\nChart values and numbers till that date are calculated\n"
+        "by converting XTN. value to Puzzle,\nusing price from WX.Network for according date",
+    child: const Icon(Icons.help_outline, color: Colors.yellowAccent,),
   );
 }

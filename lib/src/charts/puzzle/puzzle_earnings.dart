@@ -50,17 +50,17 @@ class PuzzleEarnings extends StatelessWidget {
                   },
                 ),
               ),
-              SizedBox(width: 10,),
-              SizedBox(
-                height: fontSize*2,
-                child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.cyan), ),
-                  child: Text("Burn Machine", style: TextStyle(fontSize: fontSize*0.8, color: Colors.cyanAccent),),
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(PuzzleBurn.routeName);
-                  },
-                ),
-              ),
+              // SizedBox(width: 10,),
+              // SizedBox(
+              //   height: fontSize*2,
+              //   child: OutlinedButton(
+              //     style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.cyan), ),
+              //     child: Text("Burn Machine", style: TextStyle(fontSize: fontSize*0.8, color: Colors.cyanAccent),),
+              //     onPressed: () {
+              //       Navigator.of(context).pushNamed(PuzzleBurn.routeName);
+              //     },
+              //   ),
+              // ),
               const SizedBox(width: 10,),
               Expanded(child: Text("Puzzle Chart", style: TextStyle(fontSize: fontSize*1.1, fontWeight: FontWeight.bold),)),
             ],

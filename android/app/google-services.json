@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "163891227840",
+    "project_id": "wavesspy-2abc7",
+    "storage_bucket": "wavesspy-2abc7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:163891227840:android:e4cbac092070ce8025d125",
+        "android_client_info": {
+          "package_name": "com.example.waves_spy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "163891227840-uugbh9q42ekjp0eqjspsdokh1dqjsqan.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhTrU2cAzAn1LYlM6aTkAAc-KJI-iD3GI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "163891227840-uugbh9q42ekjp0eqjspsdokh1dqjsqan.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "163891227840-cfl5917m5kpqg2boumo53b9hb740pe6r.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.wavesSpy"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

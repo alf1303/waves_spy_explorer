@@ -14,16 +14,20 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  http: ^0.13.4
+  http: ^1.0.0
   provider: ^6.0.2
   flutter_datetime_picker: ^1.5.1
-  date_time_picker: ^2.1.0
+#  date_time_picker: ^2.1.0
+  date_time_picker:
+    git:
+      url: https://github.com/DavidHDJ/date_time_picker.git
+      ref: 2.1.1
   url_launcher: ^6.1.2
-  dropdown_search: ^4.0.1
-  firebase_analytics: ^9.1.9
-  firebase_core: ^1.17.1
+  dropdown_search: ^5.0.6
+  firebase_analytics: ^10.4.1
+  firebase_core: ^2.13.0
   get_it: ^7.2.0
-  fl_chart: ^0.51.0
+  fl_chart: ^0.62.0
   fast_base58: ^0.2.1
   fluttertoast: ^8.0.9
 
@@ -32,7 +36,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^1.0.0
+  flutter_lints: ^2.0.1
 
 flutter:
   uses-material-design: true

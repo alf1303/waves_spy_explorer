@@ -61,7 +61,7 @@ class _PuzzleChartState extends State<PuzzleChart> {
     // print(value);
     String val = "";
     double tmpval = widget.data.length - value - 1;
-    final module = widget.full ? 1 : !lastIsNarrow() ? 4 : 8;
+    final module = widget.full ? 1 : !lastIsNarrow() ? 8 : 16;
     final bool startend = tmpval == 0 || tmpval == widget.data.length - 1;
     final bool others = tmpval < widget.data.length && tmpval%module == 0 && tmpval != widget.data.length - 2;
     bool flag = startend || others || widget.data.length < 60;
@@ -93,15 +93,16 @@ class _PuzzleChartState extends State<PuzzleChart> {
     String text;
     double module = !isNarr ? getGridSize() : getGridSize()*4;
     print("$module, $value");
-    if (value > 1) {
-      if(value.toInt()%module == 0) {
-        text = value.toInt().toString();
-      } else {
-        return Container();
-      }
-    } else {
-      text = value.toStringAsFixed(2);
-    }
+    text = value.toStringAsFixed(2);
+    // if (value > 1) {
+    //   if(value.toInt()%module == 0) {
+    //     text = value.toInt().toString();
+    //   } else {
+    //     return Container();
+    //   }
+    // } else {
+    //   text = value.toStringAsFixed(2);
+    // }
     return Text(text, style: style, textAlign: TextAlign.left);
   }
 
@@ -117,7 +118,7 @@ class _PuzzleChartState extends State<PuzzleChart> {
               final ddd = widget.data[lineBarSpot.x.toInt()].date;
               String fddd = DateFormat('yyyy-MM-dd').format(ddd);
               return LineTooltipItem(
-                "${fddd}\n${lineBarSpot.y} \$",
+                "${fddd}\n${lineBarSpot.y} \$Puzzle",
                 const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -166,8 +167,8 @@ class _PuzzleChartState extends State<PuzzleChart> {
           sideTitles: SideTitles(
             showTitles: true,
             interval: getGridSize() > 1 ? getGridSize()*2 : getGridSize()*4,
-            // getTitlesWidget: leftTitleWidgets,
-            reservedSize: getLastFontSize()*3,
+            getTitlesWidget: leftTitleWidgets,
+            reservedSize: getLastFontSize()*4,
           ),
         ),
       ),

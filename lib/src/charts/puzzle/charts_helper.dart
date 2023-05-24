@@ -52,7 +52,8 @@ print("dApp made");
 }
 
 Future<List<ChartItem>> getPuzzleEarnings() async{
-  const reqStr = "https://script.google.com/macros/s/AKfycby9igo7gRssoZXrSgnWw1kphYMHJCS8zmYtlF0aWKqhQ4vYnMG1Mt34WO9kpcqDsQHr/exec";
+  // const reqStr = "https://script.google.com/macros/s/AKfycby9igo7gRssoZXrSgnWw1kphYMHJCS8zmYtlF0aWKqhQ4vYnMG1Mt34WO9kpcqDsQHr/exec";
+  const reqStr = "https://script.google.com/macros/s/AKfycbxrK8Deg4k9bu3Qu1qP6-uyHC2AUbg_ZP_RY21vom7UQ09jc1NbYBCagMXNGH2ptf9-/exec";
   var resp = await http.get(Uri.parse(reqStr));
   // print(resp);
   List<ChartItem> result = List.empty(growable: true);
@@ -68,7 +69,8 @@ Future<List<ChartItem>> getPuzzleEarnings() async{
 
 Future<List<AggregatorItem>> getEagleEarnings() async{
   final puzzleProvider = PuzzleProvider();
-  const reqStr = "https://script.google.com/macros/s/AKfycbzybJQqxDGSuVg6XaJY6ydLjqH2nkvRIa5OJuuAkqu3M0PjL5B1dyK4S0IV6T7uT7S4/exec";
+  // const reqStr = "https://script.google.com/macros/s/AKfycbzybJQqxDGSuVg6XaJY6ydLjqH2nkvRIa5OJuuAkqu3M0PjL5B1dyK4S0IV6T7uT7S4/exec";
+  const reqStr = "https://script.google.com/macros/s/AKfycbxrK8Deg4k9bu3Qu1qP6-uyHC2AUbg_ZP_RY21vom7UQ09jc1NbYBCagMXNGH2ptf9-/exec";
   var resp = await http.get(Uri.parse(reqStr));
   // print(resp);
   List<AggregatorItem> result = List.empty(growable: true);
