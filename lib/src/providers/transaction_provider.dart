@@ -105,8 +105,8 @@ class TransactionProvider extends ChangeNotifier {
       print("** Data loaded");
       await getScript(curAddr); //implement
       print("** Script loaded");
-      await getNft(address: curAddr);
-      print("** Nft loaded");
+      // await getNft(address: curAddr);
+      // print("** Nft loaded");
       setDucksStatsData();
     }
     statsProvider.notifyAll();
@@ -626,6 +626,10 @@ class TransactionProvider extends ChangeNotifier {
 
     if(filterProvider.hideFailed) {
       filteredTransactions = filteredTransactions.where((tr) => tr["additional"] != null && tr["additional"]["fail"] != null && !tr["additional"]["fail"]).toList();
+    }
+
+    if (filterProvider.block.length == 7) {
+      filteredTransactions = filteredTransactions.where((tr) => tr["height"] == int.parse(filterProvider.block) || tr["height"] == int.parse(filterProvider.block) - 1).toList();
     }
 
     final trToFilter = filterProvider.isFiltered() ? filteredTransactions : datedTransactions;

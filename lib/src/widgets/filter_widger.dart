@@ -21,6 +21,7 @@ class FilterWidget extends StatelessWidget {
   final assetController = TextEditingController();
   final minValueController = TextEditingController();
   final addressController = TextEditingController();
+  final blockController = TextEditingController();
   String dirValue = "";
 
   final dirs = ["all", "in", "out"];
@@ -47,10 +48,12 @@ class FilterWidget extends StatelessWidget {
           functController.text = _filterProvider.functName;
           minValueController.text = _filterProvider.minValue.toString();
           addressController.text = _filterProvider.addrName;
+          blockController.text = _filterProvider.block;
           assetController.selection = TextSelection.fromPosition(TextPosition(offset: assetController.text.length));
           functController.selection = TextSelection.fromPosition(TextPosition(offset: functController.text.length));
           minValueController.selection = TextSelection.fromPosition(TextPosition(offset: minValueController.text.length));
           addressController.selection = TextSelection.fromPosition(TextPosition(offset: addressController.text.length));
+          blockController.selection = TextSelection.fromPosition(TextPosition(offset: blockController.text.length));
 
           dirValue = _filterProvider.direction;
 
@@ -124,6 +127,7 @@ class FilterWidget extends StatelessWidget {
                         child: assetFilter(context)
                     ),
                     directionSelect(fontSize),
+
                   ],
                 ),
               ),
@@ -147,9 +151,13 @@ class FilterWidget extends StatelessWidget {
             Expanded(
                 child: InputWidgetFilter(controller: minValueController, onchanged: minValueChanged, clearFunc: minValueClear, label: "min value", hint: apploc.clearMinValue, isNumeric: true, fontSize: fontSize, iconSize: iconSize)
             ),
-            Expanded(
+            funcNameVisible ? Expanded(
                 child: Visibility(child: InputWidgetFilter(controller: functController, onchanged: functChanged, clearFunc: clearFunc, label: "function name", hint: apploc.clearFunction, fontSize: fontSize, iconSize: iconSize),
                   visible: funcNameVisible,)
+            ):
+            Expanded(
+                child: Visibility(child: InputWidgetFilter(controller: blockController, onchanged: blockChanged, clearFunc: clearBlock, label: "block height", hint: "clear block", fontSize: fontSize, iconSize: iconSize),
+                  visible: !funcNameVisible,)
             ),
 
           ],
@@ -331,6 +339,16 @@ class FilterWidget extends StatelessWidget {
   void clearFunc() {
     final _filterProvider = FilterProvider();
     _filterProvider.clearFunc();
+  }
+
+  void blockChanged(val) {
+    final _filterProvider = FilterProvider();
+    _filterProvider.changeBlock(val);
+  }
+
+  void clearBlock() {
+    final _filterProvider = FilterProvider();
+    _filterProvider.clearBlock();
   }
 
   void addressChanged(val) {

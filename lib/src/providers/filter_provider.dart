@@ -32,6 +32,7 @@ class FilterProvider extends ChangeNotifier{
   bool reverseTransactions = false;
   bool onlyTraders = false; // addresses, created for trading activity
   String minValue = "0";
+  String block = "";
   bool highlightTradeAccs = false;
   bool hideFailed = false;
 
@@ -191,6 +192,21 @@ class FilterProvider extends ChangeNotifier{
 
   void clearFunc() {
     functName = "";
+    _transactionProvider.filterTransactions();
+    notifyAll();
+  }
+
+  void changeBlock(String val) {
+    // val ??= "0";
+    if (val.length == 7) {
+      block = val;
+      _transactionProvider.filterTransactions();
+      notifyAll();
+    }
+  }
+
+  void clearBlock() {
+    block = "";
     _transactionProvider.filterTransactions();
     notifyAll();
   }

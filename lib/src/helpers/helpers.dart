@@ -107,7 +107,7 @@ String getTypeName(int type) {
         case 3:
             return "Issue";
         case 4:
-            return "Asset Transfer";
+            return "Transfer";
         case 5:
             return "Reissue";
         case 6:
@@ -123,7 +123,7 @@ String getTypeName(int type) {
         case 11:
             return "Mass Payment";
         case 16:
-            return "Invoke Script";
+            return "Invoke";
         case 12:
             return "Data";
         case 13:

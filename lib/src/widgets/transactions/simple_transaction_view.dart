@@ -104,7 +104,9 @@ class _SimpleTransViewState extends State<SimpleTransView> with AutomaticKeepAli
     // print(count);
     color = fail ? Colors.grey : color;
     final borderColor = fail ? Colors.red : filterProvider.highlightTradeAccs ? count == 2 ? Colors.yellow : count == 1 ? Colors.lightGreen : Colors.grey : Colors.grey;
-    final typeName = isNarr ? getTypeName(widget.td["type"]).split(" ")[0] : getTypeName(widget.td["type"]);
+    final typeN = isNarr ? getTypeName(widget.td["type"]).split(" ")[0] : getTypeName(widget.td["type"]);
+    final block = widget.td["height"];
+    final typeName = "$typeN ($block)";
     final typeNumber = isNarr ? "" : widget.td["type"];
     final dateStr = isNarr ? formattedDate.substring(0, 10) : formattedDate;
     return InkWell(
@@ -125,7 +127,7 @@ class _SimpleTransViewState extends State<SimpleTransView> with AutomaticKeepAli
                   InkWell(
                     onLongPress: () {copyToClipboard(typeName);},
                       onTap: addTypeToFilter,
-                      child: Text("($typeNumber)$typeName", style: TextStyle(fontSize: fontSize, color: color),)),
+                      child: Text("$typeName", style: TextStyle(fontSize: fontSize, color: color),)),
                       // child: LabeledText(label: "", value: typeName, name: "$typeNumber", colr: color, fontSize: fontSize)),
                 
                   Expanded(child: Container())
