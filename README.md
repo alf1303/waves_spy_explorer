@@ -22,7 +22,7 @@ Explorer was made for private usage, during learning Waves Blockchain and for le
 
 ## Puzzle Network
 
-Also in Puzzle World Charts section are collected some statistical data for project on Waves blockchain, PuzzleSwap
+Also in Puzzle World Charts section are collected some statistical data for project on Waves blockchain, [PuzzleSwap](https://puzzleswap.org/)
 
 
 
