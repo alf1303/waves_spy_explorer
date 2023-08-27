@@ -20,10 +20,13 @@ class TransactionDetailsProvider extends ChangeNotifier{
 
   setTransaction(Map<String, dynamic>trs) {
     trsHold = trs;
+    print("details 2");
     JsonEncoder encoder = const JsonEncoder.withIndent('  ');
+    print("details 3");
     var trs2 = {...trs};
     trs2.remove("additional");
     tr = encoder.convert(trs2);
+    print("details 4");
     notifyListeners();
   }
 

@@ -23,6 +23,7 @@ class SimpleTransView extends StatefulWidget {
 class _SimpleTransViewState extends State<SimpleTransView> with AutomaticKeepAliveClientMixin{
   void showDetails() {
     final _trDetailsProvider = TransactionDetailsProvider();
+    print("details view 1");
     _trDetailsProvider.setTransaction(widget.td);
   }
 

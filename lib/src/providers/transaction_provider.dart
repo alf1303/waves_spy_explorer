@@ -165,7 +165,7 @@ class TransactionProvider extends ChangeNotifier {
             attempts = 0;
           } catch(err) {
             attempts -= 1;
-            print("Catched XMLHttpRequest error, retrying... $attempts left");
+            print("Catched XMLHttpRequest error ${err.toString()}, retrying... $attempts left");
           }
         }
         // print("trx");
