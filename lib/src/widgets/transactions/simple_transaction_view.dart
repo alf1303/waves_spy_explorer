@@ -126,7 +126,14 @@ class _SimpleTransViewState extends State<SimpleTransView> with AutomaticKeepAli
               SizedBox(width: width*0.09, child: Row(
                 children: [
                   InkWell(
-                    onLongPress: () {copyToClipboard(typeName);},
+                    onLongPress: () {
+                      RegExp regex = RegExp(r'\((\d+)\)');
+                      Match? match = regex.firstMatch(typeName);
+                      if (match != null) {
+                        String blockN = match.group(1)!;
+                        copyToClipboard(blockN);
+                      }
+                      },
                       onTap: addTypeToFilter,
                       child: Text("$typeName", style: TextStyle(fontSize: fontSize, color: color),)),
                       // child: LabeledText(label: "", value: typeName, name: "$typeNumber", colr: color, fontSize: fontSize)),
@@ -136,7 +143,12 @@ class _SimpleTransViewState extends State<SimpleTransView> with AutomaticKeepAli
               ), ),
               !isNarr ? Padding(
                 padding: const EdgeInsets.only(right: 8.0),
-                child: SizedBox(width: 100, child: LabeledText(label: "", value: widget.td["id"], name: "", colr: Colors.grey, fontSize: fontSize)),
+                child: InkWell(
+                    child: SizedBox(width: 100, child: LabeledText(label: "", value: widget.td["id"], name: "", colr: Colors.grey, fontSize: fontSize)),
+                  onLongPress: () {
+                    copyToClipboard(widget.td["id"]);
+                  },
+                ),
               ): SizedBox(),
 
               Expanded(

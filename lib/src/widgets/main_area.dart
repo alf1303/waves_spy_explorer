@@ -63,7 +63,7 @@ class _MainAreaState extends State<MainArea>  with SingleTickerProviderStateMixi
             // Tab(text: "Stats",),
                 TabHeaderWidget(name: "Transactions", label: "trans", index: 0),
                 TabHeaderWidget(name: "Assets", label: "assets",index: 1,),
-                TabHeaderWidget(name: "Nfts", label: "nfts", index: 2,),
+                TabHeaderWidget(name: "Nfts(disabled)", label: "nfts", index: 2,),
                 TabHeaderWidget(name: "Data", label: "data", index: 3,),
                 TabHeaderWidget(name: "Script", label: "script", index: 4,),
                 TabHeaderWidget(name: "Stats", label: "none", index: 5,),
