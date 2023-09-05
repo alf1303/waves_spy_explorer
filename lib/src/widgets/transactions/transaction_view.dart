@@ -432,7 +432,7 @@ Widget LabeledTextNoScroll([String? label, String? value, String? name, Color? c
 }
 
 class LinkToAddress extends StatelessWidget {
-  const LinkToAddress({Key? key, required this.val, required this.label, this.color, required this.alias, required this.fontSize}) : super(key: key);
+  const LinkToAddress({Key? key, required this.val, required this.label, this.color, required this.alias, this.fontSize}) : super(key: key);
   final String val;
   final String label;
   final Color? color;

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:waves_spy/src/arb_blocks/arb_blocks.dart';
+import 'package:waves_spy/src/arb_blocks/blocks_provider.dart';
 import 'package:waves_spy/src/charts/puzzle/puzzle_burn.dart';
 import 'package:waves_spy/src/charts/puzzle/puzzle_earnings.dart';
 import 'package:waves_spy/src/helpers/helpers.dart';
@@ -41,6 +43,7 @@ class MyApp extends StatelessWidget {
       ChangeNotifierProvider<StatsProvider>(create: (_) => StatsProvider()),
       ChangeNotifierProvider<LabelProvider>(create: (_) => LabelProvider()),
       ChangeNotifierProvider<PuzzleProvider>(create: (_) => PuzzleProvider()),
+      ChangeNotifierProvider<BlocksProvider>(create: (_) => BlocksProvider()),
     ],
       child: MaterialApp(
         // Providing a restorationScopeId allows the Navigator built by the
@@ -95,6 +98,8 @@ class MyApp extends StatelessWidget {
                 case PuzzleBurn.routeName:
                   // return PuzzleBurn();
                   return EagleEarnings(tabNum: 3,);
+                case ArbBlocks.routeName:
+                  return ArbBlocks();
                 default:
                   return MainPage(address: address);
               }

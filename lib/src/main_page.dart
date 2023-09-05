@@ -52,7 +52,7 @@ class MainPage extends StatelessWidget {
                   child: Row(
                     children: [
                       SizedBox(height: iconSize, child: Image.asset('assets/images/logo.png', fit: BoxFit.scaleDown,)),
-                      SelectableText(AppLocalizations.of(context)!.headerTitle + "     ", style: TextStyle(fontSize: fontSize),),
+                      SelectableText("${AppLocalizations.of(context)!.headerTitle}     ", style: TextStyle(fontSize: fontSize),),
                       MyToolTip(
                         message: "Show contracts",
                         child: IconButton(
@@ -62,8 +62,8 @@ class MainPage extends StatelessWidget {
                                   builder: (context) {
                                     return MyDialog(
                                       title: "Addresses:",
-                                        child: getMainAddresses(),
-                                        iconSize: iconSize);
+                                        iconSize: iconSize,
+                                        child: getMainAddresses());
                                   });
                             }
                         ),
@@ -128,13 +128,13 @@ class MainPage extends StatelessWidget {
 
           ),
         ),
-        body: Column(
+        body: const Column(
           children: [
-            const MyProgressBar(label: "main"),
+            MyProgressBar(label: "main"),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(children: const [
+                padding: EdgeInsets.all(8.0),
+                child: Row(children: [
                   Expanded(flex: 2, child: MainArea()),
                   VerticalDivider(width: 3, color: Colors.grey,),
                   Expanded(flex: 1, child: TransactionDetails())
