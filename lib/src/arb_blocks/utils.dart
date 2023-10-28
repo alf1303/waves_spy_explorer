@@ -1,12 +1,16 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:waves_spy/src/arb_blocks/blocks_provider.dart';
 import 'package:waves_spy/src/helpers/helpers.dart';
+import 'package:waves_spy/src/models/asset.dart';
+import 'package:waves_spy/src/widgets/other/custom_widgets.dart';
 import 'package:waves_spy/src/widgets/transactions/transaction_view.dart';
 
 const nodeUrl = "https://nodes.wavesnodes.com/";
@@ -194,3 +198,158 @@ Widget getStatus(Map<String, dynamic> tx) {
     child: status ? const Icon(Icons.close, color: Colors.red,) : const Icon(Icons.check_rounded, color: Colors.green,),
   );
 }
+
+class TxInfo extends StatelessWidget {
+  final Map<String, dynamic> tx;
+
+  TxInfo({Key? key, required this.tx}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final sender = tx["sender"];
+    final type = tx["type"];
+    final iconSize = getLastFontSize();
+    final blocksProvider = BlocksProvider();
+    List<String> pools = List.empty(growable: true);
+    String pools_str = "";
+    Widget child = Container(child: Text("No data"));
+    if (type == 7) {
+      // print("tx: ${tx}");
+      child = FutureBuilder<Map<String, dynamic>>(
+        future: blocksProvider.getTxData(tx["id"]),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasData) {
+            final data = snapshot.data ?? {};
+            print(data);
+            final addr1 = data["order1"]["sender"];
+            final addr2 = data["order2"]["sender"];
+            final addr1IsPool = blocksProvider.wxPools.contains(addr1);
+            final addr2IsPool = blocksProvider.wxPools.contains(addr2);
+            final amountId = data["order1"]["assetPair"]["amountAsset"] ?? "WAVES";
+            final priceId = data["order1"]["assetPair"]["priceAsset"] ?? "WAVES";
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Addresses:"),
+                Text(addr1, style: TextStyle(color: addr1IsPool ? Colors.greenAccent : Colors.white70)),
+                Text(addr2, style: TextStyle(color: addr2IsPool ? Colors.greenAccent : Colors.white70)),
+                Divider(),
+                Text("Assets:"),
+                Row(
+                  children: [
+                    Text(amountId, style: TextStyle(color: Colors.white70)),
+                    AssetName(id: amountId)
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text(priceId, style: TextStyle(color: Colors.white70)),
+                    AssetName(id: priceId)
+                  ],
+                )
+            ],);
+          } else {
+            // print(snapshot);
+            return Text("Some error or no data");
+          }
+        });
+
+    } else if (sender == "3PRE5KH9oPGfFPs7fGnQcJ4wNshEDUPGj1t") {
+      final args = tx["call"]["args"][0]["value"];
+      List<String> vals = args.split("|");
+      for (int i=1; i < vals.length-1; i++) {
+        List<String> tmpvals = vals[i].split("_");
+        tmpvals[1] = blocksProvider.getPoolType(tmpvals[1]);
+        pools.add(tmpvals.join(" "));
+      }
+      List<String> assets_all = vals[0].split("_");
+      final assets = assets_all.sublist(0, assets_all.length - 3);
+      final payAmount = int.parse(assets_all[assets_all.length - 2]);
+      // print(assets);
+      // print(tx);
+      child = FutureBuilder<Map<String, dynamic>>(
+        future: blocksProvider.getTxData(tx["id"]),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasData) {
+            final data = snapshot.data ?? {};
+            // print("txdata: ${data}");
+            // print("Wx pools length: ${blocksProvider.wxPools.length}");
+            final transfers = data["stateChanges"]["transfers"];
+            final assetData = blocksProvider.getAssetData(transfers[0]["asset"]);
+            final profitAmount = transfers[0]["amount"] / pow(10, assetData["decimals"]);
+            final profitString = "${profitAmount} ${assetData['name']}";
+            final assetsText = "Assets:\n -> profit: ${profitString}\n${assets.join('\n')}\n -> pay: ${payAmount / pow(10, assetData['decimals'])} ${assetData['name']}";
+            return Container(width: 600, height: 400, child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(assetsText),
+                Divider(),
+                Text("Pools:"),
+
+                ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: pools.length,
+                    itemBuilder: (context, index) {
+                      String pool_adr = pools[index].substring(0, pools[index].length-2);
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          LinkToAddress(label: pools[index], val: pool_adr, alias: false, color: Colors.white70,),
+                          IconButton(onPressed: () {copyToClipboard(pool_adr);},
+                              icon: Icon(Icons.copy, size: iconSize,))
+                        ],
+                      );
+                    }),
+              ],
+            ),);
+          } else {
+            // print(snapshot);
+            return Text("Some error or no data");
+          }
+        }
+      );
+    }
+
+    return IconButton(
+        icon: Icon(Icons.list_alt_rounded, size: iconSize,),
+        onPressed: () {showDialog(context: context,
+            builder: (context) {
+              return MyDialog(child: child, iconSize: iconSize);
+            });
+        }
+    );
+  }
+}
+
+class AssetName extends StatelessWidget {
+  final id;
+  const AssetName({Key? key, required this.id}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<Asset>(
+        future: fetchAssetInfo(id),
+        builder: (context, snapshot) {
+      if (snapshot.connectionState != ConnectionState.done) {
+      return Center(child: CircularProgressIndicator());
+      }
+      if (snapshot.hasData) {
+        final asset = snapshot.data;
+        return Text(" ${asset!.name}");
+      } else {
+        return Text("No Data");
+      }
+        });
+  }
+}
+
+

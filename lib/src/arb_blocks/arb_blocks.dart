@@ -16,6 +16,7 @@ class ArbBlocks extends StatelessWidget {
   Future<String> pasteFromClipboardBlock() async{
     final blocksProvider = BlocksProvider();
     ClipboardData? cdata = await Clipboard.getData(Clipboard.kTextPlain);
+    await blocksProvider.getWxPools();
     String? copiedtext = cdata?.text;
     if (copiedtext != null) {
       // controller.text = copiedtext;
@@ -30,6 +31,7 @@ class ArbBlocks extends StatelessWidget {
   Future<String> pasteFromClipboardTx() async{
     final blocksProvider = BlocksProvider();
     ClipboardData? cdata = await Clipboard.getData(Clipboard.kTextPlain);
+    await blocksProvider.getWxPools();
     String? copiedtext = cdata?.text;
     if (copiedtext != null) {
       // controller.text = copiedtext;

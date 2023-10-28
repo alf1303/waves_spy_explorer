@@ -53,7 +53,8 @@ print("dApp made");
 
 Future<List<ChartItem>> getPuzzleEarnings() async{
   // const reqStr = "https://script.google.com/macros/s/AKfycby9igo7gRssoZXrSgnWw1kphYMHJCS8zmYtlF0aWKqhQ4vYnMG1Mt34WO9kpcqDsQHr/exec";
-  const reqStr = "https://script.google.com/macros/s/AKfycbxrK8Deg4k9bu3Qu1qP6-uyHC2AUbg_ZP_RY21vom7UQ09jc1NbYBCagMXNGH2ptf9-/exec";
+  // const reqStr = "https://script.google.com/macros/s/AKfycbxrK8Deg4k9bu3Qu1qP6-uyHC2AUbg_ZP_RY21vom7UQ09jc1NbYBCagMXNGH2ptf9-/exec";
+  const reqStr = "https://script.google.com/macros/s/AKfycbzgV3Hi3CpgA9Bhmf6-So1ya8IBgTHDrWN1pmb3gGs3aK2sBFoS44pW2GrF9N0JeYQv/exec";
   var resp = await http.get(Uri.parse(reqStr));
   // print(resp);
   List<ChartItem> result = List.empty(growable: true);

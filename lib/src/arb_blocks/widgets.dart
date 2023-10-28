@@ -44,7 +44,8 @@ class ViewBlockWidget extends StatelessWidget {
                               DataColumn(label: Text("FUNCTION")),
                               DataColumn(label: Text("ID")),
                               DataColumn(label: Text("DAPP")),
-                              DataColumn(label: Text("SENDER"))
+                              DataColumn(label: Text("SENDER")),
+                              DataColumn(label: Text("INFO")),
                             ],
                             dividerThickness: 2,
                             rows:
@@ -55,7 +56,8 @@ class ViewBlockWidget extends StatelessWidget {
                                   DataCell(getFunction(tx)),
                                   DataCell(getId(tx)),
                                   DataCell(getDapp(tx)),
-                                  DataCell(getSender(tx))
+                                  DataCell(getSender(tx)),
+                                  DataCell(TxInfo(tx: tx,))
                                 ], color: getRowColor(tx, targetTx: model.txid));
                               }).toList()
                           ),

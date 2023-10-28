@@ -177,6 +177,7 @@ Future<List<Asset?>>? getAssetInfoLabel(String id) async{
             assetsGlobal[ids[1]] = priceAsset;
         }
     }
+    // print("Asset: ${asset!.name}, priceAsset: ${priceAsset!.name}");
     return [asset, priceAsset];
 }
 
