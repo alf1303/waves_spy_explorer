@@ -11,7 +11,11 @@ String getAddrName(String address) {
 
 const publicNode = 'https://nodes.wavesnodes.com';
 const localNode = 'http://127.0.0.1:6869';
-const nodeUrl = publicNode;
+const remoteCustomNode = "http://stage.wavescup.world:6570";
+
+//############################################//
+String nodeUrl = publicNode;
+//############################################//
 
 const eggId = "C1iWsKGqLwjHUndiQ7iXpdmPum9PeCDFfyXBdJJosDRS";
 

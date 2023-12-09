@@ -31,8 +31,10 @@ class ArbBlocks extends StatelessWidget {
   Future<String> pasteFromClipboardTx() async{
     final blocksProvider = BlocksProvider();
     ClipboardData? cdata = await Clipboard.getData(Clipboard.kTextPlain);
-    await blocksProvider.getWxPools();
     String? copiedtext = cdata?.text;
+    // print("${copiedtext}");
+    await blocksProvider.getWxPools();
+    // print(blocksProvider.wxPools);
     if (copiedtext != null) {
       // controller.text = copiedtext;
       blocksProvider.txid = copiedtext;
@@ -112,7 +114,7 @@ class ArbBlocks extends StatelessWidget {
                                     fontSize: fontSize,
                                     submit: true,
                                     onchanged: onSubmitTx,
-                                    isNumeric: true
+                                    // isNumeric: false
                                 ),
                               ),
                             ],

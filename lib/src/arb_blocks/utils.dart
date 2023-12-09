@@ -43,6 +43,7 @@ Future<Map<String, dynamic>> getTx() async {
   final blocksProvider = BlocksProvider();
   Map<String, dynamic> result = {};
   String reqStr = "";
+  // print(blocksProvider.txid);
   reqStr = "${nodeUrl}transactions/info/${blocksProvider.txid}";
   var resp = await http.get(Uri.parse(reqStr));
   if (resp.statusCode == 200) {
@@ -223,7 +224,7 @@ class TxInfo extends StatelessWidget {
           }
           if (snapshot.hasData) {
             final data = snapshot.data ?? {};
-            print(data);
+            // print(data);
             final addr1 = data["order1"]["sender"];
             final addr2 = data["order2"]["sender"];
             final addr1IsPool = blocksProvider.wxPools.contains(addr1);

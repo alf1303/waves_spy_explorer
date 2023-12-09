@@ -92,7 +92,7 @@ class BlocksProvider extends ChangeNotifier{
   // }
 
   Future<List<String>> getWxPools() async {
-    final reqStr = "https://waves.exchange/api/v1/liquidity_pools/stats/";
+    final reqStr = "https://wx.network/api/v1/liquidity_pools/stats/";
     var resp = await http.get(Uri.parse(reqStr));
     List<String> result = List.empty(growable: true);
     // print(resp);
