@@ -37,29 +37,34 @@ class ViewBlockWidget extends StatelessWidget {
                       Divider(),
                       Expanded(
                         child: SingleChildScrollView(
-                          child: DataTable(
-                            columns: const [
-                              DataColumn(label: Text("")),
-                              DataColumn(label: Text("TYPE")),
-                              DataColumn(label: Text("FUNCTION")),
-                              DataColumn(label: Text("ID")),
-                              DataColumn(label: Text("DAPP")),
-                              DataColumn(label: Text("SENDER")),
-                              DataColumn(label: Text("INFO")),
-                            ],
-                            dividerThickness: 2,
-                            rows:
-                              transactions.map<DataRow>((tx) {
-                                return DataRow(cells: [
-                                  DataCell(getStatus(tx)),
-                                  DataCell(getType(tx)),
-                                  DataCell(getFunction(tx)),
-                                  DataCell(getId(tx)),
-                                  DataCell(getDapp(tx)),
-                                  DataCell(getSender(tx)),
-                                  DataCell(TxInfo(tx: tx,))
-                                ], color: getRowColor(tx, targetTx: model.txid));
-                              }).toList()
+                          child: Theme(
+                            data: Theme.of(context).copyWith(dividerColor: Colors.white70),
+                            child: DataTable(
+                              columns: const [
+                                DataColumn(label: Text("")),
+                                DataColumn(label: Text("TYPE")),
+                                DataColumn(label: Text("FUNCTION")),
+                                DataColumn(label: Text("ID")),
+                                DataColumn(label: Text("DAPP")),
+                                DataColumn(label: Text("SENDER")),
+                                DataColumn(label: Text("INFO")),
+                                DataColumn(label: Text("OPS")),
+                              ],
+                              dividerThickness: 2,
+                              rows:
+                                transactions.map<DataRow>((tx) {
+                                  return DataRow(cells: [
+                                    DataCell(getStatus(tx)),
+                                    DataCell(getType(tx)),
+                                    DataCell(getFunction(tx)),
+                                    DataCell(getId(tx)),
+                                    DataCell(getDapp(tx)),
+                                    DataCell(getSender(tx)),
+                                    DataCell(TxInfo(tx: tx,)),
+                                    DataCell(AssetsCell(tx: tx,))
+                                  ],  color: getRowColor(tx, targetTx: model.txid));
+                                }).toList()
+                            ),
                           ),
                         ),
 

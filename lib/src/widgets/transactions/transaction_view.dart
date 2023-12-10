@@ -285,6 +285,36 @@ Widget assetBuilder(String id, val, exop, String amountId, String dir, [String? 
   );
 }
 
+Widget assetBuilderSimple(String id, {int val = 0, String lbl = ""}) {
+  bool isNarr = lastIsNarrow();
+  double fontSize = !isNarr ? getLastSmallFontSize() : getLastFontSize();
+  return FutureBuilder<Asset?>(
+      future: getAssetInfoLabelSimple(id),
+      builder: (context, snapshot) {
+        Widget widget;
+        if (snapshot.hasData) {
+          // print("${snapshot.data![1]} - $exop, $id, $amountId, $val");
+          int decimals = snapshot.data!.decimals;
+          double value = val / pow(10, decimals);
+          // print(snapshot.data);
+          widget = Padding(
+            padding: const EdgeInsets.symmetric(vertical: 1.0),
+            child: Text(value != 0 ? "$lbl $value ${snapshot.data!.name}" : "$lbl $snapshot.data!.name", style: TextStyle(fontSize: fontSize, color: inAssetsColor),),
+          );
+          if(value == 555) {
+            widget = Container(color: Colors.yellow, child: Text("Alarm", style: TextStyle(fontSize: fontSize),),);
+          }
+        } else if (snapshot.hasError) {
+          print(snapshot.error.toString());
+          widget = Text("Error", style: TextStyle(fontSize: fontSize));
+        } else {
+          widget = Text("loading", style: TextStyle(fontSize: fontSize));
+        }
+        return widget;
+      }
+  );
+}
+
 Widget assetBuilderLocal(String id, val, exop, String amountId, String dir, [String? receiver, bool? fail]) {
   String rec = receiver == null ? "" : " to $receiver";
   String tmpAss = id + ".|." + amountId;
@@ -323,15 +353,17 @@ Widget assetBuilderLocal(String id, val, exop, String amountId, String dir, [Str
 }
 
 class OutWidget extends StatelessWidget {
-  const OutWidget({Key? key, required this.payList}) : super(key: key);
+  const OutWidget({Key? key, required this.payList, this.shorted = false}) : super(key: key);
   final payList;
+  final bool shorted;
 
   @override
   Widget build(BuildContext context) {
     final fontSize = getFontSize(context);
+    String lbl = shorted ? "" : "Out -->";
     return Row(
       children: [
-        payList.isNotEmpty && !isNarr ? Text("Out --> ", style: TextStyle(fontSize: fontSize, color: outAssetsColor),) : Container(),
+        payList.isNotEmpty && !isNarr ? Text(lbl, style: TextStyle(fontSize: fontSize, color: outAssetsColor),) : Container(),
         Expanded(
           child: ListView(
             shrinkWrap: true,
@@ -343,15 +375,17 @@ class OutWidget extends StatelessWidget {
 }
 
 class InWidget extends StatelessWidget {
-  const InWidget({Key? key, required this.income}) : super(key: key);
+  const InWidget({Key? key, required this.income, this.shorted = false}) : super(key: key);
   final income;
+  final bool shorted;
 
   @override
   Widget build(BuildContext context) {
     final fontSize = getFontSize(context);
+    String lbl = shorted ? "" : "In <-- ";
     return Row(
       children: [
-        income.isNotEmpty && !isNarr ? Text("In <-- ", style: TextStyle(fontSize: fontSize, color: inAssetsColor),) : Container(),
+        income.isNotEmpty && !isNarr ? Text(lbl, style: TextStyle(fontSize: fontSize, color: inAssetsColor),) : Container(),
         Expanded(
           child: ListView(
             shrinkWrap: true,

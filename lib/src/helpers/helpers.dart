@@ -181,6 +181,17 @@ Future<List<Asset?>>? getAssetInfoLabel(String id) async{
     return [asset, priceAsset];
 }
 
+Future<Asset?>? getAssetInfoLabelSimple(String id) async{
+    Asset? asset;
+    if (assetsGlobal.containsKey(id)) {
+        asset = assetsGlobal[id];
+    } else {
+        asset = await fetchAssetInfo(id);
+        assetsGlobal[id] = asset;
+    }
+    return asset;
+}
+
 List<Asset?>? getAssetInfoLabelLocal(String id) {
     Asset? asset;
     List<String> ids = id.split(".|.");
@@ -261,12 +272,15 @@ Future<List<dynamic>> getMassAssets(Map<String, dynamic> ids) async{
     return assetDetails;
 }
 
-getTransfers({required bool isDapp, required String sender, required String curAddr, dynamic data, required Map<String, double> resDict}) {
-    var transfers = data["stateChanges"]["transfers"];
+getTransfers({required bool isDapp, required String sender, required String curAddr, dynamic data, required Map<String, double> resDict, arbBlocks=false}) {
+    var transfers = data?["stateChanges"]?["transfers"];
+    if (transfers == null) {
+        transfers = List.empty(growable: true);
+    }
     for (dynamic el in transfers) {
         double amount = el["amount"] ?? 0;
         // bool condition = isDapp ?
-        if ((isDapp && el["address"] == sender) || (!isDapp && isCurrentAddr(el["address"]))) {
+        if ((isDapp && el["address"] == sender) || (!isDapp && isCurrentAddr(el["address"])) || arbBlocks) {
             final assetId = el["asset"] ?? "WAVES";
             if (resDict.containsKey(assetId)) {
                 double prevAm = resDict[assetId] ?? 0;
@@ -277,14 +291,15 @@ getTransfers({required bool isDapp, required String sender, required String curA
             }
         }
         }
-    List<dynamic> invokes = data["stateChanges"]["invokes"];
+    var invokes = data?["stateChanges"]?["invokes"];
+    invokes ??= List.empty(growable: true);
         for (var inv in invokes) {
-            getTransfers(isDapp: isDapp, sender: sender, curAddr: curAddr, data: inv, resDict: resDict);
+            getTransfers(isDapp: isDapp, sender: sender, curAddr: curAddr, data: inv, resDict: resDict, arbBlocks: arbBlocks);
         }
         // print(resDict);
 }
 
-parseTransactionType(Map<String, dynamic> td)  {
+parseTransactionType(Map<String, dynamic> td, [arbBlocks=false])  {
     final _transactionProvider = TransactionProvider();
     Map<String, double> payment = {};
     Map<String, double> transfers = {};
@@ -292,6 +307,8 @@ parseTransactionType(Map<String, dynamic> td)  {
     p['exchPriceAsset'] = " ";
     p["sender"] = td["sender"];
     p["fail"] = td["additional"]["fail"];
+    p["payment"] = payment;
+    p["transfers"] = transfers;
     switch(td['type']) {
         case 16:
             p["dApp"] = td["dApp"];
@@ -300,11 +317,11 @@ parseTransactionType(Map<String, dynamic> td)  {
 
             for (var element in td["payment"]) {
                 final assetId = element["assetId"] ?? "WAVES";
-                if (isCurrentAddr(td["sender"]) ||  isCurrentAddr(td["dApp"])) {
+                if (isCurrentAddr(td["sender"]) ||  isCurrentAddr(td["dApp"]) || arbBlocks) {
                   payment[assetId] = element["amount"];
                 }
             }
-            getTransfers(isDapp: isCurrentAddr(td["dApp"]), sender: td["sender"], curAddr: _transactionProvider.curAddr, data: td, resDict: transfers);
+            getTransfers(isDapp: isCurrentAddr(td["dApp"]), sender: td["sender"], curAddr: _transactionProvider.curAddr, data: td, resDict: transfers, arbBlocks: arbBlocks);
             p["header"] = "invoke";
             break;
         case 4:
@@ -388,7 +405,16 @@ parseTransactionType(Map<String, dynamic> td)  {
                     payment[priceAsset] = amount*sell["price"];
                     transfers[amountAsset] = amount;
                 }
-
+            }
+            // for arb_blocks work properly:
+            if(payment.isEmpty && transfers.isEmpty) {
+                if(orderDirection == "sell") {
+                    payment[amountAsset] = amount;
+                    transfers[priceAsset] = amount*sell["price"];
+                } else {
+                    payment[priceAsset] = amount*sell["price"];
+                    transfers[amountAsset] = amount;
+                }
             }
             // print(transfers)
             p["header"] = "exchange";

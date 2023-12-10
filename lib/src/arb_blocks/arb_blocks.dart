@@ -17,6 +17,8 @@ class ArbBlocks extends StatelessWidget {
     final blocksProvider = BlocksProvider();
     ClipboardData? cdata = await Clipboard.getData(Clipboard.kTextPlain);
     await blocksProvider.getWxPools();
+    await blocksProvider.getPzPools();
+    await blocksProvider.getSwopfiPools();
     String? copiedtext = cdata?.text;
     if (copiedtext != null) {
       // controller.text = copiedtext;
@@ -34,6 +36,8 @@ class ArbBlocks extends StatelessWidget {
     String? copiedtext = cdata?.text;
     // print("${copiedtext}");
     await blocksProvider.getWxPools();
+    await blocksProvider.getPzPools();
+    await blocksProvider.getSwopfiPools();
     // print(blocksProvider.wxPools);
     if (copiedtext != null) {
       // controller.text = copiedtext;

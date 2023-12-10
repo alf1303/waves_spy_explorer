@@ -21,16 +21,28 @@ Future<Map<String, dynamic>> getBlockData(int blockNumber) async {
   String reqStr = "";
   Map<String, dynamic> result = {};
   reqStr = "${nodeUrl}blocks/at/${blockNumber}";
-
+  var newTrxs = [];
   var resp = await http.get(Uri.parse(reqStr));
   if (resp.statusCode == 200) {
     final json = jsonDecode(resp.body);
     final trxs = json["transactions"].where((t) => t["type"] == 16 || t["type"] == 7).toList();
+    final jsonPayload = {"ids": trxs.map((trx) => trx["id"]).toList()};
+    final jsonString = jsonEncode(jsonPayload);
+    final response = await http.post(
+      Uri.parse('https://nodes.wavesnodes.com/transactions/info'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonString,
+    );
+    if (resp.statusCode == 200) {
+      newTrxs = jsonDecode(response.body);
+    }
+    // print(newTrxs[4]);
+    // print(trxs[4]);
     return {
       "height": json["height"],
       "id": json["id"],
       "generator": json["generator"],
-      "transactions": trxs
+      "transactions": newTrxs
     };
     return json;
   } else {
@@ -70,6 +82,11 @@ Future<Map<String, dynamic>> getData() async {
 final List<String> myDapps = ["3PNASfdCWXvYfErZXoKhVbi7XrbJw1SJvfg", "3PBeerh759eA1eGFuw77RowaZfZNohzJzvz"];
 final List<String> botAddresses = ["3PNASfdCWXvYfErZXoKhVbi7XrbJw1SJvfg", "3PBeerh759eA1eGFuw77RowaZfZNohzJzvz", "3P5ji1wvrDLQxgK5c3cGbiSwiZfu5x1S3VR", "3PRE5KH9oPGfFPs7fGnQcJ4wNshEDUPGj1t", "3PQ23xgnf98t4qDtF5bscxdCDwgYoL7SPeK", "3PMbnqiffrx5NRAsgun6bGdE4T4M9gxWLgg"];
 final au = ["3P8auNWJkxxByyJtwErFXaxiXcGM45qQ1hA"];
+const rex = "3PGFHzVGT4NTigwCKP1NcwoXkodVZwvBuuU";
+const keeper = "3P5UKXpQbom7GB2WGdPG5yGQPeQQuM3hFmw";
+const wxSwap = "3P68zNiufsu1viZpu1aY3cdahRRKcvV5N93";
+const swappers = [rex, keeper, wxSwap];
+
 bool my(Map<String, dynamic> tx) {
   if (tx["type"] == 16) {
     final String dApp = tx["dApp"];
@@ -165,10 +182,30 @@ _launchURL(String url) async {
 }
 
 Widget getDapp(Map<String, dynamic> tx) {
+  String dappName = "";
+  if (tx['type'] == 16) {
+    dappName = tx['dApp'];
+    if (tx['dApp'] == rex) {
+        dappName = "REX";
+    }
+    if (tx['dApp'] == keeper) {
+      dappName = "KEEPER";
+    }
+    if (tx['dApp'] == wxSwap) {
+      for (var i in tx["stateChanges"]["invokes"]) {
+        final func = i["call"]["function"];
+        if (func == "calculateAmountOutForSwapAndSendTokens") {
+          dappName = "WX (${i['dApp']})";
+        }
+      }
+
+    }
+  }
   return Container(
     padding: const EdgeInsets.all(3),
     decoration: getBorder(tx),
-    child: SelectableText("${tx['type'] == 16 ? tx['dApp'] : ''}", style: getTextStyle(tx)),
+
+    child: SelectableText(dappName, style: getTextStyle(tx)),
   );
 }
 
@@ -183,7 +220,7 @@ Widget getSender(Map<String, dynamic> tx) {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       mainAxisSize: MainAxisSize.min,
       children: [
-        LinkToAddress(label: sender, val: sender, alias: false),
+        LinkToAddress(label: sender.substring(0,10), val: sender, alias: false),
         IconButton(onPressed: () {copyToClipboard(tx["sender"]);},
             icon: Icon(Icons.copy, size: iconSize,))
       ],
@@ -231,6 +268,16 @@ class TxInfo extends StatelessWidget {
             final addr2IsPool = blocksProvider.wxPools.contains(addr2);
             final amountId = data["order1"]["assetPair"]["amountAsset"] ?? "WAVES";
             final priceId = data["order1"]["assetPair"]["priceAsset"] ?? "WAVES";
+
+            data["additional"] = <String, dynamic>{};
+            data["additional"]["fail"] = false;
+            Map<String, dynamic> p = parseTransactionType(data);
+            final exop = p['exchPriceAsset'] == " " ? false : true;
+            Map<String, double> payment = p['payment'];
+            Map<String, double> transfers = p["transfers"];
+            List<Widget> payList = payment.entries.map((e) => assetBuilder(e.key, e.value, exop, p["exchPriceAsset"], "in", null)).toList();
+            List<Widget> inList = transfers.entries.map((e) => assetBuilder(e.key, e.value, exop, p["exchPriceAsset"], "out", null)).toList();
+
             return Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -251,6 +298,14 @@ class TxInfo extends StatelessWidget {
                     Text(priceId, style: TextStyle(color: Colors.white70)),
                     AssetName(id: priceId)
                   ],
+                ),
+                SizedBox(width: 600, height: 70,
+                  child: Row(
+                    children: [
+                      payList.isNotEmpty ? Expanded(child: OutWidget(payList: payList,)) : Container(),
+                      transfers.isNotEmpty ? Expanded(child: InWidget(income: inList,)) : Container()
+                    ],
+                  ),
                 )
             ],);
           } else {
@@ -259,7 +314,11 @@ class TxInfo extends StatelessWidget {
           }
         });
 
-    } else if (sender == "3PRE5KH9oPGfFPs7fGnQcJ4wNshEDUPGj1t") {
+    }
+    else if (type == 16 && sender == "3PRE5KH9oPGfFPs7fGnQcJ4wNshEDUPGj1t") {
+      if (tx["applicationStatus"] == "script_execution_failed") {
+        return Text("Failed tx");
+      }
       final args = tx["call"]["args"][0]["value"];
       List<String> vals = args.split("|");
       for (int i=1; i < vals.length-1; i++) {
@@ -319,6 +378,76 @@ class TxInfo extends StatelessWidget {
         }
       );
     }
+    else if (type == 16 && sender == "3PQ23xgnf98t4qDtF5bscxdCDwgYoL7SPeK" && tx["call"]["function"] == "x") {
+      if (tx["applicationStatus"] == "script_execution_failed") {
+        return Text("Failed tx");
+      }
+      final data = tx["stateChanges"]["data"];
+      final profit_assetId = data[0]["key"].split("_")[1];
+      final profit_amount = data[0]["value"];
+      Widget profit = assetBuilderSimple(profit_assetId, val: profit_amount, lbl: "Profit:");
+
+      List<Map<String, dynamic>> assets = List.empty(growable: true);
+      List<Map<String, String>> pools = List.empty(growable: true);
+
+      for (var i in tx["stateChanges"]["invokes"]) {
+        String dapp = i["dApp"];
+        String func = i["call"]["function"];
+        if (func != "y") {
+          // print("--> ${i}");
+          List<dynamic> payments = i["payment"] ?? List.empty(growable: true);
+          if (payments.isNotEmpty) {
+            String assetId = payments[0]["assetId"] ?? "WAVES";
+            final amount = payments[0]["amount"];
+            assets.add({"assetId": assetId, "amount": amount});
+          }
+          if (dapp != "3PLoX5yufZz9jRahL1CVVRAXq8VpUmXBKLK") {
+            if (dapp == "3P68zNiufsu1viZpu1aY3cdahRRKcvV5N93") {
+              var trfs = i["stateChanges"]["transfers"];
+              if (trfs.length != 2) {
+                pools.add({"pool": "unknown", "type": "unknown"});
+              } else {
+                pools.add({"pool": trfs[1]["address"], "type": "wx"});
+              }
+            } else {
+              pools.add({"pool": dapp, "type": blocksProvider.getPoolType(dapp)});
+            }
+          }
+        }
+      }
+      List<Widget> payList = assets.map((e) => assetBuilderSimple(e["assetId"], val: e["amount"])).toList();
+      child = Container(width: 600, height: 400, child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          profit,
+          Divider(),
+          Text("Assets:"),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: payList,),
+          Divider(),
+          Text("Pools:"),
+          ListView.builder(
+              shrinkWrap: true,
+              itemCount: pools.length,
+              itemBuilder: (context, index) {
+                String pool_adr = pools[index]["pool"] ?? "undefined";
+                String? type = pools[index]["type"];
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    LinkToAddress(label: "$pool_adr ($type)", val: pool_adr, alias: false, color: Colors.white70,),
+                    IconButton(onPressed: () {copyToClipboard(pool_adr);},
+                        icon: Icon(Icons.copy, size: iconSize,))
+                  ],
+                );
+              }),
+        ],
+      ),);
+    }
 
     return IconButton(
         icon: Icon(Icons.list_alt_rounded, size: iconSize,),
@@ -330,6 +459,55 @@ class TxInfo extends StatelessWidget {
     );
   }
 }
+
+class AssetsCell extends StatelessWidget {
+  final Map<String, dynamic> tx;
+
+  const AssetsCell({Key? key, required this.tx}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final iconSize = getLastFontSize();
+    final type = tx["type"];
+    if (type == 7 || (type == 16 && swappers.contains(tx["dApp"]))) {
+      // print(tx);
+      tx["additional"] = <String, dynamic>{};
+      tx["additional"]["fail"] = false;
+      Map<String, dynamic> p = parseTransactionType(tx, true);
+      Map<String, double> transfers = {};
+      final exop = p['exchPriceAsset'] == " " ? false : true;
+      Map<String, double> payment = p['payment'];
+      if (type == 16 && tx["dApp"] == wxSwap) {
+        for (var i in tx["stateChanges"]["invokes"]) {
+          final func = i["call"]["function"];
+          if (func == "calculateAmountOutForSwapAndSendTokens") {
+            var trsf = i["stateChanges"]["transfers"];
+            for (var t in trsf) {
+              if (t["address"] == tx["sender"]) {
+                transfers = {t["asset"] ?? "WAVES": t["amount"]};
+              }
+            }
+          }
+        }
+      } else {
+        transfers = p["transfers"];
+      }
+      List<Widget> payList = payment.entries.map((e) => assetBuilder(e.key, e.value, exop, p["exchPriceAsset"], "in", null)).toList();
+      List<Widget> inList = transfers.entries.map((e) => assetBuilder(e.key, e.value, exop, p["exchPriceAsset"], "out", null)).toList();
+      return SizedBox(width: 300, height: 70,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            payList.isNotEmpty ? Expanded(child: OutWidget(payList: payList,shorted: true,)) : Container(),
+            transfers.isNotEmpty ? Expanded(child: InWidget(income: inList, shorted: true,)) : Container()
+          ],
+        ),
+      );
+    }
+    return Container();
+  }
+}
+
 
 class AssetName extends StatelessWidget {
   final id;

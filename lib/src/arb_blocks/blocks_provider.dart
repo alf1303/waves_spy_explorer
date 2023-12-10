@@ -13,6 +13,8 @@ class BlocksProvider extends ChangeNotifier{
   String txid = "";
   bool byBlock = true;
   List<String> wxPools = List.empty(growable: true);
+  List<String> pzPools = List.empty(growable: true);
+  List<String> swopfiPools = List.empty(growable: true);
 
 
   notifyAll() {
@@ -45,13 +47,13 @@ class BlocksProvider extends ChangeNotifier{
     final wx = ["W"];
     final swopfi = ["S"];
     final tsn = ["T"];
-    if (puzzle.contains(identificator)) {
+    if (puzzle.contains(identificator) || pzPools.contains(identificator)) {
       return "puzzle";
     }
-    if (wx.contains(identificator)) {
+    if (wx.contains(identificator) || wxPools.contains(identificator)) {
       return "wx";
     }
-    if (swopfi.contains(identificator)) {
+    if (swopfi.contains(identificator) || swopfiPools.contains(identificator)) {
       return "swopfi";
     }
     if (tsn.contains(identificator)) {
@@ -105,6 +107,40 @@ class BlocksProvider extends ChangeNotifier{
       print("Some error_loading wxPools: " + resp.body);
     }
     wxPools = result;
+    return result;
+  }
+
+  Future<List<String>> getPzPools() async {
+    final reqStr = "https://puzzle-js-back.herokuapp.com/api/v1/pools";
+    var resp = await http.get(Uri.parse(reqStr));
+    List<String> result = List.empty(growable: true);
+    // print(resp);
+    if (resp.statusCode == 200) {
+      final json = jsonDecode(resp.body);
+      final items = json;
+      result = items.map<String>((el) => el["contractAddress"].toString()).toList();
+
+    } else {
+      print("Some error_loading pzPools: " + resp.body);
+    }
+    pzPools = result;
+    return result;
+  }
+
+  Future<List<String>> getSwopfiPools() async {
+    final reqStr = "https://backend.swop.fi/exchangers/data/";
+    var resp = await http.get(Uri.parse(reqStr));
+    List<String> result = List.empty(growable: true);
+    // print(resp);
+    if (resp.statusCode == 200) {
+      final json = jsonDecode(resp.body);
+      final items = json["data"];
+      result = items.keys.toList();
+
+    } else {
+      print("Some error_loading swopfi Pools: " + resp.body);
+    }
+    swopfiPools = result;
     return result;
   }
 
