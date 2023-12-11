@@ -154,6 +154,7 @@ Future<Asset> fetchAssetInfo(String? id) async{
         data = jsonDecode(resp.body);
     }
     if (data.containsKey("error")) {
+        print(data);
         throw ("Can not fetch asset details data");
     }
     return Asset(data["assetId"], data["name"], data["decimals"], data['description'], data['reissuable'], data["scripted"]);
