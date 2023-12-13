@@ -383,10 +383,12 @@ class FilterWidget extends StatelessWidget {
 
 }
 
-Widget InputWidgetFilter({controller, onchanged, clearFunc, label, hint, bool? isNumeric, bool? padded, bool? submit, double? fontSize, double? iconSize}) {
+Widget InputWidgetFilter({controller, onchanged, clearFunc, label, hint, bool? isNumeric, bool? isInteger, bool? padded, bool? submit, double? fontSize, double? iconSize}) {
   bool isNum = isNumeric ?? false;
+  bool isInt = isInteger ?? false;
   final bool padde = padded ?? false;
   final bool submi = submit ?? false;
+  final rege = isNum && !isInt ? r'[0-9]+[,.]{0,1}[0-9]*' : isInt ? r'[1-9][0-9]*' : r'';
   return Container(
       padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
       // decoration: BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: BorderRadius.all(Radius.circular(5))),
@@ -402,7 +404,7 @@ Widget InputWidgetFilter({controller, onchanged, clearFunc, label, hint, bool? i
             controller: controller,
             keyboardType: isNum ? const TextInputType.numberWithOptions(decimal: true) : null,
             inputFormatters: isNum ? [
-            FilteringTextInputFormatter.allow(RegExp(r'[0-9]+[,.]{0,1}[0-9]*')),
+            FilteringTextInputFormatter.allow(RegExp(rege)),
             ] : [],
         decoration: InputDecoration(
         border: const OutlineInputBorder(borderSide: BorderSide(color: Colors.blueGrey)),

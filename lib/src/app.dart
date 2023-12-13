@@ -7,6 +7,8 @@ import 'package:waves_spy/src/arb_blocks/blocks_provider.dart';
 import 'package:waves_spy/src/charts/puzzle/puzzle_burn.dart';
 import 'package:waves_spy/src/charts/puzzle/puzzle_earnings.dart';
 import 'package:waves_spy/src/helpers/helpers.dart';
+import 'package:waves_spy/src/multipool/multipool.dart';
+import 'package:waves_spy/src/multipool/multipool_provider.dart';
 import 'package:waves_spy/src/providers/asset_provider.dart';
 import 'package:waves_spy/src/providers/data_script_provider.dart';
 import 'package:waves_spy/src/providers/filter_provider.dart';
@@ -44,6 +46,7 @@ class MyApp extends StatelessWidget {
       ChangeNotifierProvider<LabelProvider>(create: (_) => LabelProvider()),
       ChangeNotifierProvider<PuzzleProvider>(create: (_) => PuzzleProvider()),
       ChangeNotifierProvider<BlocksProvider>(create: (_) => BlocksProvider()),
+      ChangeNotifierProvider<MultipoolProvider>(create: (_) => MultipoolProvider()),
     ],
       child: MaterialApp(
         // Providing a restorationScopeId allows the Navigator built by the
@@ -100,6 +103,8 @@ class MyApp extends StatelessWidget {
                   return EagleEarnings(tabNum: 3,);
                 case ArbBlocks.routeName:
                   return ArbBlocks();
+                case Multipool.routeName:
+                  return Multipool();
                 default:
                   return MainPage(address: address);
               }

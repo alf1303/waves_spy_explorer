@@ -30,6 +30,7 @@ dependencies:
   fl_chart: ^0.62.0
   fast_base58: ^0.2.1
   fluttertoast: ^8.0.9
+  flutter_html_v3: ^3.0.6
 
 
 dev_dependencies:
@@ -39,6 +40,11 @@ dev_dependencies:
   flutter_lints: ^2.0.1
 
 flutter:
+  fonts:
+    - family: RobotoMono
+      fonts:
+        - asset: fonts/static/RobotoMono-Regular.ttf
+
   uses-material-design: true
 
   # Enable generation of localized Strings from arb files.
