@@ -321,69 +321,6 @@ class TxInfo extends StatelessWidget {
         });
 
     }
-    else if (type == 16 && sender == "3PRE5KH9oPGfFPs7fGnQcJ4wNshEDUPGj1t") {
-      if (tx["applicationStatus"] == "script_execution_failed") {
-        return Text("Failed tx");
-      }
-      final args = tx["call"]["args"][0]["value"];
-      List<String> vals = args.split("|");
-      for (int i=1; i < vals.length-1; i++) {
-        List<String> tmpvals = vals[i].split("_");
-        tmpvals[1] = blocksProvider.getPoolType(tmpvals[1]);
-        pools.add(tmpvals.join(" "));
-      }
-      List<String> assets_all = vals[0].split("_");
-      final assets = assets_all.sublist(0, assets_all.length - 3);
-      final payAmount = int.parse(assets_all[assets_all.length - 2]);
-      // print(assets);
-      // print(tx);
-      child = FutureBuilder<Map<String, dynamic>>(
-        future: blocksProvider.getTxData(tx["id"]),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.done) {
-            return Center(child: CircularProgressIndicator());
-          }
-          if (snapshot.hasData) {
-            final data = snapshot.data ?? {};
-            // print("txdata: ${data}");
-            // print("Wx pools length: ${blocksProvider.wxPools.length}");
-            final transfers = data["stateChanges"]["transfers"];
-            final assetData = blocksProvider.getAssetData(transfers[0]["asset"]);
-            final profitAmount = transfers[0]["amount"] / pow(10, assetData["decimals"]);
-            final profitString = "${profitAmount} ${assetData['name']}";
-            final assetsText = "Assets:\n -> profit: ${profitString}\n${assets.join('\n')}\n -> pay: ${payAmount / pow(10, assetData['decimals'])} ${assetData['name']}";
-            return Container(width: 600, height: 400, child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(assetsText),
-                Divider(),
-                Text("Pools:"),
-
-                ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: pools.length,
-                    itemBuilder: (context, index) {
-                      String pool_adr = pools[index].substring(0, pools[index].length-2);
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          LinkToAddress(label: pools[index], val: pool_adr, alias: false, color: Colors.white70,),
-                          IconButton(onPressed: () {copyToClipboard(pool_adr);},
-                              icon: Icon(Icons.copy, size: iconSize,))
-                        ],
-                      );
-                    }),
-              ],
-            ),);
-          } else {
-            // print(snapshot);
-            return Text("Some error or no data");
-          }
-        }
-      );
-    }
     else if (type == 16 && sender == "3PQ23xgnf98t4qDtF5bscxdCDwgYoL7SPeK" && tx["call"]["function"] == "x") {
       if (tx["applicationStatus"] == "script_execution_failed") {
         return Text("Failed tx");
@@ -453,7 +390,7 @@ class TxInfo extends StatelessWidget {
         ],
       ),);
     }
-    else if (type == 16 && sender == "3PLET96WmdYmHzqkEHB6Ufj1F2kREgnCzDc") {
+    else if (type == 16 && (sender == "3PLET96WmdYmHzqkEHB6Ufj1F2kREgnCzDc" || sender == "3P7AiH8YmJNqLaWeYm21bM4pD5iFnBrAyt1")) {
       // if (tx["applicationStatus"] == "script_execution_failed") {
       //   return Text("Failed tx");
       // }
@@ -522,7 +459,215 @@ class TxInfo extends StatelessWidget {
         ],
       ),);
     }
+    else if (type == 16 && (sender == "3PMbnqiffrx5NRAsgun6bGdE4T4M9gxWLgg")) {
+      if (tx["applicationStatus"] == "script_execution_failed") {
+        return Text("Failed tx");
+      }
+      final ptransfers = tx["stateChanges"]["invokes"][0]["stateChanges"]["transfers"];
+      final profit_assetId = ptransfers.isNotEmpty ? ptransfers[0]["asset"] ?? "WAVES" : "";
+      final profit_amount = ptransfers.isNotEmpty ? ptransfers[0]["amount"] : 0;
+      final out_amount = ptransfers.isNotEmpty ? ptransfers[0]["amount"] + ptransfers[1]["amount"] : 0;
+      Widget profit = assetBuilderSimple(profit_assetId, val: profit_amount, lbl: "Profit:");
 
+      List<Map<String, dynamic>> assets = List.empty(growable: true);
+      List<Map<String, String>> pools = List.empty(growable: true);
+
+      for (var i in tx["stateChanges"]["invokes"][0]["stateChanges"]["invokes"]) {
+        String dapp = i["dApp"];
+        String func = i["call"]["function"];
+        if (func != "w") {
+          // print("--> ${i}");
+          List<dynamic> payments = i["payment"] ?? List.empty(growable: true);
+          if (payments.isNotEmpty) {
+            String assetId = payments[0]["assetId"] ?? "WAVES";
+            final amount = payments[0]["amount"];
+            assets.add({"assetId": assetId, "amount": amount});
+          }
+          if (dapp != "3PLoX5yufZz9jRahL1CVVRAXq8VpUmXBKLK") {
+            if (dapp == "3P68zNiufsu1viZpu1aY3cdahRRKcvV5N93") {
+              var invs = i["stateChanges"]["invokes"];
+              var resultMap = invs.firstWhere((element) => element["call"]["function"] == "calculateAmountOutForSwapAndSendTokens", orElse: () => null);
+              pools.add({"pool": resultMap != null ? resultMap["dApp"] : "unknown", "type": "wx"});
+            } else {
+              pools.add({"pool": dapp, "type": blocksProvider.getPoolType(dapp)});
+            }
+          }
+        }
+      }
+      List<Widget> payList = assets.map((e) => assetBuilderSimple(e["assetId"], val: e["amount"])).toList();
+      payList.add(assetBuilderSimple(profit_assetId, val: out_amount));
+      child = Container(width: 600, height: 600, child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          profit,
+          Divider(),
+          Text("Assets:"),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: payList,),
+          Divider(),
+          Text("Pools:"),
+          ListView.builder(
+              shrinkWrap: true,
+              itemCount: pools.length,
+              itemBuilder: (context, index) {
+                String pool_adr = pools[index]["pool"] ?? "undefined";
+                String? type = pools[index]["type"];
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    LinkToAddress(label: "$pool_adr ($type)", val: pool_adr, alias: false, color: Colors.white70,),
+                    IconButton(onPressed: () {copyToClipboard(pool_adr);},
+                        icon: Icon(Icons.copy, size: iconSize,))
+                  ],
+                );
+              }),
+        ],
+      ),);
+    }
+    else if (type == 16 && (sender == "3PRE5KH9oPGfFPs7fGnQcJ4wNshEDUPGj1t")) {
+      if (tx["applicationStatus"] == "script_execution_failed") {
+        return Text("Failed tx");
+      }
+      final ptransfers = tx["stateChanges"]["transfers"];
+      final payment = tx["stateChanges"]["invokes"][0]["payment"][0];
+
+      final profit_assetId = ptransfers.isNotEmpty ? ptransfers[0]["asset"] ?? "WAVES" : "";
+      final profit_amount = ptransfers.isNotEmpty ? ptransfers[0]["amount"] : 0;
+      final out_amount = payment["amount"];
+      Widget profit = assetBuilderSimple(profit_assetId, val: profit_amount, lbl: "Profit:");
+
+      List<Map<String, dynamic>> assets = List.empty(growable: true);
+      List<Map<String, String>> pools = List.empty(growable: true);
+
+      for (var i in tx["stateChanges"]["invokes"]) {
+        String dapp = i["dApp"];
+        String func = i["call"]["function"];
+        if (func != "w") {
+          // print("--> ${i}");
+          List<dynamic> payments = i["payment"] ?? List.empty(growable: true);
+          if (payments.isNotEmpty) {
+            String assetId = payments[0]["assetId"] ?? "WAVES";
+            final amount = payments[0]["amount"];
+            assets.add({"assetId": assetId, "amount": amount});
+          }
+          if (dapp != "3PLoX5yufZz9jRahL1CVVRAXq8VpUmXBKLK") {
+            if (dapp == "3P68zNiufsu1viZpu1aY3cdahRRKcvV5N93") {
+              var invs = i["stateChanges"]["invokes"];
+              var resultMap = invs.firstWhere((element) => element["call"]["function"] == "calculateAmountOutForSwapAndSendTokens", orElse: () => null);
+              pools.add({"pool": resultMap != null ? resultMap["dApp"] : "unknown", "type": "wx"});
+            } else {
+              pools.add({"pool": dapp, "type": blocksProvider.getPoolType(dapp)});
+            }
+          }
+        }
+      }
+      List<Widget> payList = assets.map((e) => assetBuilderSimple(e["assetId"], val: e["amount"])).toList();
+      payList.add(assetBuilderSimple(profit_assetId, val: out_amount));
+      child = Container(width: 600, height: 400, child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          profit,
+          Divider(),
+          Text("Assets:"),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: payList,),
+          Divider(),
+          Text("Pools:"),
+          ListView.builder(
+              shrinkWrap: true,
+              itemCount: pools.length,
+              itemBuilder: (context, index) {
+                String pool_adr = pools[index]["pool"] ?? "undefined";
+                String? type = pools[index]["type"];
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    LinkToAddress(label: "$pool_adr ($type)", val: pool_adr, alias: false, color: Colors.white70,),
+                    IconButton(onPressed: () {copyToClipboard(pool_adr);},
+                        icon: Icon(Icons.copy, size: iconSize,))
+                  ],
+                );
+              }),
+        ],
+      ),);
+    }
+    else if (type == 16) {
+      if (tx["applicationStatus"] == "script_execution_failed") {
+        return Text("Failed tx");
+      }
+      // final ptransfers = tx["stateChanges"]["invokes"][0]["stateChanges"]["transfers"];
+      // final profit_assetId = ptransfers.isNotEmpty ? ptransfers[0]["asset"] ?? "WAVES" : "";
+      // final profit_amount = ptransfers.isNotEmpty ? ptransfers[0]["amount"] : 0;
+      // final out_amount = ptransfers.isNotEmpty ? ptransfers[0]["amount"] + ptransfers[1]["amount"] : 0;
+      // Widget profit = assetBuilderSimple(profit_assetId, val: profit_amount, lbl: "Profit:");
+
+      List<Map<String, dynamic>> assets = List.empty(growable: true);
+      List<Map<String, String>> pools = List.empty(growable: true);
+
+      for (var i in tx["stateChanges"]["invokes"]) {
+        String dapp = i["dApp"];
+        String func = i["call"]["function"];
+        if (func != "w") {
+          // print("--> ${i}");
+          List<dynamic> payments = i["payment"] ?? List.empty(growable: true);
+          if (payments.isNotEmpty) {
+            String assetId = payments[0]["assetId"] ?? "WAVES";
+            final amount = payments[0]["amount"];
+            assets.add({"assetId": assetId, "amount": amount});
+          }
+          if (dapp != "3PLoX5yufZz9jRahL1CVVRAXq8VpUmXBKLK") {
+            if (dapp == "3P68zNiufsu1viZpu1aY3cdahRRKcvV5N93") {
+              var invs = i["stateChanges"]["invokes"];
+              var resultMap = invs.firstWhere((element) => element["call"]["function"] == "calculateAmountOutForSwapAndSendTokens", orElse: () => null);
+              pools.add({"pool": resultMap != null ? resultMap["dApp"] : "unknown", "type": "wx"});
+            } else {
+              pools.add({"pool": dapp, "type": blocksProvider.getPoolType(dapp)});
+            }
+          }
+        }
+      }
+      List<Widget> payList = assets.map((e) => assetBuilderSimple(e["assetId"], val: e["amount"])).toList();
+      // payList.add(assetBuilderSimple(profit_assetId, val: out_amount));
+      child = Container(width: 600, height: 600, child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // profit,
+          Divider(),
+          Text("Assets:"),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: payList,),
+          Divider(),
+          Text("Pools:"),
+          ListView.builder(
+              shrinkWrap: true,
+              itemCount: pools.length,
+              itemBuilder: (context, index) {
+                String pool_adr = pools[index]["pool"] ?? "undefined";
+                String? type = pools[index]["type"];
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    LinkToAddress(label: "$pool_adr ($type)", val: pool_adr, alias: false, color: Colors.white70,),
+                    IconButton(onPressed: () {copyToClipboard(pool_adr);},
+                        icon: Icon(Icons.copy, size: iconSize,))
+                  ],
+                );
+              }),
+        ],
+      ),);
+    }
     return IconButton(
         icon: Icon(Icons.list_alt_rounded, size: iconSize,),
         onPressed: () {showDialog(context: context,

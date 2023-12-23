@@ -28,7 +28,7 @@ class MyToolTip extends StatelessWidget {
     return Tooltip(
       message: message,
       decoration: BoxDecoration(color: Colors.blueGrey, borderRadius: BorderRadius.circular(10)),
-      textStyle: TextStyle(fontSize: 14),
+      textStyle: TextStyle(fontSize: 16),
       child: child,
     );
   }

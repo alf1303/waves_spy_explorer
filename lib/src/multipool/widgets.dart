@@ -34,8 +34,10 @@ class AssetList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final multipoolProvider = MultipoolProvider();
+    final fontSize = getFontSize(context);
+    final iconSize = getIconSize(context);
     return Container(
-      margin: EdgeInsets.all(30),
+      margin: EdgeInsets.all(15),
       // width: 400,
       // height: 400,
       child: Column(
@@ -46,12 +48,15 @@ class AssetList extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(title),
-              IconButton(
-                  onPressed: () {
-                    multipoolProvider.addItem(type);
-                  },
-                  icon: const Icon(Icons.add_box_outlined))
+              Text(title, style: TextStyle(fontSize: fontSize),),
+              MyToolTip(
+                message: "Add asset",
+                child: IconButton(
+                    onPressed: () {
+                      multipoolProvider.addItem(type);
+                    },
+                    icon: const Icon(Icons.add_circle_outline, color: Colors.green,)),
+              )
             ],
           ),
           ListView.builder(
@@ -114,17 +119,20 @@ class AssetRow extends StatelessWidget {
           items: multipoolProvider.assets.map((String option) {
             return DropdownMenuItem<String>(
               value: option,
-              child: Text(option),
+              child: Text(option, style: TextStyle(fontSize: fontSize),),
             );
           }).toList(),
         ),
         Expanded(child: InputWidgetFilter(controller: amountController, isNumeric: true, isInteger: false, fontSize: fontSize, label: "Amount", submit: false, onchanged: (val) => setAmount())),
         Expanded(child: InputWidgetFilter(controller: weightController, isNumeric: true, isInteger: true, fontSize: fontSize, label: "Weight", submit: false, onchanged: (val) => setWeight())),
-        IconButton(
-            onPressed: () {
-              removeItem();
-            },
-            icon: const Icon(Icons.remove_circle_outline))
+        MyToolTip(
+          message: "Remove asset",
+          child: IconButton(
+              onPressed: () {
+                removeItem();
+              },
+              icon: Icon(Icons.remove_circle_outline, color: Colors.redAccent.shade400,)),
+        )
         // Text(weight.toString())
       ],
     ),);
@@ -153,6 +161,8 @@ class ResultTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fontSize = getFontSize(context);
+    final iconSize = getIconSize(context);
     final headers = table[0].cast<String>();
     final data = table.getRange(1, table.length).toList();
     return Align(
@@ -169,7 +179,7 @@ class ResultTable extends StatelessWidget {
               }).toList(),
               rows: data.map<DataRow>((row) {
                 return DataRow(cells: row.map<DataCell>((dd) {
-                  return DataCell(Text((dd is int || dd is double) ? dd.toString() : dd));
+                  return DataCell(Text((dd is int || dd is double) ? dd.toString() : dd, style: TextStyle(fontSize: fontSize),));
                 }).toList());
               }).toList()),
         ),

@@ -6,6 +6,7 @@ import 'package:waves_spy/src/helpers/helpers.dart';
 import 'package:waves_spy/src/multipool/multipool_provider.dart';
 import 'package:waves_spy/src/multipool/widgets.dart';
 import 'package:waves_spy/src/widgets/filter_widger.dart';
+import 'package:waves_spy/src/widgets/other/custom_widgets.dart';
 
 
 class Multipool_View extends StatelessWidget {
@@ -14,11 +15,14 @@ class Multipool_View extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        // mainAxisSize: MainAxisSize.min,
         children: [
-          InputArea(),
-          Expanded(child: ResultArea())
+          Flexible(flex: 2, child: InputArea()),
+          VerticalDivider(width: 2,),
+          // Flexible(flex: 5, child: Text("results"))
+          Flexible(flex: 5, child: ResultArea())
         ],
       ),
     );
@@ -39,43 +43,48 @@ class InputArea extends StatelessWidget {
       builder: (context, model, child) {
         stepsAmountController.text = model.stepsAmount.toString();
         feeController.text = model.fee.toString();
-        return Container(child:
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0),
-            child: Row(children: [ // Fixed inputs
-              Flexible(flex: 2, child: InputWidgetFilter(label: "stepsAmount", fontSize: fontSize, isNumeric: true, isInteger: true, onchanged: model.setStepsAmount, controller: stepsAmountController)),
-              Flexible(flex: 2, child: InputWidgetFilter(label: "fee", fontSize: fontSize, isNumeric: true, isInteger: false, onchanged: model.setFee, controller: feeController)),
-              Row(
+        return Container(
+            margin: EdgeInsets.all(5),
+            child:
+        SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+            Flexible(flex: 2, child: InputWidgetFilter(label: "stepsAmount", fontSize: fontSize, isNumeric: true, isInteger: true, onchanged: model.setStepsAmount, controller: stepsAmountController)),
+            Flexible(flex: 2, child: InputWidgetFilter(label: "poolFee", fontSize: fontSize, isNumeric: true, isInteger: false, onchanged: model.setFee, controller: feeController)),
+            Flexible(
+              child: Row(
                 children: [
-                  Text("use arbitrage"),
-                  Checkbox(value: model.use_arb, onChanged: (newVal) {model.setUseArb(newVal);},),
+                  Text("  use arbitrage"),
+                  Checkbox(activeColor: Colors.indigo, value: model.use_arb, onChanged: (newVal) {model.setUseArb(newVal);},),
+                ],
+              ),
+            ),
+            AssetList(inputList: model.initAssets, title: "Init data", type: "init"),
+            AssetList(inputList: model.rebalanceAssets, title: "Rebalance data", type: "rebalance"),
+            Padding(padding: EdgeInsets.only(top: 10, bottom: 5), child:
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  OutlinedButton(
+                    style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Colors.white24)),
+                      child: model.isLoading ? CircularProgressIndicator() : Text("EMULATE", style: TextStyle(color: Colors.cyanAccent),),
+                    onPressed: () async {
+                      await Future.delayed(Duration(seconds: 1));
+                      await model.makeRequest();
+                    },
+                  ),
+                  MyToolTip(
+                      message: "Fixed pool exchange any tokens 1:1, so any token price is 1\$.\n"
+                          "Arbitrage bot is running after each stepRebalancing call.\n"
+                          "USDT should be in composition, because it is taken as baseTokenId in emulation and is used by arbitrage bot",
+                      child: Icon(Icons.help_outline, color: Colors.yellowAccent,))
                 ],
               )
-            ],),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [ // List inputs
-              Expanded(child: AssetList(inputList: model.initAssets, title: "Init data", type: "init")),
-              Expanded(child: AssetList(inputList: model.rebalanceAssets, title: "Rebalance data", type: "rebalance"))
-            ],),
-          ),
-            Padding(padding: EdgeInsets.only(top: 10, bottom: 5), child:
-              OutlinedButton(
-                child: model.isLoading ? CircularProgressIndicator() : Text("EMULATE"),
-                onPressed: () async {
-                  await Future.delayed(Duration(seconds: 1));
-                  await model.makeRequest();
-                },
-              )
               ,)
-        ],)
+          ],),
+        )
         );
       },
     );
