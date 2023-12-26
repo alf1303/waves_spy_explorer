@@ -20,6 +20,8 @@ import 'package:waves_spy/src/providers/stats_provider.dart';
 import 'package:waves_spy/src/providers/transaction_details_provider.dart';
 import 'package:waves_spy/src/providers/transaction_provider.dart';
 import 'package:get_it/get_it.dart';
+import 'package:waves_spy/src/utx_viewer/utx_provider.dart';
+import 'package:waves_spy/src/utx_viewer/utx_viever.dart';
 
 import 'charts/puzzle/eagle_earnings.dart';
 import 'helpers/firebase_analytics_service.dart';
@@ -47,6 +49,7 @@ class MyApp extends StatelessWidget {
       ChangeNotifierProvider<PuzzleProvider>(create: (_) => PuzzleProvider()),
       ChangeNotifierProvider<BlocksProvider>(create: (_) => BlocksProvider()),
       ChangeNotifierProvider<MultipoolProvider>(create: (_) => MultipoolProvider()),
+      ChangeNotifierProvider<UtxProvider>(create: (_) => UtxProvider()),
     ],
       child: MaterialApp(
         // Providing a restorationScopeId allows the Navigator built by the
@@ -105,6 +108,8 @@ class MyApp extends StatelessWidget {
                   return ArbBlocks();
                 case Multipool.routeName:
                   return Multipool();
+                case UtxViever.routeName:
+                  return UtxViever();
                 default:
                   return MainPage(address: address);
               }

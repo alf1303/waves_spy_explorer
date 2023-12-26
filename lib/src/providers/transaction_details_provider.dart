@@ -25,7 +25,11 @@ class TransactionDetailsProvider extends ChangeNotifier{
     print("details 3");
     var trs2 = {...trs};
     trs2.remove("additional");
+    final stChngs = trs["stateChanges"] ?? {};
+    final error = stChngs["error"] ?? {"error": "None"};
+    final err = encoder.convert(error);
     tr = encoder.convert(trs2);
+    tr = err + "\n" + tr;
     print("details 4");
     notifyListeners();
   }
