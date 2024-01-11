@@ -465,7 +465,9 @@ class TxInfo extends StatelessWidget {
       }
       final ptransfers = tx["stateChanges"]["invokes"][0]["stateChanges"]["transfers"];
       final profit_assetId = ptransfers.isNotEmpty ? ptransfers[0]["asset"] ?? "WAVES" : "";
-      final profit_amount = ptransfers.isNotEmpty ? ptransfers[0]["amount"] : 0;
+      final profitTransfer = ptransfers.firstWhere((tra) => tra["address"] == "3P9MUrbeQkef5dKpHw7QN7jv7y4q7XVUi6J", orElse: () => null);
+      final profit_amount = profitTransfer != null ? profitTransfer["amount"] : 0;
+      // final profit_amount = ptransfers.isNotEmpty ? ptransfers[1]["amount"] : 0;
       final out_amount = ptransfers.isNotEmpty ? ptransfers[0]["amount"] + ptransfers[1]["amount"] : 0;
       Widget profit = assetBuilderSimple(profit_assetId, val: profit_amount, lbl: "Profit:");
 
