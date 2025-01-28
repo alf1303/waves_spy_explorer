@@ -39,7 +39,7 @@ class TransactionProvider extends ChangeNotifier {
   List<String> aliases = List.empty(growable: true);
   String afterGlob = "";
   String afterGlobNft = "";
-  int limit = 1000;
+  int limit = 300;
   int limitNft = 1000;
 
   bool isLoading = false;
@@ -158,15 +158,28 @@ class TransactionProvider extends ChangeNotifier {
         String afterId = after == null ? "" : afterGlob;
         after = true;
         var resp;
-        int attempts = 10;
+        int attempts = 5;
+        bool success = false;
         while (attempts > 0) {
           try {
             resp = await http.get(Uri.parse("$nodeUrl/transactions/address/$address/limit/$limit?after=$afterId"));
             attempts = 0;
+            success = true;
           } catch(err) {
             attempts -= 1;
-            print("Catched XMLHttpRequest error ${err.toString()}, retrying... $attempts left");
+            // print("$nodeUrl/transactions/address/$address/limit/$limit?after=$afterId");
+            print("Catched XMLHttpRequest error ${err.toString()} ${resp.toString()}, retrying... $attempts left");
+            await Future.delayed(Duration(seconds: 2));
           }
+        }
+        if (!success) {
+          progressProvider.stopTransactions();
+          progressProvider.stop();
+          showSnackError(resp.body);
+          print("Failed to load transactions list\n" + resp.body);
+          // throw("Transactions not loaded");
+          progressProvider.notify();
+          return false;
         }
         // print("trx");
         // print(resp.body);
@@ -208,9 +221,9 @@ class TransactionProvider extends ChangeNotifier {
         fillTransactionsWithAssetsNames(res);
         filteredTransactions = allTransactions;
 
-        print("loading filter start");
+        // print("loading filter start");
         filterTransactions();
-        print("loading filter finish");
+        // print("loading filter finish");
 
         // createInfo();
         filterProvider.notifyAll();
@@ -586,7 +599,7 @@ class TransactionProvider extends ChangeNotifier {
   }
 
   void filterTransactions() {
-    print("filter1");
+    // print("filter1");
     final filterProvider = FilterProvider();
     List<dynamic> datedTransactions = List.from(allTransactions);
     // print("Transactions loaded: " + datedTransactions.length.toString());
@@ -608,7 +621,7 @@ class TransactionProvider extends ChangeNotifier {
     } else {
       filteredTransactions = datedTransactions;
     }
-    print("filter2");
+    // print("filter2");
     if(filterProvider.addrName.isNotEmpty) {
       filteredTransactions = filteredTransactions.where((tr) => tr["additional"]["addressesIds"].toLowerCase().contains(filterProvider.addrName.toLowerCase())).toList();
     }
@@ -662,7 +675,7 @@ class TransactionProvider extends ChangeNotifier {
     // if(filterProvider.direction == "out") {
     //   filteredTransactions = trToFilter.where((tr) => tr["additional"]["outAssetsNames"].toLowerCase().contains(filterProvider.assetName.name.toLowerCase())).toList();
     // }
-    print("filter 2.5");
+    // print("filter 2.5");
     if (filterProvider.assetName.name.isNotEmpty) {
       if(filterProvider.direction == "all") {
         filteredTransactions = trToFilter.where((tr) => isInListOfStrings(tr["additional"]["assetsIds"].keys.toList(), filterProvider.assetName.id)).toList();
@@ -681,7 +694,7 @@ class TransactionProvider extends ChangeNotifier {
     filterProvider.actualTo = firstTrans == null ? DateTime.now() : timestampToDate(firstTrans["timestamp"]);
     createInfo();
     notifyListeners();
-    print("filter3");
+    // print("filter3");
   }
 
   Future<Map<String, int>> getStakedDucks(String address) async{

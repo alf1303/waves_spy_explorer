@@ -17,8 +17,8 @@ const myNode = "http://wavescup.world:6869";
 
 //############################################//
 // String nodeUrl = remoteCustomNode;
-// String nodeUrl = publicNode;
-String nodeUrl = myNode;
+String nodeUrl = publicNode;
+// String nodeUrl = myNode;
 //############################################//
 
 const eggId = "C1iWsKGqLwjHUndiQ7iXpdmPum9PeCDFfyXBdJJosDRS";
