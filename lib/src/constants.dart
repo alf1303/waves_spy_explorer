@@ -13,11 +13,12 @@ const publicNode = 'https://nodes.wavesnodes.com';
 const localNode = 'http://127.0.0.1:6869';
 const remoteCustomNode = "http://stage.wavescup.world:6570";
 const myNode2 = "http://stage.wavescup.world:6869";
+const myNode = "http://wavescup.world:6869";
 
 //############################################//
 // String nodeUrl = remoteCustomNode;
-String nodeUrl = publicNode;
-// String nodeUrl = myNode2;
+// String nodeUrl = publicNode;
+String nodeUrl = myNode;
 //############################################//
 
 const eggId = "C1iWsKGqLwjHUndiQ7iXpdmPum9PeCDFfyXBdJJosDRS";
